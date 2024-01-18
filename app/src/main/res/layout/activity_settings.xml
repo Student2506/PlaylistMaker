@@ -10,35 +10,35 @@
         android:id="@+id/back_to_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="@dimen/dp_24">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/dp_8"
             android:contentDescription="@string/return_back"
             android:src="@drawable/arrow_back" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="86dp"
-            android:layout_marginBottom="12dp"
-            android:paddingStart="48dp"
-            android:paddingEnd="48dp"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginBottom="@dimen/dp_12"
+            android:paddingStart="@dimen/dp_48"
+            android:paddingEnd="@dimen/dp_48"
             android:text="@string/settings_header"
             android:textColor="@color/black"
-            android:textSize="26sp" />
+            android:textSize="@dimen/sp_22"
+            android:textStyle="bold" />
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:paddingVertical="21dp">
+        android:padding="@dimen/dp_16"
+        android:paddingVertical="@dimen/dp_20">
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,16 +46,15 @@
             android:layout_gravity="center_vertical"
             android:text="@string/dark_theme"
             android:textColor="@color/black"
-            android:textSize="19sp" />
+            android:textSize="@dimen/sp_16" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:minWidth="56dp"
-            android:minHeight="40dp"
-            android:paddingStart="9dp"
-            android:paddingEnd="0dp"
+            android:minWidth="@dimen/dp_56"
+            android:minHeight="@dimen/dp_40"
+            android:paddingStart="@dimen/dp_8"
             app:iconTint="@color/icon_color" />
 
     </FrameLayout>
@@ -63,19 +62,19 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="21dp">
+        android:paddingHorizontal="@dimen/dp_16"
+        android:paddingVertical="@dimen/dp_20">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/share_app"
             android:textColor="@color/black"
-            android:textSize="@dimen/settings_font_size" />
+            android:textSize="@dimen/sp_16" />
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
             android:layout_gravity="end"
             android:contentDescription="@string/share_button"
             android:src="@drawable/social_networks"
@@ -85,19 +84,19 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="21dp">
+        android:paddingHorizontal="@dimen/dp_16"
+        android:paddingVertical="@dimen/dp_20">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/contact_support"
             android:textColor="@color/black"
-            android:textSize="@dimen/settings_font_size" />
+            android:textSize="@dimen/sp_16" />
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
             android:layout_gravity="end"
             android:contentDescription="@string/contact_support"
             android:src="@drawable/operator"
@@ -107,19 +106,19 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="21dp">
+        android:paddingHorizontal="@dimen/dp_16"
+        android:paddingVertical="@dimen/dp_20">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_agreement"
             android:textColor="@color/black"
-            android:textSize="@dimen/settings_font_size" />
+            android:textSize="@dimen/sp_16" />
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
             android:layout_gravity="end"
             android:contentDescription="@string/user_agreement"
             android:src="@drawable/arrow_forward"
