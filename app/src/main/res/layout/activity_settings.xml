@@ -35,19 +35,12 @@
             android:textStyle="bold" />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_20">
+    <FrameLayout style="@style/SettingsFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/SettingsButton"
             android:layout_gravity="center_vertical"
-            android:text="@string/dark_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            android:text="@string/dark_theme" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -60,70 +53,40 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_20">
+    <FrameLayout style="@style/SettingsFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/share_app"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            style="@style/SettingsButton"
+            android:text="@string/share_app" />
 
         <ImageView
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            android:layout_gravity="end"
+            style="@style/SettingsImageView"
             android:contentDescription="@string/share_button"
-            android:src="@drawable/social_networks"
-            app:iconTint="@color/icon_color" />
+            android:src="@drawable/social_networks" />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_20">
+    <FrameLayout style="@style/SettingsFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/contact_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            style="@style/SettingsButton"
+            android:text="@string/contact_support" />
 
         <ImageView
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            android:layout_gravity="end"
+            style="@style/SettingsImageView"
             android:contentDescription="@string/contact_support"
-            android:src="@drawable/operator"
-            app:iconTint="@color/icon_color" />
+            android:src="@drawable/operator" />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_20">
+    <FrameLayout style="@style/SettingsFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            style="@style/SettingsButton"
+            android:text="@string/user_agreement" />
 
         <ImageView
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            android:layout_gravity="end"
+            style="@style/SettingsImageView"
             android:contentDescription="@string/user_agreement"
-            android:src="@drawable/arrow_forward"
-            app:iconTint="@color/icon_color" />
+            android:src="@drawable/arrow_forward" />
     </FrameLayout>
 
 </LinearLayout>
