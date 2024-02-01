@@ -27,13 +27,13 @@
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginTop="@dimen/dp_12"
             android:layout_marginBottom="@dimen/dp_12"
+            android:fontFamily="@font/ys_display_medium"
             android:paddingStart="@dimen/dp_48"
             android:paddingEnd="@dimen/dp_48"
             android:text="@string/settings_header"
             android:textColor="@color/black"
-            android:textSize="@dimen/sp_22"
-            android:fontFamily="@font/ys_display_medium"
-            android:textFontWeight="500" />
+            android:textFontWeight="500"
+            android:textSize="@dimen/sp_22" />
     </FrameLayout>
 
     <FrameLayout style="@style/SettingsFrameLayout">
