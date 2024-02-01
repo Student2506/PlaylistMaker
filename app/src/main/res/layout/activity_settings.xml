@@ -32,7 +32,8 @@
             android:text="@string/settings_header"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_22"
-            android:textStyle="bold" />
+            android:fontFamily="@font/ys_display_medium"
+            android:textFontWeight="500" />
     </FrameLayout>
 
     <FrameLayout style="@style/SettingsFrameLayout">
