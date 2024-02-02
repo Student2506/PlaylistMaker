@@ -3,7 +3,7 @@
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="text_size_main_screen">22sp</dimen>
-    <dimen name="button_margin">8dp</dimen>
+    <dimen name="button_margin">4dp</dimen>
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_52">52dp</dimen>

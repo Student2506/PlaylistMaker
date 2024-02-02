@@ -36,7 +36,8 @@
             android:textSize="@dimen/sp_22" />
     </FrameLayout>
 
-    <FrameLayout style="@style/SettingsFrameLayout">
+    <FrameLayout style="@style/SettingsFrameLayout"
+        android:paddingVertical="@dimen/dp_12">
 
         <TextView
             style="@style/SettingsButton"
