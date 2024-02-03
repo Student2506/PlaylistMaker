@@ -11,4 +11,8 @@
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="return_back">Назад</string>
     <string name="share_button">Поделиться</string>
+    <string name="license_agreement_url">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="generic_email_title_template">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="generic_email_body_template">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="practicum_link">https://practicum.yandex.ru/trainer/android-developer/</string>
 </resources>

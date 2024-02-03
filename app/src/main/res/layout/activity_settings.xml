@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimaryVariant"
-    android:theme="@style/Theme.PlaylistMaker"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.PlaylistMaker">
 
     <FrameLayout
         android:id="@+id/back_to_main"
@@ -20,8 +20,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/dp_8"
             android:contentDescription="@string/return_back"
-            app:tint="?attr/colorOnPrimary"
-            android:src="@drawable/arrow_back" />
+            android:src="@drawable/arrow_back"
+            app:tint="?attr/colorOnPrimary" />
 
         <TextView
             android:layout_width="match_parent"
@@ -38,7 +38,8 @@
             android:textSize="@dimen/sp_22" />
     </FrameLayout>
 
-    <FrameLayout style="@style/SettingsFrameLayout"
+    <FrameLayout
+        style="@style/SettingsFrameLayout"
         android:paddingVertical="@dimen/dp_12">
 
         <TextView
@@ -57,7 +58,9 @@
 
     </FrameLayout>
 
-    <FrameLayout style="@style/SettingsFrameLayout">
+    <FrameLayout
+        android:id="@+id/share_button"
+        style="@style/SettingsFrameLayout">
 
         <TextView
             style="@style/SettingsButton"
@@ -69,7 +72,9 @@
             android:src="@drawable/social_networks" />
     </FrameLayout>
 
-    <FrameLayout style="@style/SettingsFrameLayout">
+    <FrameLayout
+        android:id="@+id/send_to_techsupport"
+        style="@style/SettingsFrameLayout">
 
         <TextView
             style="@style/SettingsButton"
@@ -81,7 +86,9 @@
             android:src="@drawable/operator" />
     </FrameLayout>
 
-    <FrameLayout style="@style/SettingsFrameLayout">
+    <FrameLayout
+        android:id="@+id/show_agreement"
+        style="@style/SettingsFrameLayout">
 
         <TextView
             style="@style/SettingsButton"
