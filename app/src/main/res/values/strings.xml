@@ -15,4 +15,6 @@
     <string name="generic_email_title_template">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="generic_email_body_template">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="practicum_link">https://practicum.yandex.ru/trainer/android-developer/</string>
+    <string name="input_hint">Поиск</string>
+    <string name="search_title">Поиск</string>
 </resources>
