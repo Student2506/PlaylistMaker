@@ -55,8 +55,8 @@
             android:drawablePadding="@dimen/dp_8"
             android:hint="@string/input_hint"
             android:minHeight="@dimen/dp_56"
-            android:inputType="textAutoComplete"
-            android:maxLength="5"
+            android:inputType="text"
+            android:maxLength="40"
             android:maxLines="1"
             android:textColor="@color/black"
             android:textColorHint="@color/black" />
