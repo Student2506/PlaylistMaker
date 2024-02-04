@@ -6,8 +6,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
 class SearchActivity : AppCompatActivity() {
@@ -24,10 +24,12 @@ class SearchActivity : AppCompatActivity() {
             searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         }
 
-
-        val linearLayout = findViewById<LinearLayout>(R.id.container)
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
+        val headerButton = findViewById<FrameLayout>(R.id.back_to_main)
+        headerButton.setOnClickListener {
+            finish()
+        }
         inputEditText.setText(searchQuery)
 
 
@@ -41,7 +43,6 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
-
             }
 
             override fun afterTextChanged(s: Editable?) {
