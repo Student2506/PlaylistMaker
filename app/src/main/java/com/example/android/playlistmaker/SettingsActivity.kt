@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         techSupport.setOnClickListener {
             val techSupportIntent = Intent(Intent.ACTION_SENDTO)
             techSupportIntent.data = Uri.parse("mailto:")
-            techSupportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("zpe25@ya.ru"))
+            techSupportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.main_email_address)))
             techSupportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.generic_email_title_template))
             techSupportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.generic_email_body_template))
             startActivity(techSupportIntent)
