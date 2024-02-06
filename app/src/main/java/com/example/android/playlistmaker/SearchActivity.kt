@@ -2,7 +2,6 @@ package com.example.android.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -20,10 +19,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        if (savedInstanceState != null) {
-            searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
-        }
-
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         val headerButton = findViewById<FrameLayout>(R.id.back_to_main)
@@ -35,7 +30,8 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
         }
 
@@ -60,6 +56,11 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(SEARCH_QUERY, searchQuery)
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        searchQuery = savedInstanceState.getString(SEARCH_QUERY, DEFAULT_QUERY)
+    }
+
     private fun getClearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -70,5 +71,6 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
+        const val DEFAULT_QUERY = ""
     }
 }
