@@ -1,52 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="?attr/colorPrimaryVariant"
+    style="@style/MainScreen"
+    android:theme="@style/Theme.PlaylistMaker">
 
     <FrameLayout
         android:id="@+id/back_to_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_24">
+        style="@style/TopHeader">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:contentDescription="@string/return_back"
-            android:src="@drawable/arrow_back" />
+            style="@style/TopHeaderImageView"
+            android:contentDescription="@string/return_back" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_12"
-            android:layout_marginTop="@dimen/dp_12"
-            android:layout_marginBottom="@dimen/dp_12"
-            android:paddingStart="@dimen/dp_48"
-            android:paddingEnd="@dimen/dp_48"
-            android:text="@string/settings_header"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_22"
-            android:textStyle="bold" />
+            style="@style/TopHeaderTextView"
+            android:text="@string/settings_header" />
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_20">
+        style="@style/SettingsFrameLayout"
+        android:paddingVertical="@dimen/dp_12">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/SettingsButton"
             android:layout_gravity="center_vertical"
-            android:text="@string/dark_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            android:text="@string/dark_theme" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -55,74 +33,50 @@
             android:minWidth="@dimen/dp_56"
             android:minHeight="@dimen/dp_40"
             android:paddingStart="@dimen/dp_8"
-            app:iconTint="@color/icon_color" />
+            android:theme="@style/SwitchCompat" />
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_20">
+        android:id="@+id/share_button"
+        style="@style/SettingsFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/share_app"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            style="@style/SettingsButton"
+            android:text="@string/share_app" />
 
         <ImageView
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            android:layout_gravity="end"
+            style="@style/SettingsImageView"
             android:contentDescription="@string/share_button"
-            android:src="@drawable/social_networks"
-            app:iconTint="@color/icon_color" />
+            android:src="@drawable/social_networks" />
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_20">
+        android:id="@+id/send_to_techsupport"
+        style="@style/SettingsFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/contact_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            style="@style/SettingsButton"
+            android:text="@string/contact_support" />
 
         <ImageView
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            android:layout_gravity="end"
+            style="@style/SettingsImageView"
             android:contentDescription="@string/contact_support"
-            android:src="@drawable/operator"
-            app:iconTint="@color/icon_color" />
+            android:src="@drawable/operator" />
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_20">
+        android:id="@+id/show_agreement"
+        style="@style/SettingsFrameLayout">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            style="@style/SettingsButton"
+            android:text="@string/user_agreement" />
 
         <ImageView
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            android:layout_gravity="end"
+            style="@style/SettingsImageView"
             android:contentDescription="@string/user_agreement"
-            android:src="@drawable/arrow_forward"
-            app:iconTint="@color/icon_color" />
+            android:src="@drawable/arrow_forward" />
     </FrameLayout>
 
 </LinearLayout>

@@ -1,8 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?attr/colorSecondary"
+    android:theme="@style/Theme.PlaylistMaker"
+    style="@style/MainScreen">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/back_to_main"
+        style="@style/TopHeader">
+
+        <ImageView
+            style="@style/TopHeaderImageView"
+            android:contentDescription="@string/return_back" />
+
+        <TextView
+            style="@style/TopHeaderTextView"
+            android:text="@string/search_title" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/rounded_textedit"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/dp_8">
+
+        <EditText
+            android:id="@+id/inputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:drawableStart="@drawable/search"
+            android:drawablePadding="@dimen/dp_8"
+            android:drawableTint="@color/search_hint"
+            android:hint="@string/input_hint"
+            android:inputType="text"
+            android:maxLength="40"
+            android:maxLines="1"
+            android:minHeight="@dimen/dp_36"
+            android:textColorHint="@color/search_hint"
+            android:textCursorDrawable="@drawable/custom_cursor"
+            android:textColor="?attr/colorOnTertiary" />
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:src="@drawable/close_button"
+            android:visibility="gone" />
+
+    </FrameLayout>
+</LinearLayout>
