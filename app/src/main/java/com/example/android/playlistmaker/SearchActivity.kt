@@ -10,6 +10,11 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.android.playlistmaker.datalayer.Track
+import com.example.android.playlistmaker.mocks.trackList
+import kotlin.random.Random
 
 class SearchActivity : AppCompatActivity() {
 
@@ -49,6 +54,20 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputEditText.addTextChangedListener(simpleTextWatcher)
+
+        val recycler = findViewById<RecyclerView>(R.id.trackList)
+        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.adapter = TrackAdapter(
+            tracks = List(100) {
+                val randomTrack = trackList[Random.nextInt(0, trackList.size-1)]
+                Track(
+                    trackName = randomTrack["trackName"]!!,
+                    artistName = randomTrack["artist"]!!,
+                    trackTime = randomTrack["duration"]!!,
+                    artworkUrl100 = randomTrack["link"]!!
+                )
+            }
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

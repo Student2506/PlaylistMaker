@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="textColorMain" />
+    <attr name="backgroundTintColor" />
+    <attr name="textColorAlternative" />
+    <attr name="switchColor" />
+    <attr name="switchActivatedColor" />
+    <attr name="switchThumbNormalColor" />
+</resources>
