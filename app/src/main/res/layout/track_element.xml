@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="61dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingVertical="@dimen/dp_8"
     android:paddingStart="@dimen/dp_12"
@@ -11,10 +11,9 @@
 
     <ImageView
         android:id="@+id/trackImage"
+        style="@style/Track.Icon"
         android:layout_width="46dp"
         android:layout_height="46dp"
-        android:layout_marginEnd="@dimen/dp_8"
-        android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/track_description"
         android:src="@color/black" />
 
@@ -29,9 +28,8 @@
             android:id="@+id/trackName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ys_display_regular"
-            tools:text="Yesterday"
-            android:textSize="@dimen/sp_16" />
+            style="@style/Track.Text.Header"
+            tools:text="Yesterday" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,22 +40,21 @@
                 android:id="@+id/artistName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ys_display_regular"
-                android:textSize="@dimen/sp_12"
+                style="@style/Track.Text.Detail"
                 tools:text="The Beatles" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ys_display_regular"
-                android:textSize="@dimen/sp_12"
                 android:layout_marginHorizontal="6dp"
+                style="@style/Track.Text.Detail"
                 tools:text="*" />
+
             <TextView
                 android:id="@+id/trackDuration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ys_display_regular"
-                android:textSize="@dimen/sp_12"
+                style="@style/Track.Text.Detail"
                 tools:text="t:me" />
         </LinearLayout>
 
@@ -69,8 +66,8 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="@dimen/dp_8"
         android:contentDescription="@string/go_to_details"
-        app:tint="#AEAFB4"
-        android:src="@drawable/arrow_forward" />
+        android:src="@drawable/arrow_forward"
+        app:tint="#AEAFB4" />
 
 
 </LinearLayout>

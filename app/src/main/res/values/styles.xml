@@ -55,12 +55,14 @@
         <item name="colorSwitchThumbNormal">?attr/switchThumbNormalColor</item>
         <item name="android:colorForeground">?attr/switchColor</item>
     </style>
+
     <style name="TopHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/dp_24</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
+
     <style name="TopHeaderImageView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -69,6 +71,7 @@
         <item name="android:src">@drawable/arrow_back</item>
         <item name="tint">?attr/colorOnPrimary</item>
     </style>
+
     <style name="TopHeaderTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -82,10 +85,25 @@
         <item name="android:textFontWeight">500</item>
         <item name="android:textSize">@dimen/sp_22</item>
     </style>
+
     <style name="MainScreen">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Track.Icon" parent="">
+        <item name="android:layout_marginEnd">@dimen/dp_8</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+    <style name="Track.Text" parent="">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+    <style name="Track.Text.Header">
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+    <style name="Track.Text.Detail">
+        <item name="android:textSize">@dimen/sp_12</item>
     </style>
 </resources>
