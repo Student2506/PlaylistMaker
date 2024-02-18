@@ -27,6 +27,7 @@
             android:text="@string/dark_theme" />
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/nightMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -75,5 +76,10 @@
             android:contentDescription="@string/user_agreement"
             android:src="@drawable/arrow_forward" />
     </FrameLayout>
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+    <include layout="@layout/bottom_menu"/>
 
 </LinearLayout>
