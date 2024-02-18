@@ -15,8 +15,9 @@
         <item name="backgroundTintColor">?attr/colorSecondaryVariant</item>
         <item name="textColorAlternative">?attr/colorOnSecondary</item>
         <item name="switchColor">#E6E8EB</item>
-        <item name="switchActivatedColor">@color/white</item>
+        <item name="switchActivatedColor">@color/switch_activated</item>
         <item name="switchThumbNormalColor">#AEAFB4</item>
+        <item name="hintText">@color/white</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

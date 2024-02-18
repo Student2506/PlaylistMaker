@@ -6,4 +6,5 @@
     <attr name="switchColor" />
     <attr name="switchActivatedColor" />
     <attr name="switchThumbNormalColor" />
+    <attr name="hintText" />
 </resources>

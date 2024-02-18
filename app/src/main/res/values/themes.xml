@@ -17,6 +17,7 @@
         <item name="switchColor">@color/white</item>
         <item name="switchActivatedColor">@color/switch_activated</item>
         <item name="switchThumbNormalColor">@color/white</item>
+        <item name="hintText">@color/search_hint</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

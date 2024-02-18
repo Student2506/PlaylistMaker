@@ -2,11 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SongElement"
     android:layout_width="match_parent"
     android:layout_height="61dp"
-    android:orientation="horizontal"
-    android:paddingVertical="@dimen/dp_8"
-    android:paddingStart="@dimen/dp_12"
     tools:ignore="RtlSymmetry">
 
     <ImageView
@@ -26,9 +24,9 @@
 
         <TextView
             android:id="@+id/trackName"
+            style="@style/Track.Text.Header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Track.Text.Header"
             tools:text="Yesterday" />
 
         <LinearLayout
@@ -38,23 +36,23 @@
 
             <TextView
                 android:id="@+id/artistName"
+                style="@style/Track.Text.Detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Track.Text.Detail"
                 tools:text="The Beatles" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="6dp"
-                style="@style/Track.Text.Detail"
-                tools:text="*" />
+                android:src="@drawable/point"
+                style="@style/Track.Separator"
+                android:importantForAccessibility="no" />
 
             <TextView
                 android:id="@+id/trackDuration"
+                style="@style/Track.Text.Detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Track.Text.Detail"
                 tools:text="t:me" />
         </LinearLayout>
 

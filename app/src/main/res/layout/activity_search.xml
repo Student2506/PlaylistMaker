@@ -20,39 +20,23 @@
 
     <FrameLayout
         android:id="@+id/container"
+        style="@style/SearchDialog"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="@dimen/dp_16"
-        android:background="@drawable/rounded_textedit"
-        android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/dp_8">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/inputEditText"
+            style="@style/SearchDialog.SearchEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:drawableStart="@drawable/search"
-            android:drawablePadding="@dimen/dp_8"
-            android:drawableTint="@color/search_hint"
-            android:hint="@string/input_hint"
-            android:inputType="text"
-            android:maxLength="40"
-            android:maxLines="1"
-            android:minHeight="@dimen/dp_36"
-            android:textColor="?attr/colorOnTertiary"
-            android:textColorHint="@color/search_hint"
-            android:textCursorDrawable="@drawable/custom_cursor" />
+            android:hint="@string/input_hint" />
 
         <ImageView
             android:id="@+id/clearIcon"
+            style="@style/SearchDialog.ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="@dimen/dp_12"
-            android:src="@drawable/close_button"
-            android:visibility="gone" />
+            android:src="@drawable/close_button" />
 
     </FrameLayout>
 
