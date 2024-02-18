@@ -2,8 +2,8 @@ package com.example.android.playlistmaker.mocks
 
 val trackList = listOf(
     mapOf(
-        "trackName" to "Smells Like Teen Spirit",
-        "artist" to "Nirvana",
+        "trackName" to "Smells Like Teen SpiritSmells Like Teen SpiritSmells Like Teen SpiritSmells Like Teen SpiritSmells Like Teen Spirit",
+        "artist" to "NirvanaNirvanaNirvanaNirvanaNirvanaNirvanaNirvanaNirvanaNirvanaNirvana",
         "duration" to "5:01",
         "link" to "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
     ),
