@@ -8,9 +8,16 @@
         <item name="colorOnTertiary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
-        <item name="colorSecondaryVariant"  >@color/search_field</item>
+        <item name="colorSecondaryVariant">@color/search_field</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="textColorMain">?attr/colorOnPrimary</item>
+        <item name="backgroundTintColor">?attr/colorPrimaryVariant</item>
+        <item name="textColorAlternative">@color/black</item>
+        <item name="switchColor">@color/white</item>
+        <item name="switchActivatedColor">@color/switch_activated</item>
+        <item name="switchThumbNormalColor">@color/white</item>
+        <item name="hintText">@color/search_hint</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

@@ -18,4 +18,6 @@
     <string name="input_hint">Поиск</string>
     <string name="search_title">Поиск</string>
     <string name="main_email_address">zpe25@ya.ru</string>
+    <string name="track_description">Track\'s image</string>
+    <string name="go_to_details">go to details</string>
 </resources>
