@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/SongElement"
     android:layout_width="match_parent"
-    android:layout_height="61dp"
+    android:layout_height="@dimen/dp_60"
     tools:ignore="RtlSymmetry">
 
     <ImageView
         android:id="@+id/trackImage"
         style="@style/Track.Icon"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
         android:contentDescription="@string/track_description"
         android:src="@color/black" />
 
@@ -65,7 +65,7 @@
         android:layout_margin="@dimen/dp_8"
         android:contentDescription="@string/go_to_details"
         android:src="@drawable/arrow_forward"
-        app:tint="#AEAFB4" />
+        app:tint="?attr/hintText" />
 
 
 </LinearLayout>
