@@ -11,15 +11,9 @@ import com.example.android.playlistmaker.R
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val trackName: TextView
-    private val artistName: TextView
-    private val trackTime: TextView
-
-    init {
-        trackName = itemView.findViewById(R.id.trackName)
-        artistName = itemView.findViewById(R.id.artistName)
-        trackTime = itemView.findViewById(R.id.trackDuration)
-    }
+    private val trackName: TextView = itemView.findViewById(R.id.trackName)
+    private val artistName: TextView = itemView.findViewById(R.id.artistName)
+    private val trackTime: TextView = itemView.findViewById(R.id.trackDuration)
 
     fun bind(model: Track) {
         trackName.text = model.trackName
@@ -34,12 +28,14 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 RoundedCorners(
                     TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
-                        2F,
+                        ROUND_CORNERS_SIZE_PX,
                         itemView.context.resources.displayMetrics
                     ).toInt()
                 )
             )
             .into(urlCover)
     }
-
+    companion object {
+        const val ROUND_CORNERS_SIZE_PX = 2f
+    }
 }
