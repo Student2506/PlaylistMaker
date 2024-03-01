@@ -42,6 +42,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var nothingFound: TextView
     private lateinit var refreshButton: Button
     private lateinit var noConnection: TextView
+    private lateinit var lastRequest: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +101,9 @@ class SearchActivity : AppCompatActivity() {
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = adapter
 
+        refreshButton.setOnClickListener {
+            searchSong(lastRequest)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -144,12 +148,14 @@ class SearchActivity : AppCompatActivity() {
                     }
 
                     else -> {
+                        lastRequest = songTitle
                         showErrorMessage()
                     }
                 }
             }
 
             override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
+                lastRequest = songTitle
                 showErrorMessage()
             }
         })

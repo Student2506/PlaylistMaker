@@ -42,11 +42,11 @@
                 tools:text="The Beatles" />
 
             <ImageView
+                style="@style/Track.Separator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/point"
-                style="@style/Track.Separator"
-                android:importantForAccessibility="no" />
+                android:importantForAccessibility="no"
+                android:src="@drawable/point" />
 
             <TextView
                 android:id="@+id/trackDuration"

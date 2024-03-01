@@ -57,39 +57,26 @@
 
         <TextView
             android:id="@+id/nothing_found"
-            style="@style/SearchDialog.ErrorScreen"
+            style="@style/SearchDialog.ErrorScreen.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nothing_was_found"
-            android:visibility="gone"
-            android:layout_gravity="center_horizontal"
             app:drawableTopCompat="@drawable/not_found_image" />
 
         <TextView
             android:id="@+id/no_signal"
-            style="@style/SearchDialog.ErrorScreen"
+            style="@style/SearchDialog.ErrorScreen.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_connection"
-            android:visibility="gone"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
             app:drawableTopCompat="@drawable/no_internet" />
 
         <Button
             android:id="@+id/refresh_button"
+            style="@style/SearchDialog.ErrorScreen.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_352"
-            android:backgroundTint="@color/button_color"
-            android:fontFamily="@font/ys_display_medium"
-            android:text="Обновить"
-            android:textColor="?attr/colorSecondary"
-            android:textFontWeight="500"
-            android:textSize="@dimen/sp_14"
-            android:visibility="gone"
-            app:cornerRadius="54dp" />
+            android:text="@string/refresh_text" />
     </FrameLayout>
 
     <Space
