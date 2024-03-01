@@ -126,6 +126,7 @@ class SearchActivity : AppCompatActivity() {
                                 tracks.clear()
                                 tracks.addAll(response.body()?.tracks!!)
                                 adapter.notifyDataSetChanged()
+                                Log.d("Songs", tracks.toString())
                             } else {
                                 Log.e("Songs", "Songs not found")
                             }

@@ -31,14 +31,16 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:inputType="text"
-            android:hint="@string/input_hint" />
+            android:hint="@string/input_hint"
+            android:importantForAutofill="no" />
 
         <ImageView
             android:id="@+id/clearIcon"
             style="@style/SearchDialog.ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/close_button" />
+            android:src="@drawable/close_button"
+            android:contentDescription="@string/close_button" />
 
     </FrameLayout>
 
@@ -48,7 +50,7 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <FrameLayout
+    <Space
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 
