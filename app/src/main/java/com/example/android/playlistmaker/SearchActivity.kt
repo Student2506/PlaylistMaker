@@ -4,13 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,15 +30,18 @@ class SearchActivity : AppCompatActivity() {
     private var searchQuery: String = ""
     private val baseUrl: String = "https://itunes.apple.com"
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private val retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build()
 
     private val itunesService = retrofit.create(ITunesApi::class.java)
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter()
 
+    private lateinit var recycler: RecyclerView
+    private lateinit var nothingFound: TextView
+    private lateinit var refreshButton: Button
+    private lateinit var noConnection: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +92,10 @@ class SearchActivity : AppCompatActivity() {
 
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
-        val recycler = findViewById<RecyclerView>(R.id.trackList)
+        recycler = findViewById(R.id.trackList)
+        nothingFound = findViewById(R.id.nothing_found)
+        refreshButton = findViewById(R.id.refresh_button)
+        noConnection = findViewById(R.id.no_signal)
         adapter.tracks = tracks
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = adapter
@@ -114,32 +121,47 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchSong(songTitle: String) {
-        itunesService.getTracks(songTitle)
-            .enqueue(object : Callback<ITunesTrackResponse> {
-                override fun onResponse(
-                    call: Call<ITunesTrackResponse>,
-                    response: Response<ITunesTrackResponse>
-                ) {
-                    when (response.code()) {
-                        HTTP_OK -> {
-                            if (response.body()?.tracks?.isNotEmpty() == true) {
-                                tracks.clear()
-                                tracks.addAll(response.body()?.tracks!!)
-                                adapter.notifyDataSetChanged()
-                                Log.d("Songs", tracks.toString())
-                            } else {
-                                Log.e("Songs", "Songs not found")
-                            }
+        itunesService.getTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
+            override fun onResponse(
+                call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>
+            ) {
+                when (response.code()) {
+                    HTTP_OK -> {
+                        refreshButton.visibility = View.GONE
+                        noConnection.visibility = View.GONE
+                        if (response.body()?.tracks?.isNotEmpty() == true) {
+                            nothingFound.visibility = View.GONE
+                            tracks.clear()
+                            tracks.addAll(response.body()?.tracks!!)
+                            recycler.visibility = View.VISIBLE
+                            adapter.notifyDataSetChanged()
+                        } else {
+                            tracks.clear()
+                            adapter.notifyDataSetChanged()
+                            recycler.visibility = View.GONE
+                            nothingFound.visibility = View.VISIBLE
                         }
+                    }
 
-                        else -> Log.e("Songs", "${response.code()} ${response.message()}")
+                    else -> {
+                        showErrorMessage()
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
-                    Log.e("Songs", t.message.toString())
-                }
-            })
+            override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
+                showErrorMessage()
+            }
+        })
+    }
+
+    private fun showErrorMessage() {
+        tracks.clear()
+        adapter.notifyDataSetChanged()
+        recycler.visibility = View.GONE
+        nothingFound.visibility = View.GONE
+        noConnection.visibility = View.VISIBLE
+        refreshButton.visibility = View.VISIBLE
     }
 
     companion object {
