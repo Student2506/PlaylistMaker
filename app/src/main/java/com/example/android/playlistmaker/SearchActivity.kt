@@ -22,6 +22,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.HttpURLConnection.HTTP_OK
 
 class SearchActivity : AppCompatActivity() {
 
@@ -112,15 +113,15 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun searchSong(song: String) {
-        itunesService.getTracks(song)
+    private fun searchSong(songTitle: String) {
+        itunesService.getTracks(songTitle)
             .enqueue(object : Callback<ITunesTrackResponse> {
                 override fun onResponse(
                     call: Call<ITunesTrackResponse>,
                     response: Response<ITunesTrackResponse>
                 ) {
                     when (response.code()) {
-                        200 -> {
+                        HTTP_OK -> {
                             if (response.body()?.tracks?.isNotEmpty() == true) {
                                 tracks.clear()
                                 tracks.addAll(response.body()?.tracks!!)
