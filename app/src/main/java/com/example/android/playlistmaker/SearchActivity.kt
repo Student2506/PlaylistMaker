@@ -13,6 +13,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.playlistmaker.api.v1.ITunesApi
@@ -131,19 +132,19 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 when (response.code()) {
                     HTTP_OK -> {
-                        refreshButton?.visibility = View.GONE
-                        noConnection?.visibility = View.GONE
+                        refreshButton?.isVisible = false
+                        noConnection?.isVisible = false
                         if (response.body()?.tracks?.isNotEmpty() == true) {
-                            nothingFound?.visibility = View.GONE
+                            nothingFound?.isVisible = false
                             tracks.clear()
                             tracks.addAll(response.body()?.tracks!!)
-                            recycler?.visibility = View.VISIBLE
+                            recycler?.isVisible = true
                             adapter.notifyDataSetChanged()
                         } else {
                             tracks.clear()
                             adapter.notifyDataSetChanged()
-                            recycler?.visibility = View.GONE
-                            nothingFound?.visibility = View.VISIBLE
+                            recycler?.isVisible = false
+                            nothingFound?.isVisible = true
                         }
                     }
 
@@ -164,10 +165,10 @@ class SearchActivity : AppCompatActivity() {
     private fun showErrorMessage() {
         tracks.clear()
         adapter.notifyDataSetChanged()
-        recycler?.visibility = View.GONE
-        nothingFound?.visibility = View.GONE
-        noConnection?.visibility = View.VISIBLE
-        refreshButton?.visibility = View.VISIBLE
+        recycler?.isVisible = false
+        nothingFound?.isVisible = false
+        noConnection?.isVisible = true
+        refreshButton?.isVisible = true
     }
 
     companion object {
