@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -12,7 +13,6 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -176,7 +176,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showTrack(track: Track) {
         val message = "${track.trackName} - ${track.artistName}\nTime:${track.trackTime}"
-        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+        Log.d("SearchActivity", message)
     }
 
     companion object {
