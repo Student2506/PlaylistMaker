@@ -49,9 +49,9 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val inputEditText = findViewById<EditText>(R.id.inputEditText)
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
-        val headerButton = findViewById<FrameLayout>(R.id.back_to_main)
+        val inputEditText = findViewById<EditText>(R.id.etInput)
+        val clearButton = findViewById<ImageView>(R.id.ivClear)
+        val headerButton = findViewById<FrameLayout>(R.id.flBackToMain)
         headerButton.setOnClickListener {
             finish()
         }
@@ -94,10 +94,10 @@ class SearchActivity : AppCompatActivity() {
 
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
-        recycler = findViewById(R.id.trackList)
-        nothingFound = findViewById(R.id.nothing_found)
-        refreshButton = findViewById(R.id.refresh_button)
-        noConnection = findViewById(R.id.no_signal)
+        recycler = findViewById(R.id.rvTracks)
+        nothingFound = findViewById(R.id.tvNothingFound)
+        refreshButton = findViewById(R.id.btRefresh)
+        noConnection = findViewById(R.id.tvNoSignal)
         adapter.tracks = tracks
         recycler?.layoutManager = LinearLayoutManager(this)
         recycler?.adapter = adapter

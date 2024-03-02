@@ -6,7 +6,7 @@
     android:theme="@style/Theme.PlaylistMaker">
 
     <FrameLayout
-        android:id="@+id/back_to_main"
+        android:id="@+id/flBackToMain"
         style="@style/TopHeader">
 
         <ImageView
@@ -20,13 +20,13 @@
 
 
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/flContainer"
         style="@style/SearchDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/inputEditText"
+            android:id="@+id/etInput"
             style="@style/SearchDialog.SearchEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:inputType="text" />
 
         <ImageView
-            android:id="@+id/clearIcon"
+            android:id="@+id/ivClear"
             style="@style/SearchDialog.ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,12 +51,12 @@
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/trackList"
+            android:id="@+id/rvTracks"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/nothing_found"
+            android:id="@+id/tvNothingFound"
             style="@style/SearchDialog.ErrorScreen.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
             app:drawableTopCompat="@drawable/not_found_image" />
 
         <TextView
-            android:id="@+id/no_signal"
+            android:id="@+id/tvNoSignal"
             style="@style/SearchDialog.ErrorScreen.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
             app:drawableTopCompat="@drawable/no_internet" />
 
         <Button
-            android:id="@+id/refresh_button"
+            android:id="@+id/btRefresh"
             style="@style/SearchDialog.ErrorScreen.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
