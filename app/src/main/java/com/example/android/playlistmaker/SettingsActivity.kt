@@ -11,19 +11,19 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val header = findViewById<FrameLayout>(R.id.back_to_main)
+        val header = findViewById<FrameLayout>(R.id.flBackToMainSettings)
         header.setOnClickListener {
             finish()
         }
 
-        val licenseAgreement = findViewById<FrameLayout>(R.id.show_agreement)
+        val licenseAgreement = findViewById<FrameLayout>(R.id.flShowAgreement)
         licenseAgreement.setOnClickListener {
             val showAgreement = Intent(Intent.ACTION_VIEW)
             showAgreement.data = Uri.parse(getString(R.string.license_agreement_url))
             startActivity(showAgreement)
         }
 
-        val techSupport = findViewById<FrameLayout>(R.id.send_to_techsupport)
+        val techSupport = findViewById<FrameLayout>(R.id.flSendToTechsupport)
         techSupport.setOnClickListener {
             val techSupportIntent = Intent(Intent.ACTION_SENDTO)
             techSupportIntent.data = Uri.parse("mailto:")
@@ -42,7 +42,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(techSupportIntent)
         }
 
-        val shareApp = findViewById<FrameLayout>(R.id.share_button)
+        val shareApp = findViewById<FrameLayout>(R.id.flShareButton)
         shareApp.setOnClickListener {
             val shareAppIntent = Intent(Intent.ACTION_SEND)
             shareAppIntent.setType("text/plain")

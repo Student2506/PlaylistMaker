@@ -5,7 +5,7 @@
     android:theme="@style/Theme.PlaylistMaker">
 
     <FrameLayout
-        android:id="@+id/back_to_main"
+        android:id="@+id/flBackToMainSettings"
         style="@style/TopHeader">
 
         <ImageView
@@ -27,7 +27,7 @@
             android:text="@string/dark_theme" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/nightMode"
+            android:id="@+id/swNightMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -36,7 +36,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/share_button"
+        android:id="@+id/flShareButton"
         style="@style/SettingsFrameLayout">
 
         <TextView
@@ -50,7 +50,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/send_to_techsupport"
+        android:id="@+id/flSendToTechsupport"
         style="@style/SettingsFrameLayout">
 
         <TextView
@@ -64,7 +64,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/show_agreement"
+        android:id="@+id/flShowAgreement"
         style="@style/SettingsFrameLayout">
 
         <TextView

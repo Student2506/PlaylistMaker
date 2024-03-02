@@ -20,4 +20,8 @@
     <string name="main_email_address">zpe25@ya.ru</string>
     <string name="track_description">Track\'s image</string>
     <string name="go_to_details">go to details</string>
+    <string name="close_button">Close button</string>
+    <string name="nothing_was_found">Ничего не нашлось</string>
+    <string name="no_connection">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="refresh_text">Обновить</string>
 </resources>

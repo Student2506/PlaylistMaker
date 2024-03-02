@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MainScreen"
     android:background="?attr/colorSecondary"
     android:theme="@style/Theme.PlaylistMaker">
 
     <FrameLayout
-        android:id="@+id/back_to_main"
+        android:id="@+id/flBackToMain"
         style="@style/TopHeader">
 
         <ImageView
@@ -19,34 +20,66 @@
 
 
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/flContainer"
         style="@style/SearchDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/inputEditText"
+            android:id="@+id/etInput"
             style="@style/SearchDialog.SearchEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/input_hint" />
+            android:hint="@string/input_hint"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
         <ImageView
-            android:id="@+id/clearIcon"
+            android:id="@+id/ivClear"
             style="@style/SearchDialog.ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/close_button"
             android:src="@drawable/close_button" />
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trackList"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
 
-    <FrameLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTracks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tvNothingFound"
+            style="@style/SearchDialog.ErrorScreen.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nothing_was_found"
+            app:drawableTopCompat="@drawable/not_found_image" />
+
+        <TextView
+            android:id="@+id/tvNoSignal"
+            style="@style/SearchDialog.ErrorScreen.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_connection"
+            app:drawableTopCompat="@drawable/no_internet" />
+
+        <Button
+            android:id="@+id/btRefresh"
+            style="@style/SearchDialog.ErrorScreen.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/refresh_text" />
+    </FrameLayout>
+
+    <Space
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 
