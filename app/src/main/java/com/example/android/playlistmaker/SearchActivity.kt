@@ -38,11 +38,11 @@ class SearchActivity : AppCompatActivity() {
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter()
 
-    private lateinit var recycler: RecyclerView
-    private lateinit var nothingFound: TextView
-    private lateinit var refreshButton: Button
-    private lateinit var noConnection: TextView
-    private lateinit var lastRequest: String
+    private var recycler: RecyclerView? = null
+    private var nothingFound: TextView? = null
+    private var refreshButton: Button? = null
+    private var noConnection: TextView? = null
+    private var lastRequest: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,11 +98,11 @@ class SearchActivity : AppCompatActivity() {
         refreshButton = findViewById(R.id.refresh_button)
         noConnection = findViewById(R.id.no_signal)
         adapter.tracks = tracks
-        recycler.layoutManager = LinearLayoutManager(this)
-        recycler.adapter = adapter
+        recycler?.layoutManager = LinearLayoutManager(this)
+        recycler?.adapter = adapter
 
-        refreshButton.setOnClickListener {
-            searchSong(lastRequest)
+        refreshButton?.setOnClickListener {
+            searchSong(lastRequest!!)
         }
     }
 
@@ -131,19 +131,19 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 when (response.code()) {
                     HTTP_OK -> {
-                        refreshButton.visibility = View.GONE
-                        noConnection.visibility = View.GONE
+                        refreshButton?.visibility = View.GONE
+                        noConnection?.visibility = View.GONE
                         if (response.body()?.tracks?.isNotEmpty() == true) {
-                            nothingFound.visibility = View.GONE
+                            nothingFound?.visibility = View.GONE
                             tracks.clear()
                             tracks.addAll(response.body()?.tracks!!)
-                            recycler.visibility = View.VISIBLE
+                            recycler?.visibility = View.VISIBLE
                             adapter.notifyDataSetChanged()
                         } else {
                             tracks.clear()
                             adapter.notifyDataSetChanged()
-                            recycler.visibility = View.GONE
-                            nothingFound.visibility = View.VISIBLE
+                            recycler?.visibility = View.GONE
+                            nothingFound?.visibility = View.VISIBLE
                         }
                     }
 
@@ -164,10 +164,10 @@ class SearchActivity : AppCompatActivity() {
     private fun showErrorMessage() {
         tracks.clear()
         adapter.notifyDataSetChanged()
-        recycler.visibility = View.GONE
-        nothingFound.visibility = View.GONE
-        noConnection.visibility = View.VISIBLE
-        refreshButton.visibility = View.VISIBLE
+        recycler?.visibility = View.GONE
+        nothingFound?.visibility = View.GONE
+        noConnection?.visibility = View.VISIBLE
+        refreshButton?.visibility = View.VISIBLE
     }
 
     companion object {
