@@ -5,7 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.playlistmaker.datalayer.Track
 import com.example.android.playlistmaker.datalayer.TrackViewHolder
 
-class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(val clickListener: TrackClickListener) :
+    RecyclerView.Adapter<TrackViewHolder>() {
 
     var tracks = ArrayList<Track>()
 
@@ -17,5 +18,10 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
+        holder.itemView.setOnClickListener { clickListener.onTrackClick(tracks[position]) }
+    }
+
+    fun interface TrackClickListener {
+        fun onTrackClick(track: Track)
     }
 }

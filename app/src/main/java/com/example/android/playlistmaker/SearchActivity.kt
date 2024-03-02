@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +38,9 @@ class SearchActivity : AppCompatActivity() {
 
     private val itunesService = retrofit.create(ITunesApi::class.java)
     private val tracks = ArrayList<Track>()
-    private val adapter = TrackAdapter()
+    private val adapter = TrackAdapter {
+        showTrack(it)
+    }
 
     private var recycler: RecyclerView? = null
     private var nothingFound: TextView? = null
@@ -169,6 +172,11 @@ class SearchActivity : AppCompatActivity() {
         nothingFound?.isVisible = false
         noConnection?.isVisible = true
         refreshButton?.isVisible = true
+    }
+
+    private fun showTrack(track: Track) {
+        val message = "${track.trackName} - ${track.artistName}\nTime:${track.trackTime}"
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     companion object {

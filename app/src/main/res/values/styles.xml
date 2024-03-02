@@ -153,6 +153,7 @@
     </style>
 
     <style name="SongElement">
+        <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:paddingVertical">@dimen/dp_8</item>
         <item name="android:paddingStart">@dimen/dp_12</item>
