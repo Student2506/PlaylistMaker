@@ -5,12 +5,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.playlistmaker.CustomApp.Companion.KEY_FOR_NIGHT_THEME
+import com.example.android.playlistmaker.CustomApp.Companion.PLAYLIST_MAKER_PREFERENCES
 import com.google.android.material.switchmaterial.SwitchMaterial
 
-const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
-const val KEY_FOR_NIGHT_THEME = "key_for_night_theme"
 
 class SettingsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -66,5 +67,6 @@ class SettingsActivity : AppCompatActivity() {
         }
         themeSwitcher.isChecked = (applicationContext as CustomApp).darkTheme
     }
+
 
 }

@@ -28,4 +28,10 @@ class CustomApp : Application() {
             }
         )
     }
+
+    companion object {
+        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
+        const val KEY_FOR_NIGHT_THEME = "key_for_night_theme"
+        const val KEY_FOR_SEARCH_HISTORY = "key_for_search_activity"
+    }
 }

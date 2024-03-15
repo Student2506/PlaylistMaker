@@ -48,6 +48,8 @@ class SearchActivity : AppCompatActivity() {
     private var noConnection: TextView? = null
     private var lastRequest: String? = null
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -108,6 +110,8 @@ class SearchActivity : AppCompatActivity() {
         refreshButton?.setOnClickListener {
             searchSong(lastRequest!!)
         }
+
+        val sharedPrefs = getSharedPreferences(CustomApp.PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
