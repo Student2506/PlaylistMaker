@@ -45,6 +45,18 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/tvHistoryHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ys_display_medium"
+        android:gravity="center_horizontal|center_vertical"
+
+        android:minHeight="@dimen/dp_52"
+        android:text="@string/search_top_header"
+        android:textFontWeight="500"
+        android:textSize="@dimen/sp_19" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -77,7 +89,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/refresh_text" />
+
     </FrameLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <Button
+        android:id="@+id/btClearHistory"
+        style="@style/SearchDialog.History.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="@dimen/dp_36"
+        android:text="@string/clear_history" />
 
     <Space
         android:layout_width="match_parent"
