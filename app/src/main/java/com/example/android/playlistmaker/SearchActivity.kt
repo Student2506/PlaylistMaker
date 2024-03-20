@@ -3,8 +3,6 @@ package com.example.android.playlistmaker
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -15,7 +13,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.playlistmaker.CustomApp.Companion.KEY_FOR_SEARCH_HISTORY
@@ -82,18 +82,6 @@ class SearchActivity : AppCompatActivity() {
             }
             adapter.notifyDataSetChanged()
         }
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = getClearButtonVisibility(s)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                searchQuery = inputEditText.text.toString()
-            }
-        }
         inputEditText.setText(searchQuery)
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -110,7 +98,15 @@ class SearchActivity : AppCompatActivity() {
                 false
             }
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
+        inputEditText.addTextChangedListener(
+            beforeTextChanged = { _, _, _, _ -> },
+            onTextChanged = { charSequence, _, _, _ ->
+                clearButton.visibility = getClearButtonVisibility(charSequence)
+            },
+            afterTextChanged = { _ ->
+                searchQuery = inputEditText.text.toString()
+            }
+        )
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
             tvHistoryHeader?.isVisible = false
             clearHistory?.isVisible = false
@@ -132,8 +128,12 @@ class SearchActivity : AppCompatActivity() {
         refreshButton?.setOnClickListener {
             searchSong(lastRequest!!)
         }
-        clearHistory = findViewById(R.id.btClearHistory)
-        tvHistoryHeader = findViewById(R.id.tvHistoryHeader)
+        clearHistory = findViewById<MaterialButton?>(R.id.btClearHistory).also {
+            it.isVisible = false
+        }
+        tvHistoryHeader = findViewById<TextView?>(R.id.tvHistoryHeader).also {
+            it.isVisible = false
+        }
         clearHistory?.setOnClickListener {
             historyTracks.clear()
             adapter.notifyDataSetChanged()
@@ -147,7 +147,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         val historyTracksJson = Gson().toJson(historyTracks)
-        sharedPrefs!!.edit().putString(KEY_FOR_SEARCH_HISTORY, historyTracksJson).apply()
+        sharedPrefs!!.edit { putString(KEY_FOR_SEARCH_HISTORY, historyTracksJson) }
     }
 
     override fun onStart() {

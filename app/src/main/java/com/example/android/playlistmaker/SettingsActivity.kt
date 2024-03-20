@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.example.android.playlistmaker.CustomApp.Companion.KEY_FOR_NIGHT_THEME
 import com.example.android.playlistmaker.CustomApp.Companion.PLAYLIST_MAKER_PREFERENCES
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -61,9 +62,9 @@ class SettingsActivity : AppCompatActivity() {
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.swNightMode)
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as CustomApp).switchTheme(checked)
-            sharedPrefs.edit()
-                .putBoolean(KEY_FOR_NIGHT_THEME, checked)
-                .apply()
+            sharedPrefs.edit {
+                putBoolean(KEY_FOR_NIGHT_THEME, checked)
+            }
         }
         themeSwitcher.isChecked = (applicationContext as CustomApp).darkTheme
     }
