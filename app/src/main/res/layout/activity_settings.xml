@@ -17,23 +17,14 @@
             android:text="@string/settings_header" />
     </FrameLayout>
 
-    <FrameLayout
-        style="@style/SettingsFrameLayout"
-        android:paddingVertical="@dimen/dp_12">
 
-        <TextView
-            style="@style/SettingsButton"
-            android:layout_gravity="center_vertical"
-            android:text="@string/dark_theme" />
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swNightMode"
+        style="@style/SettingsFrameLayout.Switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dark_theme" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/swNightMode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:theme="@style/SwitchCompat" />
-
-    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/flShareButton"
@@ -76,10 +67,12 @@
             android:contentDescription="@string/user_agreement"
             android:src="@drawable/arrow_forward" />
     </FrameLayout>
+
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1" />
-    <include layout="@layout/bottom_menu"/>
+
+    <include layout="@layout/bottom_menu" />
 
 </LinearLayout>

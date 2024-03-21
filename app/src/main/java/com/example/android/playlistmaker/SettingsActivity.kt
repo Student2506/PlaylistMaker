@@ -5,11 +5,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
+import com.example.android.playlistmaker.CustomApp.Companion.KEY_FOR_NIGHT_THEME
+import com.example.android.playlistmaker.CustomApp.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.google.android.material.switchmaterial.SwitchMaterial
+
 
 class SettingsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
         val header = findViewById<FrameLayout>(R.id.flBackToMainSettings)
         header.setOnClickListener {
@@ -49,5 +57,17 @@ class SettingsActivity : AppCompatActivity() {
             shareAppIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.practicum_link))
             startActivity(shareAppIntent)
         }
+
+
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.swNightMode)
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as CustomApp).switchTheme(checked)
+            sharedPrefs.edit {
+                putBoolean(KEY_FOR_NIGHT_THEME, checked)
+            }
+        }
+        themeSwitcher.isChecked = (applicationContext as CustomApp).darkTheme
     }
+
+
 }
