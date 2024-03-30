@@ -1,6 +1,7 @@
 package com.example.android.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -252,6 +253,10 @@ class SearchActivity : AppCompatActivity() {
         }
         Log.d(TAG, historyTracks.toString())
         adapter.notifyDataSetChanged()
+        val settingsIntent = Intent(this, AudioPlayerActivity::class.java)
+        settingsIntent.putExtra(Intent.EXTRA_TEXT, Gson().toJson(track))
+        startActivity(settingsIntent)
+
 //        adapter.notifyItemMoved(counter, 0)
     }
 

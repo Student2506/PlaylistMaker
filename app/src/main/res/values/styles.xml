@@ -225,4 +225,22 @@
         <item name="android:visibility">visible</item>
         <item name="cornerRadius">@dimen/dp_52</item>
     </style>
+
+    <style name="AudioPlayer.Track.Description.Value" parent="">
+        <item name="android:layout_marginTop">@dimen/dp_16</item>
+        <item name="android:layout_marginEnd">@dimen/dp_16</item>
+        <item name="android:layout_marginBottom">@dimen/dp_20</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+        <item name="android:textColor">@color/textview_values</item>
+    </style>
+    <style name="AudioPlayer.Track.Description.Key" parent="">
+        <item name="android:layout_marginStart">@dimen/dp_16</item>
+        <item name="android:layout_marginTop">@dimen/dp_16</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+    </style>
+
 </resources>
