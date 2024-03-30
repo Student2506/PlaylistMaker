@@ -21,15 +21,15 @@ import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    val trackImage: ImageView by lazy { findViewById(R.id.ivTrackImage) }
-    val trackName: TextView by lazy { findViewById(R.id.tvTrackName) }
-    val artistName: TextView by lazy { findViewById(R.id.tvArtistName) }
-    val trackDurationTime: TextView by lazy { findViewById(R.id.tvTrackDurationTime) }
-    val albumName: TextView by lazy { findViewById(R.id.tvAlbumName) }
-    val albumNameHeader: TextView by lazy { findViewById(R.id.tvAlbum) }
-    val year: TextView by lazy { findViewById(R.id.tvYearValue) }
-    val genre: TextView by lazy { findViewById(R.id.tvGenreValue) }
-    val country: TextView by lazy { findViewById(R.id.tvCountryValue) }
+    private val trackImage: ImageView by lazy { findViewById(R.id.ivTrackImage) }
+    private val trackName: TextView by lazy { findViewById(R.id.tvTrackName) }
+    private val artistName: TextView by lazy { findViewById(R.id.tvArtistName) }
+    private val trackDurationTime: TextView by lazy { findViewById(R.id.tvTrackDurationTime) }
+    private val albumName: TextView by lazy { findViewById(R.id.tvAlbumName) }
+    private val albumNameHeader: TextView by lazy { findViewById(R.id.tvAlbum) }
+    private val year: TextView by lazy { findViewById(R.id.tvYearValue) }
+    private val genre: TextView by lazy { findViewById(R.id.tvGenreValue) }
+    private val country: TextView by lazy { findViewById(R.id.tvCountryValue) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
