@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.datalayer.Track
 import com.google.gson.Gson
-import kotlinx.datetime.LocalDate
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -27,7 +26,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     val artistName: TextView by lazy { findViewById(R.id.tvArtistName) }
     val trackDurationTime: TextView by lazy { findViewById(R.id.tvTrackDurationTime) }
     val albumName: TextView by lazy { findViewById(R.id.tvAlbumName) }
-    val albumNameHeader: TextView by lazy { findViewById(R.id.tvAlbum)}
+    val albumNameHeader: TextView by lazy { findViewById(R.id.tvAlbum) }
     val year: TextView by lazy { findViewById(R.id.tvYearValue) }
     val genre: TextView by lazy { findViewById(R.id.tvGenreValue) }
     val country: TextView by lazy { findViewById(R.id.tvCountryValue) }
@@ -59,7 +58,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             .into(trackImage)
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackDurationTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
+        trackDurationTime.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
         if (track.collectionName.isNotEmpty()) albumName.text = track.collectionName
         else {
             albumName.isVisible = false
