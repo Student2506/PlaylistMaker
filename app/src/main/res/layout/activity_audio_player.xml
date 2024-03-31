@@ -38,6 +38,13 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/dp_24" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/descriptionGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/dp_120" />
+
         <ImageView
             android:id="@+id/ivTrackImage"
             android:layout_width="0dp"
@@ -130,56 +137,53 @@
         <TextView
             android:id="@+id/tvTrackDuration"
             style="@style/AudioPlayer.Track.Description.Key"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_40"
             android:text="@string/duration"
-            app:layout_constraintEnd_toStartOf="@id/tvTrackDurationTime"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintEnd_toStartOf="@id/descriptionGuideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTrackElapsed" />
 
         <TextView
             android:id="@+id/tvTrackDurationTime"
             style="@style/AudioPlayer.Track.Description.Value"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_40"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvTrackDuration"
+            app:layout_constraintStart_toEndOf="@id/descriptionGuideline"
             app:layout_constraintTop_toBottomOf="@id/tvTrackElapsed"
             tools:text="3:33" />
 
         <TextView
             android:id="@+id/tvAlbum"
             style="@style/AudioPlayer.Track.Description.Key"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minWidth="50dp"
             android:text="@string/album"
-            app:layout_constraintEnd_toStartOf="@id/tvAlbumName"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintEnd_toStartOf="@id/descriptionGuideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTrackDuration" />
 
         <TextView
             android:id="@+id/tvAlbumName"
             style="@style/AudioPlayer.Track.Description.Value"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvAlbum"
+            app:layout_constraintStart_toEndOf="@id/descriptionGuideline"
             app:layout_constraintTop_toBottomOf="@id/tvTrackDurationTime"
-            tools:text="Yesterday (Remastered 2009)" />
+            tools:text="Yesterday (Remastered 2009)Yesterday (Remastered 2009)Yesterday (Remastered 2009)" />
 
         <TextView
             android:id="@+id/tvYear"
             style="@style/AudioPlayer.Track.Description.Key"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:text="@string/year"
             app:layout_constraintEnd_toStartOf="@id/tvYearValue"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -189,7 +193,7 @@
         <TextView
             android:id="@+id/tvYearValue"
             style="@style/AudioPlayer.Track.Description.Value"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvYear"
@@ -199,7 +203,7 @@
         <TextView
             android:id="@+id/tvGenre"
             style="@style/AudioPlayer.Track.Description.Key"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/genre"
             app:layout_constraintEnd_toStartOf="@id/tvGenreValue"
@@ -210,7 +214,7 @@
         <TextView
             android:id="@+id/tvGenreValue"
             style="@style/AudioPlayer.Track.Description.Value"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvGenre"
@@ -220,7 +224,7 @@
         <TextView
             android:id="@+id/tvCountry"
             style="@style/AudioPlayer.Track.Description.Key"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/country"
             app:layout_constraintEnd_toStartOf="@id/tvCountryValue"
@@ -231,7 +235,7 @@
         <TextView
             android:id="@+id/tvCountryValue"
             style="@style/AudioPlayer.Track.Description.Value"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

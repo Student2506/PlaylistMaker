@@ -236,7 +236,8 @@
         <item name="android:textSize">@dimen/sp_13</item>
         <item name="android:textColor">@color/textview_values</item>
         <item name="android:ellipsize">end</item>
-        <item name="maxLines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAlignment">textEnd</item>
     </style>
 
     <style name="AudioPlayer.Track.Description.Key" parent="">
