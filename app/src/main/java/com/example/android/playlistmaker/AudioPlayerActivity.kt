@@ -1,6 +1,5 @@
 package com.example.android.playlistmaker
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -11,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.android.playlistmaker.SearchActivity.Companion.TRACK_TO_SHOW
 import com.example.android.playlistmaker.datalayer.Track
-import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -39,8 +38,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         header.setOnClickListener {
             finish()
         }
-        val trackJson: String? = intent.getStringExtra(Intent.EXTRA_TEXT)
-        val track: Track = Gson().fromJson(trackJson!!, Track::class.java)
+        val track: Track = intent.getParcelableExtra(TRACK_TO_SHOW)!!
         Log.d("AudioPlayer", track.toString())
         Glide.with(applicationContext)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))

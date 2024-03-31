@@ -249,19 +249,18 @@ class SearchActivity : AppCompatActivity() {
         historyTracks.add(0, track)
         if (historyTracks.size > 10) {
             historyTracks.removeLast()
-//            adapter.notifyItemRemoved(historyTracks.size)
         }
         Log.d(TAG, historyTracks.toString())
         adapter.notifyDataSetChanged()
         val settingsIntent = Intent(this, AudioPlayerActivity::class.java)
-        settingsIntent.putExtra(Intent.EXTRA_TEXT, Gson().toJson(track))
+        settingsIntent.putExtra(TRACK_TO_SHOW, track)
         startActivity(settingsIntent)
 
-//        adapter.notifyItemMoved(counter, 0)
     }
 
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val DEFAULT_QUERY = ""
+        const val TRACK_TO_SHOW = "track_to_show"
     }
 }
