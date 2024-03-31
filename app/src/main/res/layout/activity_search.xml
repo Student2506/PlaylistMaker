@@ -59,13 +59,30 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTracks"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTracks"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="vertical" />
+
+            <Button
+                android:id="@+id/btClearHistory"
+                style="@style/SearchDialog.History.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/dp_36"
+                android:text="@string/clear_history" />
+
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tvNothingFound"
@@ -91,23 +108,5 @@
             android:text="@string/refresh_text" />
 
     </FrameLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
-
-    <Button
-        android:id="@+id/btClearHistory"
-        style="@style/SearchDialog.History.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxHeight="@dimen/dp_36"
-        android:text="@string/clear_history" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
-
-<!--    <include layout="@layout/bottom_menu" />-->
 
 </LinearLayout>
