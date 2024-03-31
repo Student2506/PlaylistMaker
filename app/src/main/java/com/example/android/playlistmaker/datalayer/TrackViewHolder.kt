@@ -25,11 +25,8 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         artistName.text = model.artistName
         trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime)
         val urlCover = itemView.findViewById<ImageView>(R.id.ivTrack)
-        Glide.with(itemView.context)
-            .load(model.artworkUrl100)
-            .placeholder(R.drawable.placeholder)
-            .centerInside()
-            .transform(
+        Glide.with(itemView.context).load(model.artworkUrl100).placeholder(R.drawable.placeholder)
+            .centerInside().transform(
                 RoundedCorners(
                     TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
@@ -37,11 +34,10 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                         itemView.context.resources.displayMetrics
                     ).toInt()
                 )
-            )
-            .into(urlCover)
+            ).into(urlCover)
     }
 
     companion object {
-        const val ROUND_CORNERS_SIZE_PX = 2f
+        private const val ROUND_CORNERS_SIZE_PX = 2f
     }
 }

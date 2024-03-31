@@ -72,6 +72,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val ROUND_CORNERS_SIZE_PX = 8f
+        private const val ROUND_CORNERS_SIZE_PX = 8f
     }
 }
