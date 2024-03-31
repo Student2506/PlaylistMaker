@@ -214,6 +214,7 @@
         <item name="android:visibility">gone</item>
         <item name="cornerRadius">@dimen/dp_52</item>
     </style>
+
     <style name="SearchDialog.History.Button" parent="">
         <item name="android:layout_marginVertical">@dimen/dp_24</item>
         <item name="android:layout_gravity">center_horizontal</item>
@@ -225,4 +226,26 @@
         <item name="android:visibility">visible</item>
         <item name="cornerRadius">@dimen/dp_52</item>
     </style>
+
+    <style name="AudioPlayer.Track.Description.Value" parent="">
+        <item name="android:layout_marginTop">@dimen/dp_16</item>
+        <item name="android:layout_marginEnd">@dimen/dp_16</item>
+        <item name="android:layout_marginBottom">@dimen/dp_20</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+        <item name="android:textColor">@color/textview_values</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAlignment">textEnd</item>
+    </style>
+
+    <style name="AudioPlayer.Track.Description.Key" parent="">
+        <item name="android:layout_marginStart">@dimen/dp_16</item>
+        <item name="android:layout_marginTop">@dimen/dp_16</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+    </style>
+
 </resources>

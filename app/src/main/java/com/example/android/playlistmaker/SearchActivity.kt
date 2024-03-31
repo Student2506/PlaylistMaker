@@ -1,6 +1,7 @@
 package com.example.android.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -248,15 +249,18 @@ class SearchActivity : AppCompatActivity() {
         historyTracks.add(0, track)
         if (historyTracks.size > 10) {
             historyTracks.removeLast()
-//            adapter.notifyItemRemoved(historyTracks.size)
         }
         Log.d(TAG, historyTracks.toString())
         adapter.notifyDataSetChanged()
-//        adapter.notifyItemMoved(counter, 0)
+        val settingsIntent = Intent(this, AudioPlayerActivity::class.java)
+        settingsIntent.putExtra(TRACK_TO_SHOW, track)
+        startActivity(settingsIntent)
+
     }
 
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val DEFAULT_QUERY = ""
+        const val TRACK_TO_SHOW = "track_to_show"
     }
 }
