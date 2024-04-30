@@ -196,6 +196,7 @@ class SearchActivity : AppCompatActivity() {
         nothingFound?.isVisible = false
         refreshButton?.isVisible = false
         progressBar?.isVisible = true
+        Log.d(TAG, "Progress Bar UP")
 
         itunesService.getTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
             override fun onResponse(
@@ -203,6 +204,7 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 adapter.tracks = tracks
                 progressBar?.isVisible = false
+                Log.d(TAG, "Progress Bar DOWN")
                 when (response.code()) {
                     HTTP_OK -> {
                         refreshButton?.isVisible = false
