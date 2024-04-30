@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -60,11 +62,19 @@ class SearchActivity : AppCompatActivity() {
     private var clearHistory: MaterialButton? = null
     private var tvHistoryHeader: TextView? = null
 
+    private val inputEditText: EditText by lazy { findViewById(R.id.etInput) }
+    private val searchRunnable = Runnable {
+        if (inputEditText.text.isNotEmpty()) {
+            searchSong(inputEditText.text.toString())
+        }
+    }
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val inputEditText = findViewById<EditText>(R.id.etInput)
+//        val inputEditText = findViewById<EditText>(R.id.etInput)
         val clearButton = findViewById<ImageView>(R.id.ivClear)
         val headerButton = findViewById<FrameLayout>(R.id.flBackToMain)
         headerButton.setOnClickListener {
@@ -103,12 +113,13 @@ class SearchActivity : AppCompatActivity() {
             beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
                 clearButton.visibility = getClearButtonVisibility(charSequence)
+                searchDebounce()
             },
             afterTextChanged = { _ ->
                 searchQuery = inputEditText.text.toString()
             }
         )
-        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+        inputEditText.setOnFocusChangeListener { _, hasFocus ->
             tvHistoryHeader?.isVisible = false
             clearHistory?.isVisible = false
             if (hasFocus && inputEditText.text.isEmpty())
@@ -258,9 +269,15 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    private fun searchDebounce( ) {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val DEFAULT_QUERY = ""
         const val TRACK_TO_SHOW = "track_to_show"
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }
