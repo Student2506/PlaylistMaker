@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -53,6 +54,7 @@ class SearchActivity : AppCompatActivity() {
     private var refreshButton: Button? = null
     private var noConnection: TextView? = null
     private var lastRequest: String? = null
+    private var progressBar: ProgressBar? = null
 
     private val historyTracks: ArrayList<Track> = arrayListOf()
     private var sharedPrefs: SharedPreferences? = null
@@ -122,6 +124,7 @@ class SearchActivity : AppCompatActivity() {
         nothingFound = findViewById(R.id.tvNothingFound)
         refreshButton = findViewById(R.id.btRefresh)
         noConnection = findViewById(R.id.tvNoSignal)
+        progressBar = findViewById(R.id.pbProgressBar)
         adapter.tracks = tracks
         recycler?.layoutManager = LinearLayoutManager(this)
         recycler?.adapter = adapter
@@ -188,11 +191,18 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchSong(songTitle: String) {
+        recycler?.isVisible = false
+        noConnection?.isVisible = false
+        nothingFound?.isVisible = false
+        refreshButton?.isVisible = false
+        progressBar?.isVisible = true
+
         itunesService.getTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
             override fun onResponse(
                 call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>
             ) {
                 adapter.tracks = tracks
+                progressBar?.isVisible = false
                 when (response.code()) {
                     HTTP_OK -> {
                         refreshButton?.isVisible = false
