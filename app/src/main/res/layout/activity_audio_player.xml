@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_12"
             android:fontFamily="@font/ys_display_medium"
-            android:text="3:33"
+            android:text="@string/initial_track_elapsed"
             android:textAlignment="center"
             android:textFontWeight="500"
             android:textSize="@dimen/sp_14"
