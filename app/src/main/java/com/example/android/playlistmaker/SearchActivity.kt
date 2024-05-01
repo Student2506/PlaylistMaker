@@ -208,6 +208,7 @@ class SearchActivity : AppCompatActivity() {
         noConnection?.isVisible = false
         nothingFound?.isVisible = false
         refreshButton?.isVisible = false
+        clearHistory?.isVisible = false
         progressBar?.isVisible = true
         Log.d(TAG, "Progress Bar UP")
 
@@ -283,16 +284,16 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun searchDebounce( ) {
+    private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
-    private fun clickDebounce() : Boolean {
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
     }
