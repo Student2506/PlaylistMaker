@@ -37,7 +37,7 @@ import java.net.HttpURLConnection.HTTP_OK
 
 class SearchActivity : AppCompatActivity() {
 
-    private val TAG = "SearchActivity"
+
     private var searchQuery: String = ""
     private val baseUrl: String = "https://itunes.apple.com"
 
@@ -185,6 +185,11 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, searchQuery)
@@ -304,5 +309,6 @@ class SearchActivity : AppCompatActivity() {
         const val TRACK_TO_SHOW = "track_to_show"
         const val SEARCH_DEBOUNCE_DELAY = 2000L
         const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val TAG = "SearchActivity"
     }
 }

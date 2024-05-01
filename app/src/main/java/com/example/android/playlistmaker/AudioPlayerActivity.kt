@@ -39,14 +39,17 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val mediaPlayer = MediaPlayer()
     private var playerState = STATE_DEFAULT
     private val handler = Handler(Looper.getMainLooper())
+    private val timeFormatter: SimpleDateFormat by lazy {
+        SimpleDateFormat(
+            "mm:ss",
+            Locale.getDefault()
+        )
+    }
     private val trackTime: Runnable by lazy {
         object : Runnable {
             override fun run() {
                 elapsedTime.post {
-                    elapsedTime.text = SimpleDateFormat(
-                        "mm:ss",
-                        Locale.getDefault()
-                    ).format(mediaPlayer.currentPosition)
+                    elapsedTime.text = timeFormatter.format(mediaPlayer.currentPosition)
                 }
                 handler.postDelayed(
                     this,
@@ -55,8 +58,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
         }
     }
-
-    private var TAG = "AudioPlayerActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,8 +85,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             .into(trackImage)
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackDurationTime.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
+        trackDurationTime.text = timeFormatter.format(track.trackTime)
         if (track.collectionName.isNotEmpty()) albumName.text = track.collectionName
         else {
             albumName.isVisible = false
@@ -129,7 +129,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener {
             playButton.setImageResource(R.drawable.play)
             playerState = STATE_PREPARED
-            elapsedTime.text = "00:00"
+            elapsedTime.text = timeFormatter.format(0L)
         }
     }
 
@@ -165,5 +165,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
         private const val REFRESH_TRACK_DELAY_MILLIS = 400L  // 2-3 time a second
+        private const val TAG = "AudioPlayerActivity"
     }
 }
