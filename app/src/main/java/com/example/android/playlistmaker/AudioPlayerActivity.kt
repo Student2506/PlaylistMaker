@@ -1,5 +1,6 @@
 package com.example.android.playlistmaker
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -43,7 +44,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             override fun run() {
                 elapsedTime.post {
                     elapsedTime.text = SimpleDateFormat(
-                        "m:ss",
+                        "mm:ss",
                         Locale.getDefault()
                     ).format(mediaPlayer.currentPosition)
                 }
@@ -116,6 +117,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         handler.removeCallbacks(trackTime)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun preparePlayer(trackUrl: String) {
         Log.d(TAG, "Track: $trackUrl")
         mediaPlayer.setDataSource(trackUrl)
@@ -127,6 +129,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener {
             playButton.setImageResource(R.drawable.play)
             playerState = STATE_PREPARED
+            elapsedTime.text = "00:00"
         }
     }
 
