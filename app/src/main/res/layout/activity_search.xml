@@ -107,6 +107,15 @@
             android:layout_height="wrap_content"
             android:text="@string/refresh_text" />
 
+        <ProgressBar
+            android:id="@+id/pbProgressBar"
+            android:layout_marginTop="@dimen/dp_140"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:layout_gravity="center_horizontal|top"
+            android:indeterminateTint="@color/progress_bar_tint"
+            android:visibility="gone" />
+
     </FrameLayout>
 
 </LinearLayout>

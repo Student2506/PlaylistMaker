@@ -15,4 +15,5 @@
     <color name="switch_foreground_on">#3772E7</color>
     <color name="switch_foreground_off">#AEAFB4</color>
     <color name="textview_values">#1A1B22</color>
+    <color name="progress_bar_tint">#6200EE</color>
 </resources>

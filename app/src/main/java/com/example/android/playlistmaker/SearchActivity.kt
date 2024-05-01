@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -12,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -34,7 +37,7 @@ import java.net.HttpURLConnection.HTTP_OK
 
 class SearchActivity : AppCompatActivity() {
 
-    private val TAG = "SearchActivity"
+
     private var searchQuery: String = ""
     private val baseUrl: String = "https://itunes.apple.com"
 
@@ -45,7 +48,9 @@ class SearchActivity : AppCompatActivity() {
     private val itunesService = retrofit.create(ITunesApi::class.java)
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter {
-        showTrack(it)
+        if (clickDebounce()) {
+            showTrack(it)
+        }
     }
 
     private var recycler: RecyclerView? = null
@@ -53,6 +58,7 @@ class SearchActivity : AppCompatActivity() {
     private var refreshButton: Button? = null
     private var noConnection: TextView? = null
     private var lastRequest: String? = null
+    private var progressBar: ProgressBar? = null
 
     private val historyTracks: ArrayList<Track> = arrayListOf()
     private var sharedPrefs: SharedPreferences? = null
@@ -60,11 +66,19 @@ class SearchActivity : AppCompatActivity() {
     private var clearHistory: MaterialButton? = null
     private var tvHistoryHeader: TextView? = null
 
+    private val inputEditText: EditText by lazy { findViewById(R.id.etInput) }
+    private val searchRunnable = Runnable {
+        if (inputEditText.text.isNotEmpty()) {
+            searchSong(inputEditText.text.toString())
+        }
+    }
+    private val handler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val inputEditText = findViewById<EditText>(R.id.etInput)
         val clearButton = findViewById<ImageView>(R.id.ivClear)
         val headerButton = findViewById<FrameLayout>(R.id.flBackToMain)
         headerButton.setOnClickListener {
@@ -103,12 +117,13 @@ class SearchActivity : AppCompatActivity() {
             beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
                 clearButton.visibility = getClearButtonVisibility(charSequence)
+                searchDebounce()
             },
             afterTextChanged = { _ ->
                 searchQuery = inputEditText.text.toString()
             }
         )
-        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+        inputEditText.setOnFocusChangeListener { _, hasFocus ->
             tvHistoryHeader?.isVisible = false
             clearHistory?.isVisible = false
             if (hasFocus && inputEditText.text.isEmpty())
@@ -122,6 +137,7 @@ class SearchActivity : AppCompatActivity() {
         nothingFound = findViewById(R.id.tvNothingFound)
         refreshButton = findViewById(R.id.btRefresh)
         noConnection = findViewById(R.id.tvNoSignal)
+        progressBar = findViewById(R.id.pbProgressBar)
         adapter.tracks = tracks
         recycler?.layoutManager = LinearLayoutManager(this)
         recycler?.adapter = adapter
@@ -169,6 +185,11 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, searchQuery)
@@ -188,11 +209,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchSong(songTitle: String) {
+        recycler?.isVisible = false
+        noConnection?.isVisible = false
+        nothingFound?.isVisible = false
+        refreshButton?.isVisible = false
+        clearHistory?.isVisible = false
+        progressBar?.isVisible = true
+        Log.d(TAG, "Progress Bar UP")
+
         itunesService.getTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
             override fun onResponse(
                 call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>
             ) {
                 adapter.tracks = tracks
+                progressBar?.isVisible = false
+                Log.d(TAG, "Progress Bar DOWN")
                 when (response.code()) {
                     HTTP_OK -> {
                         refreshButton?.isVisible = false
@@ -258,9 +289,26 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val DEFAULT_QUERY = ""
         const val TRACK_TO_SHOW = "track_to_show"
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val TAG = "SearchActivity"
     }
 }
