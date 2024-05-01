@@ -47,7 +47,9 @@ class SearchActivity : AppCompatActivity() {
     private val itunesService = retrofit.create(ITunesApi::class.java)
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter {
-        showTrack(it)
+        if (clickDebounce()) {
+            showTrack(it)
+        }
     }
 
     private var recycler: RecyclerView? = null
@@ -69,12 +71,12 @@ class SearchActivity : AppCompatActivity() {
         }
     }
     private val handler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-//        val inputEditText = findViewById<EditText>(R.id.etInput)
         val clearButton = findViewById<ImageView>(R.id.ivClear)
         val headerButton = findViewById<FrameLayout>(R.id.flBackToMain)
         headerButton.setOnClickListener {
@@ -274,10 +276,20 @@ class SearchActivity : AppCompatActivity() {
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val DEFAULT_QUERY = ""
         const val TRACK_TO_SHOW = "track_to_show"
         const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
