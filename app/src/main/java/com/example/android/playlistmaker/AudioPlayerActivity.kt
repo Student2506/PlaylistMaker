@@ -1,9 +1,13 @@
 package com.example.android.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +33,29 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val year: TextView by lazy { findViewById(R.id.tvYearValue) }
     private val genre: TextView by lazy { findViewById(R.id.tvGenreValue) }
     private val country: TextView by lazy { findViewById(R.id.tvCountryValue) }
+    private val playButton: ImageButton by lazy { findViewById(R.id.ibPlayButton) }
+    private val elapsedTime: TextView by lazy { findViewById(R.id.tvTrackElapsed) }
+    private val mediaPlayer = MediaPlayer()
+    private var playerState = STATE_DEFAULT
+    private val handler = Handler(Looper.getMainLooper())
+    private val trackTime: Runnable by lazy {
+        object : Runnable {
+            override fun run() {
+                elapsedTime.post {
+                    elapsedTime.text = SimpleDateFormat(
+                        "m:ss",
+                        Locale.getDefault()
+                    ).format(mediaPlayer.currentPosition)
+                }
+                handler.postDelayed(
+                    this,
+                    REFRESH_TRACK_DELAY_MILLIS
+                )
+            }
+        }
+    }
+
+    private var TAG = "AudioPlayerActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +96,71 @@ class AudioPlayerActivity : AppCompatActivity() {
         year.text = date.year.toString()
         genre.text = track.primaryGenreName
         country.text = track.country
+        playButton.isEnabled = false
+        if (track.previewUrl != null) {
+            preparePlayer(track.previewUrl)
+        }
+        playButton.setOnClickListener {
+            playbackControl()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+        handler.removeCallbacks(trackTime)
+    }
+
+    private fun preparePlayer(trackUrl: String) {
+        Log.d(TAG, "Track: $trackUrl")
+        mediaPlayer.setDataSource(trackUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playButton.isEnabled = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            playButton.setImageResource(R.drawable.play)
+            playerState = STATE_PREPARED
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playButton.setImageResource(R.drawable.pause)
+        playerState = STATE_PLAYING
+
+        handler.postDelayed(
+            trackTime,
+            REFRESH_TRACK_DELAY_MILLIS
+        )
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playButton.setImageResource(R.drawable.play)
+        playerState = STATE_PAUSED
+        handler.removeCallbacks(trackTime)
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            STATE_PLAYING -> pausePlayer()
+            STATE_PREPARED, STATE_PAUSED -> startPlayer()
+        }
     }
 
     companion object {
         private const val ROUND_CORNERS_SIZE_PX = 8f
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val REFRESH_TRACK_DELAY_MILLIS = 400L  // 2-3 time a second
     }
 }

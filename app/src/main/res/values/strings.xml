@@ -35,4 +35,5 @@
     <string name="year">Год</string>
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
+    <string name="initial_track_elapsed">0:00</string>
 </resources>
