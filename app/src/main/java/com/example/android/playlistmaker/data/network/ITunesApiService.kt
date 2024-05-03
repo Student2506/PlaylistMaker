@@ -1,14 +1,14 @@
-package com.example.android.playlistmaker.api.v1
+package com.example.android.playlistmaker.data.network
 
-import com.example.android.playlistmaker.datalayer.ITunesTrackResponse
+import com.example.android.playlistmaker.data.dto.ITunesTrackResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ITunesApi {
+interface ITunesApiService {
 
     @GET("/search")
-    fun getTracks(
+    fun searchTracks(
         @Query("term") term: String,
         @Query("entity") entity: String = "song"
     ): Call<ITunesTrackResponse>

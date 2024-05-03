@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker
+package com.example.android.playlistmaker.ui.search
 
 import android.content.Context
 import android.content.Intent
@@ -22,10 +22,13 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.playlistmaker.CustomApp
 import com.example.android.playlistmaker.CustomApp.Companion.KEY_FOR_SEARCH_HISTORY
-import com.example.android.playlistmaker.api.v1.ITunesApi
-import com.example.android.playlistmaker.datalayer.ITunesTrackResponse
-import com.example.android.playlistmaker.datalayer.Track
+import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.data.network.ITunesApiService
+import com.example.android.playlistmaker.data.dto.ITunesTrackResponse
+import com.example.android.playlistmaker.data.dto.TrackDto
+import com.example.android.playlistmaker.ui.audioplayer.AudioPlayerActivity
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import retrofit2.Call
@@ -45,8 +48,8 @@ class SearchActivity : AppCompatActivity() {
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
 
-    private val itunesService = retrofit.create(ITunesApi::class.java)
-    private val tracks = ArrayList<Track>()
+    private val itunesService = retrofit.create(ITunesApiService::class.java)
+    private val tracks = ArrayList<TrackDto>()
     private val adapter = TrackAdapter {
         if (clickDebounce()) {
             showTrack(it)
@@ -60,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
     private var lastRequest: String? = null
     private var progressBar: ProgressBar? = null
 
-    private val historyTracks: ArrayList<Track> = arrayListOf()
+    private val historyTracks: ArrayList<TrackDto> = arrayListOf()
     private var sharedPrefs: SharedPreferences? = null
 
     private var clearHistory: MaterialButton? = null
@@ -172,7 +175,7 @@ class SearchActivity : AppCompatActivity() {
         val historyTracksJson = sharedPrefs?.getString(KEY_FOR_SEARCH_HISTORY, null)
         if (historyTracksJson.isNullOrEmpty()) return
         historyTracks.clear()
-        historyTracks.addAll(Gson().fromJson(historyTracksJson, Array<Track>::class.java))
+        historyTracks.addAll(Gson().fromJson(historyTracksJson, Array<TrackDto>::class.java))
         adapter.tracks = historyTracks
         if (adapter.tracks.isNotEmpty()) {
             tvHistoryHeader?.isVisible = true
@@ -217,7 +220,7 @@ class SearchActivity : AppCompatActivity() {
         progressBar?.isVisible = true
         Log.d(TAG, "Progress Bar UP")
 
-        itunesService.getTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
+        itunesService.searchTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
             override fun onResponse(
                 call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>
             ) {
@@ -265,7 +268,7 @@ class SearchActivity : AppCompatActivity() {
         refreshButton?.isVisible = true
     }
 
-    private fun showTrack(track: Track) {
+    private fun showTrack(track: TrackDto) {
         val message = "${track.trackName} - ${track.artistName}\nTime:${track.trackTime}"
         Log.d(TAG, message)
         val historyIterator = historyTracks.iterator()

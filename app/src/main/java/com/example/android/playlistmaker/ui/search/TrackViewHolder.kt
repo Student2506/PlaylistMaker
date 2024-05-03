@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker.datalayer
+package com.example.android.playlistmaker.ui.search
 
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.data.dto.TrackDto
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -20,7 +21,7 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     private val artistName: TextView = itemView.findViewById(R.id.tvArtistName)
     private val trackTime: TextView = itemView.findViewById(R.id.tvTrackDuration)
 
-    fun bind(model: Track) {
+    fun bind(model: TrackDto) {
         trackName.text = model.trackName
         artistName.text = model.artistName
         trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime)

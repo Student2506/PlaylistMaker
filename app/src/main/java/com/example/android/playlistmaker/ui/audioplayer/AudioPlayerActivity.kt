@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker
+package com.example.android.playlistmaker.ui.audioplayer
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
@@ -15,8 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.android.playlistmaker.SearchActivity.Companion.TRACK_TO_SHOW
-import com.example.android.playlistmaker.datalayer.Track
+import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.ui.search.SearchActivity.Companion.TRACK_TO_SHOW
+import com.example.android.playlistmaker.data.dto.TrackDto
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -67,7 +68,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         header.setOnClickListener {
             finish()
         }
-        val track: Track = intent.getParcelableExtra(TRACK_TO_SHOW)!!
+        val track: TrackDto = intent.getParcelableExtra(TRACK_TO_SHOW)!!
         Log.d("AudioPlayer", track.toString())
         Glide.with(applicationContext)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
