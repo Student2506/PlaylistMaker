@@ -28,6 +28,7 @@ import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.data.network.ITunesApiService
 import com.example.android.playlistmaker.data.dto.ITunesTrackResponse
 import com.example.android.playlistmaker.data.dto.TrackDto
+import com.example.android.playlistmaker.domain.models.Track
 import com.example.android.playlistmaker.presentation.ui.audioplayer.AudioPlayerActivity
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
@@ -268,7 +269,7 @@ class SearchActivity : AppCompatActivity() {
         refreshButton?.isVisible = true
     }
 
-    private fun showTrack(track: TrackDto) {
+    private fun showTrack(track: Track) {
         val message = "${track.trackName} - ${track.artistName}\nTime:${track.trackTime}"
         Log.d(TAG, message)
         val historyIterator = historyTracks.iterator()
