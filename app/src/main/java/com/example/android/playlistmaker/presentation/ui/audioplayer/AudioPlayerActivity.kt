@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker.ui.audioplayer
+package com.example.android.playlistmaker.presentation.ui.audioplayer
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -14,7 +14,7 @@ import androidx.core.view.isVisible
 import com.example.android.playlistmaker.Creator
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.data.dto.TrackDto
-import com.example.android.playlistmaker.ui.search.SearchActivity.Companion.TRACK_TO_SHOW
+import com.example.android.playlistmaker.presentation.ui.search.SearchActivity.Companion.TRACK_TO_SHOW
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId

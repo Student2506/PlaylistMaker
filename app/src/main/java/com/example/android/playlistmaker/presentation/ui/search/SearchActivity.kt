@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker.ui.search
+package com.example.android.playlistmaker.presentation.ui.search
 
 import android.content.Context
 import android.content.Intent
@@ -28,7 +28,7 @@ import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.data.network.ITunesApiService
 import com.example.android.playlistmaker.data.dto.ITunesTrackResponse
 import com.example.android.playlistmaker.data.dto.TrackDto
-import com.example.android.playlistmaker.ui.audioplayer.AudioPlayerActivity
+import com.example.android.playlistmaker.presentation.ui.audioplayer.AudioPlayerActivity
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import retrofit2.Call
