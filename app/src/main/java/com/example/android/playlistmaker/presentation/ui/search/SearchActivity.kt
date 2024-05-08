@@ -183,7 +183,9 @@ class SearchActivity : AppCompatActivity() {
             tvHistoryHeader?.isVisible = false
             clearHistory?.isVisible = false
         }
-        adapter.notifyItemRangeChanged(0, historyTracks.size)
+        Log.d(TAG, "History tracks here?")
+        adapter.notifyDataSetChanged()
+        Log.d(TAG, "IT'S HERE")
     }
 
     override fun onDestroy() {
