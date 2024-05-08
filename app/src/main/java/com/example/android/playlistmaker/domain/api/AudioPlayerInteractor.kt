@@ -1,8 +1,5 @@
 package com.example.android.playlistmaker.domain.api
 
-import android.widget.ImageButton
-import android.widget.TextView
-
 interface AudioPlayerInteractor {
 
     enum class STATE {
@@ -17,7 +14,9 @@ interface AudioPlayerInteractor {
 
     abstract fun playbackControl(): Boolean
 
-    abstract fun preparePlayer(trackUrl: String, button: ImageButton, elapsedTime: TextView)
+    abstract fun preparePlayer(trackUrl: String, onPrepared: () -> Unit, onCompletePlay: () -> Unit)
 
     abstract fun release()
+
+    abstract val currentPosition: Int
 }

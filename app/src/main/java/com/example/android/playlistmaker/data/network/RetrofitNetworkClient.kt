@@ -1,5 +1,6 @@
 package com.example.android.playlistmaker.data.network
 
+import android.util.Log
 import com.example.android.playlistmaker.data.NetworkClient
 import com.example.android.playlistmaker.data.dto.ITunesTrackRequest
 import com.example.android.playlistmaker.data.dto.Response
@@ -17,12 +18,18 @@ class RetrofitNetworkClient : NetworkClient {
     private val itunesService = retrofit.create(ITunesApiService::class.java)
 
     override fun doRequest(dto: Any): Response {
+        Log.d(TAG, "request ${dto.toString()}")
         if (dto is ITunesTrackRequest) {
             val resp = itunesService.searchTracks(term = dto.term, entity = dto.entity).execute()
             val body = resp.body() ?: Response()
             return body.apply { resultCode = resp.code() }
         } else {
+            Log.d(TAG, "error!!!!!")
             return Response().apply { resultCode = 400 }
         }
+    }
+
+    companion object {
+        private const val TAG = "RetrofitNetworkClient"
     }
 }

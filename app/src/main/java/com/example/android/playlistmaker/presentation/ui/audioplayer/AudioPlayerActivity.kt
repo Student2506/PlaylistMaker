@@ -48,8 +48,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val trackTime: Runnable by lazy {
         object : Runnable {
             override fun run() {
-                elapsedTime.post {
-                    elapsedTime.text = timeFormatter.format(mediaPlayer.currentPosition)
+                handler.post {
+                    elapsedTime.text = timeFormatter.format(audioPlayer.currentPosition)
                 }
                 handler.postDelayed(
                     this,
@@ -100,7 +100,14 @@ class AudioPlayerActivity : AppCompatActivity() {
         country.text = track.country
         playButton.isEnabled = false
         if (track.previewUrl != null) {
-            audioPlayer.preparePlayer(track.previewUrl, playButton, elapsedTime)
+            audioPlayer.preparePlayer(
+                track.previewUrl,
+                { playButton.isEnabled = true },
+                {
+                    playButton.setImageResource(R.drawable.play)
+                    elapsedTime.text = timeFormatter.format(0L)
+                }
+            )
         }
         playButton.setOnClickListener {
             playbackControl()
@@ -114,7 +121,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        audioPlayer.release()
         handler.removeCallbacks(trackTime)
     }
 
@@ -140,6 +146,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             startPlayer()
         }
     }
+
 
     companion object {
         public const val ROUND_CORNERS_SIZE_PX = 8f

@@ -2,12 +2,12 @@ package com.example.android.playlistmaker.presentation.ui.search
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.playlistmaker.data.dto.TrackDto
+import com.example.android.playlistmaker.domain.models.Track
 
 class TrackAdapter(private val clickListener: TrackClickListener) :
     RecyclerView.Adapter<TrackViewHolder>() {
 
-    var tracks = ArrayList<TrackDto>()
+    var tracks = ArrayList<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder =
         TrackViewHolder(parent)
@@ -21,6 +21,6 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
     }
 
     fun interface TrackClickListener {
-        fun onTrackClick(track: TrackDto)
+        fun onTrackClick(track: Track)
     }
 }
