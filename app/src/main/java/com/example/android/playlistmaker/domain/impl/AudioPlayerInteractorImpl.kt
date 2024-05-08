@@ -4,8 +4,6 @@ import android.media.MediaPlayer
 import android.util.Log
 import com.example.android.playlistmaker.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.domain.api.AudioPlayerInteractor.STATE
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class AudioPlayerInteractorImpl : AudioPlayerInteractor {
 
@@ -20,7 +18,7 @@ class AudioPlayerInteractorImpl : AudioPlayerInteractor {
     }
 
     override fun pausePlayer() {
-        mediaPlayer.pause()
+        if (statePlayer == STATE.STATE_PLAYING) mediaPlayer.pause()
         statePlayer = STATE.STATE_PAUSED
     }
 

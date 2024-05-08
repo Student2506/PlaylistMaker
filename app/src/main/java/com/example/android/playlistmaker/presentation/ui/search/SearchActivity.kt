@@ -217,6 +217,7 @@ class SearchActivity : AppCompatActivity() {
         nothingFound?.isVisible = false
         refreshButton?.isVisible = false
         clearHistory?.isVisible = false
+        tvHistoryHeader?.isVisible = false
         progressBar?.isVisible = true
         Log.d(TAG, "Progress Bar UP")
 
@@ -268,6 +269,7 @@ class SearchActivity : AppCompatActivity() {
                         adapter.notifyItemRangeChanged(0, adapter.tracks.size)
                         recycler?.isVisible = true
                         progressBar?.isVisible = false
+
                     }
                 })
             }
