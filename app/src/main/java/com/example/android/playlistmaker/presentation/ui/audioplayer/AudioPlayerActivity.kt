@@ -1,6 +1,5 @@
 package com.example.android.playlistmaker.presentation.ui.audioplayer
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -38,7 +37,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val country: TextView by lazy { findViewById(R.id.tvCountryValue) }
     private val playButton: ImageButton by lazy { findViewById(R.id.ibPlayButton) }
     private val elapsedTime: TextView by lazy { findViewById(R.id.tvTrackElapsed) }
-    private val mediaPlayer = MediaPlayer()
     private val handler = Handler(Looper.getMainLooper())
     private val timeFormatter: SimpleDateFormat by lazy {
         SimpleDateFormat(
