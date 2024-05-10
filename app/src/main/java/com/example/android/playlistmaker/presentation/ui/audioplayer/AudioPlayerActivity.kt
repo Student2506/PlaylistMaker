@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.Creator
 import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.domain.models.State
 import com.example.android.playlistmaker.domain.models.Track
 import com.example.android.playlistmaker.presentation.ui.search.SearchActivity.Companion.TRACK_TO_SHOW
 import java.text.SimpleDateFormat
@@ -140,7 +141,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun playbackControl() {
-        if (audioPlayer.playbackControl()) {
+        if (audioPlayer.playbackControl() != State.STATE_PLAYING) {
             pausePlayer()
         } else {
             startPlayer()

@@ -2,7 +2,8 @@ package com.example.android.playlistmaker.domain.api
 
 import com.example.android.playlistmaker.domain.models.State
 
-interface AudioPlayerInteractor {
+interface AudioPlayerRepository {
+
     fun startPlayer()
 
     fun pausePlayer()
@@ -13,5 +14,5 @@ interface AudioPlayerInteractor {
 
     fun release()
 
-    fun getTrackTime(): Int
+    abstract val currentPosition: Int
 }
