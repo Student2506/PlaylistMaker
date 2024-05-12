@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker
+package com.example.android.playlistmaker.presentation.ui.general_settings
 
 import android.content.Intent
 import android.net.Uri
@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import com.example.android.playlistmaker.CustomApp
 import com.example.android.playlistmaker.CustomApp.Companion.KEY_FOR_NIGHT_THEME
 import com.example.android.playlistmaker.CustomApp.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.example.android.playlistmaker.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 

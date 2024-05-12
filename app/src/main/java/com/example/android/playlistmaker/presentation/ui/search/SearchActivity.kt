@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker
+package com.example.android.playlistmaker.presentation.ui.search
 
 import android.content.Context
 import android.content.Intent
@@ -22,18 +22,17 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.playlistmaker.Creator
+import com.example.android.playlistmaker.CustomApp
 import com.example.android.playlistmaker.CustomApp.Companion.KEY_FOR_SEARCH_HISTORY
-import com.example.android.playlistmaker.api.v1.ITunesApi
-import com.example.android.playlistmaker.datalayer.ITunesTrackResponse
-import com.example.android.playlistmaker.datalayer.Track
+import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.domain.api.TracksInteractor
+import com.example.android.playlistmaker.domain.models.Track
+import com.example.android.playlistmaker.presentation.ui.audioplayer.AudioPlayerActivity
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.HttpURLConnection.HTTP_OK
 
 class SearchActivity : AppCompatActivity() {
 
@@ -41,11 +40,7 @@ class SearchActivity : AppCompatActivity() {
     private var searchQuery: String = ""
     private val baseUrl: String = "https://itunes.apple.com"
 
-    private val retrofit =
-        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-    private val itunesService = retrofit.create(ITunesApi::class.java)
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter {
         if (clickDebounce()) {
@@ -74,6 +69,7 @@ class SearchActivity : AppCompatActivity() {
     }
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
+    private val tracksInteractor = Creator.provideTracksInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,13 +85,14 @@ class SearchActivity : AppCompatActivity() {
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
+            val size = tracks.size
             tracks.clear()
             adapter.tracks = historyTracks
             if (adapter.tracks.isNotEmpty()) {
                 tvHistoryHeader?.isVisible = true
                 clearHistory?.isVisible = true
             }
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRangeChanged(0, size)
         }
         inputEditText.setText(searchQuery)
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -126,11 +123,15 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.setOnFocusChangeListener { _, hasFocus ->
             tvHistoryHeader?.isVisible = false
             clearHistory?.isVisible = false
-            if (hasFocus && inputEditText.text.isEmpty())
+
+            if (hasFocus && inputEditText.text.isEmpty()) {
+                val size = adapter.tracks.size
                 adapter.tracks = arrayListOf()
-            else
+                adapter.notifyItemRangeRemoved(0, size)
+            } else {
                 adapter.tracks = tracks
-            adapter.notifyDataSetChanged()
+                adapter.notifyItemRangeChanged(0, tracks.size)
+            }
         }
 
         recycler = findViewById(R.id.rvTracks)
@@ -152,8 +153,9 @@ class SearchActivity : AppCompatActivity() {
             it.isVisible = false
         }
         clearHistory?.setOnClickListener {
+            val size = historyTracks.size
             historyTracks.clear()
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRangeRemoved(0, size)
             tvHistoryHeader?.isVisible = false
             clearHistory?.isVisible = false
         }
@@ -181,8 +183,9 @@ class SearchActivity : AppCompatActivity() {
             tvHistoryHeader?.isVisible = false
             clearHistory?.isVisible = false
         }
+        Log.d(TAG, "History tracks here?")
         adapter.notifyDataSetChanged()
-
+        Log.d(TAG, "IT'S HERE")
     }
 
     override fun onDestroy() {
@@ -214,51 +217,70 @@ class SearchActivity : AppCompatActivity() {
         nothingFound?.isVisible = false
         refreshButton?.isVisible = false
         clearHistory?.isVisible = false
+        tvHistoryHeader?.isVisible = false
         progressBar?.isVisible = true
         Log.d(TAG, "Progress Bar UP")
 
-        itunesService.getTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
-            override fun onResponse(
-                call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>
-            ) {
+//        itunesService.searchTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
+//            override fun onResponse(
+//                call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>
+//            ) {
+//                adapter.tracks = tracks
+//                progressBar?.isVisible = false
+//                Log.d(TAG, "Progress Bar DOWN")
+//                when (response.code()) {
+//                    HTTP_OK -> {
+//                        refreshButton?.isVisible = false
+//                        noConnection?.isVisible = false
+//                        if (response.body()?.tracks?.isNotEmpty() == true) {
+//                            nothingFound?.isVisible = false
+//                            tracks.clear()
+//                            tracks.addAll(response.body()?.tracks!!)
+//                            recycler?.isVisible = true
+//                            adapter.notifyItemRangeChanged(0, tracks.size)
+//                        } else {
+//                            val size = tracks.size
+//                            tracks.clear()
+//                            adapter.notifyItemRangeRemoved(0, size)
+//                            recycler?.isVisible = false
+//                            nothingFound?.isVisible = true
+//                        }
+//                    }
+//
+//                    else -> {
+//                        lastRequest = songTitle
+//                        showErrorMessage()
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
+//                lastRequest = songTitle
+//                showErrorMessage()
+//            }
+//        })
+        tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {
+            override fun consume(foundTracks: List<Track>) {
+                tracks.clear()
+                tracks.addAll(foundTracks)
                 adapter.tracks = tracks
-                progressBar?.isVisible = false
-                Log.d(TAG, "Progress Bar DOWN")
-                when (response.code()) {
-                    HTTP_OK -> {
-                        refreshButton?.isVisible = false
-                        noConnection?.isVisible = false
-                        if (response.body()?.tracks?.isNotEmpty() == true) {
-                            nothingFound?.isVisible = false
-                            tracks.clear()
-                            tracks.addAll(response.body()?.tracks!!)
-                            recycler?.isVisible = true
-                            adapter.notifyDataSetChanged()
-                        } else {
-                            tracks.clear()
-                            adapter.notifyDataSetChanged()
-                            recycler?.isVisible = false
-                            nothingFound?.isVisible = true
-                        }
-                    }
+                handler.post(object : Runnable {
+                    override fun run() {
+                        adapter.notifyItemRangeChanged(0, adapter.tracks.size)
+                        recycler?.isVisible = true
+                        progressBar?.isVisible = false
 
-                    else -> {
-                        lastRequest = songTitle
-                        showErrorMessage()
                     }
-                }
-            }
-
-            override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
-                lastRequest = songTitle
-                showErrorMessage()
+                })
             }
         })
+
     }
 
     private fun showErrorMessage() {
+        val size = tracks.size
         tracks.clear()
-        adapter.notifyDataSetChanged()
+        adapter.notifyItemRangeRemoved(0, size)
         recycler?.isVisible = false
         nothingFound?.isVisible = false
         noConnection?.isVisible = true
@@ -282,7 +304,7 @@ class SearchActivity : AppCompatActivity() {
             historyTracks.removeLast()
         }
         Log.d(TAG, historyTracks.toString())
-        adapter.notifyDataSetChanged()
+        adapter.notifyItemChanged(0)
         val settingsIntent = Intent(this, AudioPlayerActivity::class.java)
         settingsIntent.putExtra(TRACK_TO_SHOW, track)
         startActivity(settingsIntent)
