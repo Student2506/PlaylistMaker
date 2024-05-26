@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.creator.Creator
+import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.ui.SearchActivity.Companion.TRACK_TO_SHOW
@@ -41,19 +42,23 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private val timeFormatter: SimpleDateFormat by lazy {
         SimpleDateFormat(
-            "mm:ss",
-            Locale.getDefault()
+            "mm:ss", Locale.getDefault()
         )
     }
     private val trackTime: Runnable by lazy {
         object : Runnable {
             override fun run() {
-                handler.post {
-                    elapsedTime.text = timeFormatter.format(audioPlayer.currentPosition)
-                }
+                playerInteractor.getTrackTime(object :
+                    AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
+                    override fun getTime(time: Int) {
+                        handler.post {
+                            elapsedTime.text = timeFormatter.format(time)
+                        }
+                    }
+                })
+
                 handler.postDelayed(
-                    this,
-                    REFRESH_TRACK_DELAY_MILLIS
+                    this, REFRESH_TRACK_DELAY_MILLIS
                 )
             }
         }
@@ -72,9 +77,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         Log.d("AudioPlayer", track.toString())
         Glide.with(applicationContext)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
-            .placeholder(R.drawable.placeholder)
-            .centerInside()
-            .transform(
+            .placeholder(R.drawable.placeholder).centerInside().transform(
                 RoundedCorners(
                     TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
@@ -82,8 +85,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                         applicationContext.resources.displayMetrics
                     ).toInt()
                 )
-            )
-            .into(trackImage)
+            ).into(trackImage)
         trackName.text = track.trackName
         artistName.text = track.artistName
         trackDurationTime.text = timeFormatter.format(track.trackTime)
@@ -100,14 +102,15 @@ class AudioPlayerActivity : AppCompatActivity() {
         country.text = track.country
         playButton.isEnabled = false
         if (track.previewUrl != null) {
-            audioPlayer.preparePlayer(
+            playerInteractor.preparePlayer(
                 track.previewUrl,
-                { playButton.isEnabled = true },
-                {
-                    playButton.setImageResource(R.drawable.play)
-                    elapsedTime.text = timeFormatter.format(0L)
-                }
-            )
+                object : AudioPlayerInteractor.AudioPlayerConsumer {
+                    override fun consume(status: State) {
+                        playButton.isEnabled = true
+                        playButton.setImageResource(R.drawable.play)
+                        elapsedTime.text = timeFormatter.format(0L)
+                    }
+                })
         }
         playButton.setOnClickListener {
             playbackControl()
@@ -116,7 +119,11 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        audioPlayer.pausePlayer()
+        playerInteractor.pausePlayer(object : AudioPlayerInteractor.AudioPlayerConsumer {
+            override fun consume(status: State) {
+                Log.d(TAG, status.toString())
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -125,31 +132,48 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun startPlayer() {
-        audioPlayer.startPlayer()
-        playButton.setImageResource(R.drawable.pause)
-        handler.postDelayed(
-            trackTime,
-            REFRESH_TRACK_DELAY_MILLIS
-        )
+        playerInteractor.startPlayer(object : AudioPlayerInteractor.AudioPlayerConsumer {
+            override fun consume(status: State) {
+                handler.post {
+                    playButton.setImageResource(R.drawable.pause)
+                    handler.postDelayed(
+                        trackTime, REFRESH_TRACK_DELAY_MILLIS
+                    )
+                }
+            }
+        })
     }
 
     private fun pausePlayer() {
-        audioPlayer.pausePlayer()
-        playButton.setImageResource(R.drawable.play)
+        playerInteractor.pausePlayer(object : AudioPlayerInteractor.AudioPlayerConsumer {
+            override fun consume(status: State) {
+                handler.post {
+                    playButton.setImageResource(R.drawable.play)
+                }
+            }
+        })
         handler.removeCallbacks(trackTime)
     }
 
     private fun playbackControl() {
-        if (audioPlayer.playbackControl() != State.STATE_PLAYING) {
-            pausePlayer()
-        } else {
-            startPlayer()
-        }
+        playerInteractor.playbackControl(object : AudioPlayerInteractor.AudioPlayerConsumer {
+            override fun consume(status: State) {
+                if (status == State.STATE_PLAYING) {
+                    handler.post {
+                        playButton.setImageResource(R.drawable.play)
+                    }
+                } else {
+                    handler.post {
+                        playButton.setImageResource(R.drawable.pause)
+                    }
+                }
+            }
+        })
     }
 
 
     companion object {
-        public const val ROUND_CORNERS_SIZE_PX = 8f
+        const val ROUND_CORNERS_SIZE_PX = 8f
         private const val REFRESH_TRACK_DELAY_MILLIS = 400L  // 2-3 time a second
         private const val TAG = "AudioPlayerActivity"
     }

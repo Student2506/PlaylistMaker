@@ -1,7 +1,6 @@
 package com.example.android.playlistmaker.player.domain.api
 
 import com.example.android.playlistmaker.player.domain.models.State
-import com.example.android.playlistmaker.search.domain.models.Track
 
 interface AudioPlayerInteractor {
     fun startPlayer(consumer: AudioPlayerConsumer)
@@ -12,9 +11,13 @@ interface AudioPlayerInteractor {
 
     fun preparePlayer(trackUrl: String, consumer: AudioPlayerConsumer)
 
-    fun getTrackTime(consumer: AudioPlayerConsumer): Int
+    fun getTrackTime(timer: AudioPlayerTrackTimeConsumer)
 
     interface AudioPlayerConsumer {
         fun consume(status: State)
+    }
+
+    interface AudioPlayerTrackTimeConsumer {
+        fun getTime(time: Int)
     }
 }

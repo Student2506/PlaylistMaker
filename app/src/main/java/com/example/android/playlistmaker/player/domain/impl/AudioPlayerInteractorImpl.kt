@@ -37,12 +37,9 @@ class AudioPlayerInteractorImpl(private val player: AudioPlayerRepository) : Aud
         }
     }
 
-    override fun getTrackTime(consumer: AudioPlayerInteractor.AudioPlayerConsumer): Int {
+    override fun getTrackTime(timer: AudioPlayerInteractor.AudioPlayerTrackTimeConsumer) {
         executor.execute {
-            consumer.consume(player.getTrackStatus())
+            timer.getTime(player.getTrackStatus())
         }
     }
-
-
-
 }
