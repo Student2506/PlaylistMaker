@@ -3,23 +3,25 @@ package com.example.android.playlistmaker.settings.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
-import com.example.android.playlistmaker.main.CustomApp
-import com.example.android.playlistmaker.main.CustomApp.Companion.KEY_FOR_NIGHT_THEME
-import com.example.android.playlistmaker.main.CustomApp.Companion.PLAYLIST_MAKER_PREFERENCES
 import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.creator.Creator
+import com.example.android.playlistmaker.main.CustomApp
+import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
 
+    private val sharedPreferencesInteractor =
+        Creator.provideSharedPreferncesInteractor(this.application)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
         val header = findViewById<FrameLayout>(R.id.flBackToMainSettings)
         header.setOnClickListener {
@@ -64,12 +66,21 @@ class SettingsActivity : AppCompatActivity() {
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.swNightMode)
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as CustomApp).switchTheme(checked)
-            sharedPrefs.edit {
-                putBoolean(KEY_FOR_NIGHT_THEME, checked)
-            }
+            sharedPreferencesInteractor.putDarkThemePref(
+                checked,
+                object : SharedPreferencesInteractor.SharedPreferencesConsumer {
+                    override fun consume(result: Any) {
+                        Log.d(TAG, result.toString())
+                    }
+                })
         }
         themeSwitcher.isChecked = (applicationContext as CustomApp).darkTheme
     }
 
-
+    companion object {
+        const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
+        const val KEY_FOR_NIGHT_THEME = "key_for_night_theme"
+        const val KEY_FOR_SEARCH_HISTORY = "key_for_search_activity"
+        private const val TAG = "SettingsActivity"
+    }
 }

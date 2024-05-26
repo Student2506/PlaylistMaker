@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.ui.SearchActivity.Companion.TRACK_TO_SHOW
