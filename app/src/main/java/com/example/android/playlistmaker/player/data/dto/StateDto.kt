@@ -1,5 +1,8 @@
 package com.example.android.playlistmaker.player.data.dto
 
-enum class StateDto {
-    STATE_DEFAULT, STATE_PLAYING, STATE_PAUSED, STATE_PREPARED
+sealed interface StateDto {
+    object Default : StateDto
+    object Playing : StateDto
+    object Paused : StateDto
+    object Prepared : StateDto
 }

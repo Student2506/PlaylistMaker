@@ -1,8 +1,11 @@
 package com.example.android.playlistmaker.creator
 
 import android.app.Application
-import com.example.android.playlistmaker.player.data.MediaPlayerClientImpl
+import com.example.android.playlistmaker.player.data.AudioPlayerRepositoryImpl
+import com.example.android.playlistmaker.player.data.player.AndroidStandardPlayerClient
+import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerRepository
+import com.example.android.playlistmaker.player.domain.impl.AudioPlayerInteractorImpl
 import com.example.android.playlistmaker.search.data.SharedPreferncesRepositoryImpl
 import com.example.android.playlistmaker.search.data.TracksRepositoryImpl
 import com.example.android.playlistmaker.search.data.network.RetrofitNetworkClient
@@ -16,9 +19,6 @@ import com.example.android.playlistmaker.search.domain.impl.TracksInteractorImpl
 
 object Creator {
 
-    private val audioPlayer: AudioPlayerRepository by lazy {
-        MediaPlayerClientImpl()
-    }
 
     private fun getTrackRepository(): TracksRepository {
         return TracksRepositoryImpl(RetrofitNetworkClient())
@@ -28,9 +28,6 @@ object Creator {
         return TracksInteractorImpl(getTrackRepository())
     }
 
-    fun provideAudioPlayer(): AudioPlayerRepository {
-        return audioPlayer
-    }
 
     private fun getSharedPreferncesRepository(application: Application): SharedPreferencesRepository {
         return SharedPreferncesRepositoryImpl(SharedPreferncesClient(application))
@@ -38,5 +35,13 @@ object Creator {
 
     fun provideSharedPreferncesInteractor(application: Application): SharedPreferencesInteractor {
         return SharedPreferencesInteractorImpl(getSharedPreferncesRepository(application))
+    }
+
+    private fun getPlayerRepository(): AudioPlayerRepository {
+        return AudioPlayerRepositoryImpl(AndroidStandardPlayerClient())
+    }
+
+    fun provideAudioPlayerInteractor(): AudioPlayerInteractor {
+        return AudioPlayerInteractorImpl(getPlayerRepository())
     }
 }

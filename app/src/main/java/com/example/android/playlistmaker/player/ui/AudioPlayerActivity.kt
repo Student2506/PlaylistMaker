@@ -26,6 +26,7 @@ import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
+    private val playerInteractor = Creator.provideAudioPlayerInteractor()
     private val trackImage: ImageView by lazy { findViewById(R.id.ivTrackImage) }
     private val trackName: TextView by lazy { findViewById(R.id.tvTrackName) }
     private val artistName: TextView by lazy { findViewById(R.id.tvArtistName) }
@@ -57,7 +58,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
         }
     }
-    private val audioPlayer = Creator.provideAudioPlayer()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

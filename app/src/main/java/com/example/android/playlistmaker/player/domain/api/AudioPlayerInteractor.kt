@@ -9,9 +9,7 @@ interface AudioPlayerInteractor {
 
     fun playbackControl(): State
 
-    fun preparePlayer(trackUrl: String, onPrepared: () -> Unit, onCompletePlay: () -> Unit)
-
-    fun release()
+    fun preparePlayer(trackUrl: String)
 
     fun getTrackTime(): Int
 }

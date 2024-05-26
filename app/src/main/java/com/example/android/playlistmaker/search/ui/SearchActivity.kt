@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -17,27 +16,24 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.playlistmaker.creator.Creator
-import com.example.android.playlistmaker.main.CustomApp
-import com.example.android.playlistmaker.main.CustomApp.Companion.KEY_FOR_SEARCH_HISTORY
 import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.creator.Creator
+import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
+import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.models.Track
-import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 
 class SearchActivity : AppCompatActivity() {
 
-
+    private val sharedPreferencesInteractor =
+        Creator.provideSharedPreferncesInteractor(this.application)
     private var searchQuery: String = ""
-    private val baseUrl: String = "https://itunes.apple.com"
-
 
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter {
@@ -108,16 +104,14 @@ class SearchActivity : AppCompatActivity() {
                 false
             }
         }
-        inputEditText.addTextChangedListener(
-            beforeTextChanged = { _, _, _, _ -> },
+        inputEditText.addTextChangedListener(beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
-                clearButton.visibility = getClearButtonVisibility(charSequence)
+                clearButton.isVisible = !charSequence.isNullOrEmpty()
                 searchDebounce()
             },
             afterTextChanged = { _ ->
                 searchQuery = inputEditText.text.toString()
-            }
-        )
+            })
         inputEditText.setOnFocusChangeListener { _, hasFocus ->
             tvHistoryHeader?.isVisible = false
             clearHistory?.isVisible = false
@@ -158,32 +152,46 @@ class SearchActivity : AppCompatActivity() {
             clearHistory?.isVisible = false
         }
 
-        sharedPrefs = getSharedPreferences(CustomApp.PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
     }
 
     override fun onStop() {
         super.onStop()
         val historyTracksJson = Gson().toJson(historyTracks)
-        sharedPrefs!!.edit { putString(KEY_FOR_SEARCH_HISTORY, historyTracksJson) }
+        sharedPreferencesInteractor.putFilmsHistory(historyTracksJson,
+            object : SharedPreferencesInteractor.SharedPreferencesConsumer {
+                override fun consume(result: Any) {
+                    if (result is String) {
+                        Log.d(TAG, result)
+                    }
+                }
+            })
     }
 
     override fun onStart() {
         super.onStart()
-        val historyTracksJson = sharedPrefs?.getString(KEY_FOR_SEARCH_HISTORY, null)
-        if (historyTracksJson.isNullOrEmpty()) return
-        historyTracks.clear()
-        historyTracks.addAll(Gson().fromJson(historyTracksJson, Array<Track>::class.java))
-        adapter.tracks = historyTracks
-        if (adapter.tracks.isNotEmpty()) {
-            tvHistoryHeader?.isVisible = true
-            clearHistory?.isVisible = true
-        } else {
-            tvHistoryHeader?.isVisible = false
-            clearHistory?.isVisible = false
-        }
-        Log.d(TAG, "History tracks here?")
-        adapter.notifyDataSetChanged()
-        Log.d(TAG, "IT'S HERE")
+        sharedPreferencesInteractor.getFilmsHistory(object :
+            SharedPreferencesInteractor.SharedPreferencesConsumer {
+            override fun consume(result: Any) {
+                if (result is String && result != "") {
+                    val historyTracksJson = result
+                    historyTracks.clear()
+                    historyTracks.addAll(
+                        Gson().fromJson(
+                            historyTracksJson, Array<Track>::class.java
+                        )
+                    )
+                    adapter.tracks = historyTracks
+                    if (adapter.tracks.isNotEmpty()) {
+                        tvHistoryHeader?.isVisible = true
+                        clearHistory?.isVisible = true
+                    } else {
+                        tvHistoryHeader?.isVisible = false
+                        clearHistory?.isVisible = false
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -199,14 +207,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchQuery = savedInstanceState.getString(SEARCH_QUERY, DEFAULT_QUERY)
-    }
-
-    private fun getClearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
     }
 
     private fun searchSong(songTitle: String) {
