@@ -1,6 +1,7 @@
 package com.example.android.playlistmaker.player.data.player
 
 import android.media.MediaPlayer
+import android.util.Log
 import com.example.android.playlistmaker.player.data.PlayerClient
 import com.example.android.playlistmaker.player.data.dto.CommandDto
 import com.example.android.playlistmaker.player.data.dto.PlayerRequest
@@ -51,10 +52,12 @@ class AndroidStandardPlayerClient : PlayerClient {
 
     private fun startPlayer() {
         mediaPlayer.start()
+        Log.d(TAG, "Playing")
         statePlayer = StateDto.Playing
     }
 
     private fun pausePlayer() {
+        Log.d(TAG, "Not playing")
         if (statePlayer is StateDto.Playing) mediaPlayer.pause()
         statePlayer = StateDto.Paused
     }
