@@ -1,7 +1,6 @@
 package com.example.android.playlistmaker.creator
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import com.example.android.playlistmaker.player.data.AudioPlayerRepositoryImpl
 import com.example.android.playlistmaker.player.data.player.AndroidStandardPlayerClient
@@ -20,6 +19,7 @@ import com.example.android.playlistmaker.search.domain.impl.SharedPreferencesInt
 import com.example.android.playlistmaker.search.domain.impl.TracksInteractorImpl
 import com.example.android.playlistmaker.search.presentation.SearchController
 import com.example.android.playlistmaker.search.ui.TrackAdapter
+import com.example.android.playlistmaker.settings.presentation.SettingsController
 
 object Creator {
 
@@ -51,5 +51,9 @@ object Creator {
 
     fun provideSearchController(activity: Activity, adapter: TrackAdapter): SearchController {
         return SearchController(activity, adapter)
+    }
+
+    fun provideSettingsControler(activity: Activity): SettingsController {
+        return SettingsController(activity)
     }
 }
