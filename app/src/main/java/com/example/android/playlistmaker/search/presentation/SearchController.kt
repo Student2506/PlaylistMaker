@@ -31,7 +31,7 @@ class SearchController(
     private val adapter: TrackAdapter,
 ) {
     private var sharedPreferencesInteractor: SharedPreferencesInteractor? = null
-    private val tracksInteractor = Creator.provideTracksInteractor()
+    private val tracksInteractor = Creator.provideTracksInteractor(activity)
 
     private var recycler: RecyclerView? = null
     private var nothingFound: TextView? = null
@@ -61,7 +61,7 @@ class SearchController(
         adapter.tracks = tracks
         inputEditText = activity.findViewById(R.id.etInput)
         sharedPreferencesInteractor =
-            Creator.provideSharedPreferncesInteractor(activity.application)
+            Creator.provideSharedPreferncesInteractor(activity)
         clearButton = activity.findViewById<ImageView>(R.id.ivClear)
         headerButton = activity.findViewById<FrameLayout>(R.id.flBackToMain)
         headerButton?.setOnClickListener {
@@ -174,14 +174,16 @@ class SearchController(
                         )
                     )
                     adapter.tracks = historyTracks
-                    if (adapter.tracks.isNotEmpty()) {
-                        tvHistoryHeader?.isVisible = true
-                        clearHistory?.isVisible = true
-                    } else {
-                        tvHistoryHeader?.isVisible = false
-                        clearHistory?.isVisible = false
+                    handler.post {
+                        if (adapter.tracks.isNotEmpty()) {
+                            tvHistoryHeader?.isVisible = true
+                            clearHistory?.isVisible = true
+                        } else {
+                            tvHistoryHeader?.isVisible = false
+                            clearHistory?.isVisible = false
+                        }
+                        adapter.notifyDataSetChanged()
                     }
-                    adapter.notifyDataSetChanged()
                 }
             }
         })
@@ -193,6 +195,37 @@ class SearchController(
     }
 
     private fun searchSong(songTitle: String) {
+        showProgressBar()
+
+        tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {
+            override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
+                handler.post {
+                    progressBar?.isVisible = false
+                    if (foundTracks != null) {
+                        adapter.tracks = tracks
+                        refreshButton?.isVisible = false
+                        noConnection?.isVisible = false
+                        nothingFound?.isVisible = false
+                        tracks.clear()
+                        tracks.addAll(foundTracks)
+                        recycler?.isVisible = true
+//                        adapter.notifyItemRangeChanged(0, tracks.size)
+                        adapter.notifyDataSetChanged()
+                    }
+                    if (errorMessage != null) {
+                        showErrorMessage(notFoundError = false)
+                    } else if (tracks.isEmpty()) {
+                        showErrorMessage(notFoundError = true)
+                    } else {
+                        hideErrorMessage()
+                    }
+                }
+            }
+        })
+
+    }
+
+    private fun showProgressBar() {
         recycler?.isVisible = false
         noConnection?.isVisible = false
         nothingFound?.isVisible = false
@@ -200,71 +233,26 @@ class SearchController(
         clearHistory?.isVisible = false
         tvHistoryHeader?.isVisible = false
         progressBar?.isVisible = true
-
-//        itunesService.searchTracks(songTitle).enqueue(object : Callback<ITunesTrackResponse> {
-//            override fun onResponse(
-//                call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>
-//            ) {
-//                adapter.tracks = tracks
-//                progressBar?.isVisible = false
-//                Log.d(TAG, "Progress Bar DOWN")
-//                when (response.code()) {
-//                    HTTP_OK -> {
-//                        refreshButton?.isVisible = false
-//                        noConnection?.isVisible = false
-//                        if (response.body()?.tracks?.isNotEmpty() == true) {
-//                            nothingFound?.isVisible = false
-//                            tracks.clear()
-//                            tracks.addAll(response.body()?.tracks!!)
-//                            recycler?.isVisible = true
-//                            adapter.notifyItemRangeChanged(0, tracks.size)
-//                        } else {
-//                            val size = tracks.size
-//                            tracks.clear()
-//                            adapter.notifyItemRangeRemoved(0, size)
-//                            recycler?.isVisible = false
-//                            nothingFound?.isVisible = true
-//                        }
-//                    }
-//
-//                    else -> {
-//                        lastRequest = songTitle
-//                        showErrorMessage()
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
-//                lastRequest = songTitle
-//                showErrorMessage()
-//            }
-//        })
-        tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {
-            override fun consume(foundTracks: List<Track>) {
-                tracks.clear()
-                tracks.addAll(foundTracks)
-                adapter.tracks = tracks
-                handler.post(object : Runnable {
-                    override fun run() {
-                        adapter.notifyItemRangeChanged(0, adapter.tracks.size)
-                        recycler?.isVisible = true
-                        progressBar?.isVisible = false
-
-                    }
-                })
-            }
-        })
-
     }
 
-    private fun showErrorMessage() {
+    private fun hideErrorMessage() {
+        nothingFound?.isVisible = false
+        noConnection?.isVisible = false
+        refreshButton?.isVisible = false
+    }
+
+    private fun showErrorMessage(notFoundError: Boolean) {
         val size = tracks.size
         tracks.clear()
-        adapter.notifyItemRangeRemoved(0, size)
+//        adapter.notifyItemRangeRemoved(0, size)
+        adapter.notifyDataSetChanged()
         recycler?.isVisible = false
-        nothingFound?.isVisible = false
-        noConnection?.isVisible = true
-        refreshButton?.isVisible = true
+        if (notFoundError) {
+            nothingFound?.isVisible = true
+        } else {
+            noConnection?.isVisible = true
+            refreshButton?.isVisible = true
+        }
     }
 
     fun showTrack(track: Track) {
@@ -284,8 +272,8 @@ class SearchController(
             historyTracks.removeLast()
         }
         Log.d(TAG, historyTracks.toString())
-        adapter.notifyItemChanged(0)
-
+//        adapter.notifyItemChanged(0)
+        adapter.notifyDataSetChanged()
 
     }
 

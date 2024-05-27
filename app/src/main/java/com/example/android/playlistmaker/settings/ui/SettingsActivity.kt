@@ -16,7 +16,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 class SettingsActivity : AppCompatActivity() {
 
     private val sharedPreferencesInteractor =
-        Creator.provideSharedPreferncesInteractor(this.application)
+        Creator.provideSharedPreferncesInteractor(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

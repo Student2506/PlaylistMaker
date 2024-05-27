@@ -21,6 +21,7 @@ class RetrofitNetworkClient(private val context: Context) : NetworkClient {
     private val itunesService = retrofit.create(ITunesApiService::class.java)
 
     override fun doRequest(dto: Any): Response {
+        Log.d(TAG, "Start request")
         if (isConnected() == false) {
             Log.e(TAG, "No network")
             return Response().apply { resultCode = -1 }
@@ -30,7 +31,9 @@ class RetrofitNetworkClient(private val context: Context) : NetworkClient {
             return Response().apply { resultCode = 400 }
         }
         val response = itunesService.searchTracks(term = dto.term, entity = dto.entity).execute()
+        Log.d(TAG, response.toString())
         val body = response.body()
+        Log.d(TAG, body.toString())
         return if (body != null) {
             body.apply { resultCode = response.code() }
         } else {

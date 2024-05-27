@@ -106,9 +106,11 @@ class AudioPlayerActivity : AppCompatActivity() {
                 track.previewUrl,
                 object : AudioPlayerInteractor.AudioPlayerConsumer {
                     override fun consume(status: State) {
-                        playButton.isEnabled = true
-                        playButton.setImageResource(R.drawable.play)
-                        elapsedTime.text = timeFormatter.format(0L)
+                        handler.post {
+                            playButton.isEnabled = true
+                            playButton.setImageResource(R.drawable.play)
+                            elapsedTime.text = timeFormatter.format(0L)
+                        }
                     }
                 })
         }

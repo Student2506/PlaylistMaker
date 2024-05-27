@@ -1,16 +1,17 @@
 package com.example.android.playlistmaker.search.data.shared_preferences
 
 import android.app.Application
+import android.content.Context
 import androidx.core.content.edit
 import com.example.android.playlistmaker.search.data.SettingsStorageClient
 import com.example.android.playlistmaker.search.data.dto.Response
 import com.example.android.playlistmaker.search.data.dto.SharedPreferencesRequest
 import com.example.android.playlistmaker.search.data.dto.SharedPreferencesResponse
 
-class SharedPreferncesClient(application: Application) : SettingsStorageClient {
+class SharedPreferncesClient(context: Context) : SettingsStorageClient {
 
 
-    private val sharedPrefernces = application.getSharedPreferences(
+    private val sharedPrefernces = context.getSharedPreferences(
         PLAYLIST_MAKER_PREFERENCES, Application.MODE_PRIVATE
     )
 
