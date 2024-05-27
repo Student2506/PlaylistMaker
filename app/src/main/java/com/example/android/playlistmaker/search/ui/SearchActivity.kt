@@ -31,8 +31,8 @@ import com.google.gson.Gson
 
 class SearchActivity : AppCompatActivity() {
 
-    private val sharedPreferencesInteractor =
-        Creator.provideSharedPreferncesInteractor(this.application)
+    private var sharedPreferencesInteractor: SharedPreferencesInteractor? = null
+
     private var searchQuery: String = ""
 
     private val tracks = ArrayList<Track>()
@@ -68,7 +68,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
+        sharedPreferencesInteractor = Creator.provideSharedPreferncesInteractor(application)
         val clearButton = findViewById<ImageView>(R.id.ivClear)
         val headerButton = findViewById<FrameLayout>(R.id.flBackToMain)
         headerButton.setOnClickListener {
@@ -157,7 +157,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         val historyTracksJson = Gson().toJson(historyTracks)
-        sharedPreferencesInteractor.putFilmsHistory(historyTracksJson,
+        sharedPreferencesInteractor?.putFilmsHistory(historyTracksJson,
             object : SharedPreferencesInteractor.SharedPreferencesConsumer {
                 override fun consume(result: Any) {
                     if (result is String) {
@@ -169,7 +169,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        sharedPreferencesInteractor.getFilmsHistory(object :
+        sharedPreferencesInteractor?.getFilmsHistory(object :
             SharedPreferencesInteractor.SharedPreferencesConsumer {
             override fun consume(result: Any) {
                 if (result is String && result != "") {
