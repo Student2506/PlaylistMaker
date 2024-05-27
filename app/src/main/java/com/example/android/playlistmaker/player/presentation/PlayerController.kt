@@ -41,6 +41,7 @@ class PlayerController(
     private val elapsedTime: TextView by lazy { activity.findViewById(R.id.tvTrackElapsed) }
     private val header: FrameLayout by lazy { activity.findViewById<FrameLayout>(R.id.flBackToMain) }
     private val handler = Handler(Looper.getMainLooper())
+
     private val timeFormatter: SimpleDateFormat by lazy {
         SimpleDateFormat(
             "mm:ss", Locale.getDefault()
