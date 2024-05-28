@@ -4,23 +4,13 @@ import com.example.android.playlistmaker.search.domain.models.Track
 
 interface TrackSearchView {
 
-    fun showLoading()
-
-    fun showError()
-
-    fun showEmpty()
-
-    fun showContent(tracks: List<Track>, isHistory: Boolean = false)
-
-//    fun showServerError(isVisible: Boolean)
+//    fun showLoading()
 //
-//    fun showNotFoundError(isVisible: Boolean)
+//    fun showError()
 //
-//    fun showMovieList(isVisible: Boolean)
+//    fun showEmpty()
 //
-//    fun showProgressBar(isVisible: Boolean)
-//
-//    fun showHistoryList(isVisible: Boolean)
+//    fun showContent(tracks: List<Track>, isHistory: Boolean = false)
 
-//    fun updateTracksList(tracksList: List<Track>)
+    fun render(state: TracksState)
 }

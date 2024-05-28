@@ -24,6 +24,7 @@ import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.presentation.TrackSearchPresenter
 import com.example.android.playlistmaker.search.presentation.TrackSearchView
+import com.example.android.playlistmaker.search.presentation.TracksState
 import com.google.android.material.button.MaterialButton
 
 
@@ -172,7 +173,7 @@ class SearchActivity : AppCompatActivity(), TrackSearchView {
     }
 
 
-    override fun showLoading() {
+    fun showLoading() {
         progressBar?.isVisible = true
         noConnection?.isVisible = false
         refreshButton?.isVisible = false
@@ -182,7 +183,7 @@ class SearchActivity : AppCompatActivity(), TrackSearchView {
         tvHistoryHeader?.isVisible = false
     }
 
-    override fun showError() {
+    fun showError() {
         progressBar?.isVisible = false
         noConnection?.isVisible = true
         refreshButton?.isVisible = true
@@ -192,7 +193,7 @@ class SearchActivity : AppCompatActivity(), TrackSearchView {
         tvHistoryHeader?.isVisible = false
     }
 
-    override fun showEmpty() {
+    fun showEmpty() {
         progressBar?.isVisible = false
         noConnection?.isVisible = false
         refreshButton?.isVisible = false
@@ -202,7 +203,7 @@ class SearchActivity : AppCompatActivity(), TrackSearchView {
         tvHistoryHeader?.isVisible = false
     }
 
-    override fun showContent(tracks: List<Track>, isHistory: Boolean) {
+    fun showContent(tracks: List<Track>, isHistory: Boolean) {
         progressBar?.isVisible = false
         noConnection?.isVisible = false
         refreshButton?.isVisible = false
@@ -214,5 +215,15 @@ class SearchActivity : AppCompatActivity(), TrackSearchView {
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
+    }
+
+    override fun render(state: TracksState) {
+        when (state) {
+            is TracksState.Loading -> showLoading()
+            is TracksState.Empty -> showEmpty()
+            is TracksState.ServerError -> showError()
+            is TracksState.Content -> showContent(state.tracks, false)
+            is TracksState.HistoryContent -> showContent(state.tracks, true)
+        }
     }
 }

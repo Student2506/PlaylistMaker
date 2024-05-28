@@ -55,9 +55,7 @@ class TrackSearchPresenter(
                         )
                     )
                     handler.post {
-//                        view.updateTracksList(historyTracks)
-//                        view.showHistoryList(historyTracks.isNotEmpty())
-                        view.showContent(historyTracks, true)
+                        view.render(TracksState.HistoryContent(historyTracks))
                     }
                 }
             }
@@ -85,7 +83,7 @@ class TrackSearchPresenter(
     }
 
     fun searchSong(songTitle: String) {
-        view.showLoading()
+        view.render(TracksState.Loading)
 
         tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {
             override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
@@ -96,9 +94,9 @@ class TrackSearchPresenter(
 
                     }
                     when {
-                        errorMessage != null -> view.showError()
-                        tracks.isEmpty() -> view.showEmpty()
-                        else -> view.showContent(tracks)
+                        errorMessage != null -> view.render(TracksState.ServerError)
+                        tracks.isEmpty() -> view.render(TracksState.Empty)
+                        else -> view.render(TracksState.Content(tracks))
                     }
                 }
             }
@@ -123,20 +121,20 @@ class TrackSearchPresenter(
         if (historyTracks.size > 10) {
             historyTracks.removeLast()
         }
-        view.showContent(historyTracks, true)
+        view.render(TracksState.HistoryContent(historyTracks))
     }
 
     fun setHistoryTracks() {
-        view.showContent(historyTracks, true)
+        view.render(TracksState.HistoryContent(historyTracks))
     }
 
     fun setSearchTracks() {
-        view.showContent(tracks)
+        view.render(TracksState.Content(tracks))
     }
 
     fun clearHistory() {
         historyTracks.clear()
-        view.showContent(historyTracks, true)
+        view.render(TracksState.HistoryContent(historyTracks))
     }
 
     companion object {
