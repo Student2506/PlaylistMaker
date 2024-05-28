@@ -7,7 +7,8 @@ import com.example.android.playlistmaker.player.data.player.AndroidStandardPlaye
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerRepository
 import com.example.android.playlistmaker.player.domain.impl.AudioPlayerInteractorImpl
-import com.example.android.playlistmaker.player.presentation.PlayerController
+import com.example.android.playlistmaker.player.presentation.PlayerPresenter
+import com.example.android.playlistmaker.player.presentation.PlayerView
 import com.example.android.playlistmaker.search.data.SharedPreferncesRepositoryImpl
 import com.example.android.playlistmaker.search.data.TracksRepositoryImpl
 import com.example.android.playlistmaker.search.data.network.RetrofitNetworkClient
@@ -18,6 +19,7 @@ import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksRepository
 import com.example.android.playlistmaker.search.domain.impl.SharedPreferencesInteractorImpl
 import com.example.android.playlistmaker.search.domain.impl.TracksInteractorImpl
+import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.presentation.TrackSearchPresenter
 import com.example.android.playlistmaker.search.presentation.TrackSearchView
 import com.example.android.playlistmaker.settings.presentation.SettingsController
@@ -61,7 +63,7 @@ object Creator {
         return SettingsController(activity)
     }
 
-    fun providePlayerController(activity: Activity): PlayerController {
-        return PlayerController(activity)
+    fun providePlayerPresenter(view: PlayerView, track: Track): PlayerPresenter {
+        return PlayerPresenter(view, track)
     }
 }
