@@ -18,8 +18,8 @@ import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksRepository
 import com.example.android.playlistmaker.search.domain.impl.SharedPreferencesInteractorImpl
 import com.example.android.playlistmaker.search.domain.impl.TracksInteractorImpl
-import com.example.android.playlistmaker.search.presentation.SearchController
-import com.example.android.playlistmaker.search.ui.TrackAdapter
+import com.example.android.playlistmaker.search.presentation.TrackSearchPresenter
+import com.example.android.playlistmaker.search.presentation.TrackSearchView
 import com.example.android.playlistmaker.settings.presentation.SettingsController
 
 object Creator {
@@ -50,8 +50,11 @@ object Creator {
         return AudioPlayerInteractorImpl(getPlayerRepository())
     }
 
-    fun provideSearchController(activity: Activity, adapter: TrackAdapter): SearchController {
-        return SearchController(activity, adapter)
+    fun provideTrackSearchPresenter(
+        trackSearchView: TrackSearchView,
+        context: Context,
+    ): TrackSearchPresenter {
+        return TrackSearchPresenter(trackSearchView, context)
     }
 
     fun provideSettingsControler(activity: Activity): SettingsController {
