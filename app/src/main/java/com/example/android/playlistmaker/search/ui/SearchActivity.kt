@@ -94,8 +94,7 @@ class SearchActivity : AppCompatActivity(), TrackSearchView {
                 false
             }
         }
-        inputEditText?.addTextChangedListener(
-            beforeTextChanged = { _, _, _, _ -> },
+        inputEditText?.addTextChangedListener(beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
                 clearButton?.isVisible = !charSequence.isNullOrEmpty()
                 trackSearchPresenter?.searchDebounce(changedText = charSequence?.toString() ?: "")
@@ -172,32 +171,48 @@ class SearchActivity : AppCompatActivity(), TrackSearchView {
         private const val TAG = "SearchActivity"
     }
 
-    override fun showServerError(isVisible: Boolean) {
-        noConnection?.isVisible = isVisible
-        refreshButton?.isVisible = isVisible
+
+    override fun showLoading() {
+        progressBar?.isVisible = true
+        noConnection?.isVisible = false
+        refreshButton?.isVisible = false
+        nothingFound?.isVisible = false
+        recycler?.isVisible = false
+        clearHistory?.isVisible = false
+        tvHistoryHeader?.isVisible = false
     }
 
-    override fun showNotFoundError(isVisible: Boolean) {
-        nothingFound?.isVisible = isVisible
+    override fun showError() {
+        progressBar?.isVisible = false
+        noConnection?.isVisible = true
+        refreshButton?.isVisible = true
+        nothingFound?.isVisible = false
+        recycler?.isVisible = false
+        clearHistory?.isVisible = false
+        tvHistoryHeader?.isVisible = false
     }
 
-    override fun showMovieList(isVisible: Boolean) {
-        recycler?.isVisible = isVisible
+    override fun showEmpty() {
+        progressBar?.isVisible = false
+        noConnection?.isVisible = false
+        refreshButton?.isVisible = false
+        nothingFound?.isVisible = true
+        recycler?.isVisible = false
+        clearHistory?.isVisible = false
+        tvHistoryHeader?.isVisible = false
     }
 
-    override fun showProgressBar(isVisible: Boolean) {
-        progressBar?.isVisible = isVisible
-    }
+    override fun showContent(tracks: List<Track>, isHistory: Boolean) {
+        progressBar?.isVisible = false
+        noConnection?.isVisible = false
+        refreshButton?.isVisible = false
+        nothingFound?.isVisible = false
+        recycler?.isVisible = true
+        clearHistory?.isVisible = isHistory
+        tvHistoryHeader?.isVisible = isHistory
 
-    override fun showHistoryList(isVisible: Boolean) {
-        clearHistory?.isVisible = isVisible
-        tvHistoryHeader?.isVisible = isVisible
-        recycler?.isVisible = isVisible
-    }
-
-    override fun updateTracksList(tracksList: List<Track>) {
         adapter.tracks.clear()
-        adapter.tracks.addAll(tracksList)
+        adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
     }
 }

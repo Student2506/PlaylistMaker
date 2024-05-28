@@ -55,8 +55,9 @@ class TrackSearchPresenter(
                         )
                     )
                     handler.post {
-                        view.updateTracksList(historyTracks)
-                        view.showHistoryList(historyTracks.isNotEmpty())
+//                        view.updateTracksList(historyTracks)
+//                        view.showHistoryList(historyTracks.isNotEmpty())
+                        view.showContent(historyTracks, true)
                     }
                 }
             }
@@ -84,29 +85,20 @@ class TrackSearchPresenter(
     }
 
     fun searchSong(songTitle: String) {
-        view.showMovieList(false)
-        view.showHistoryList(false)
-        view.showNotFoundError(false)
-        view.showServerError(false)
-        view.showProgressBar(true)
+        view.showLoading()
 
         tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {
             override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                 handler.post {
-                    view.showProgressBar(false)
                     if (foundTracks != null) {
                         tracks.clear()
                         tracks.addAll(foundTracks)
-                        view.updateTracksList(tracks)
-                        view.showMovieList(true)
+
                     }
-                    if (errorMessage != null) {
-                        view.showServerError(true)
-                    } else if (foundTracks?.isEmpty() ?: false) {
-                        view.showNotFoundError(true)
-                    } else {
-                        view.showServerError(false)
-                        view.showNotFoundError(false)
+                    when {
+                        errorMessage != null -> view.showError()
+                        tracks.isEmpty() -> view.showEmpty()
+                        else -> view.showContent(tracks)
                     }
                 }
             }
@@ -131,20 +123,20 @@ class TrackSearchPresenter(
         if (historyTracks.size > 10) {
             historyTracks.removeLast()
         }
-        view.updateTracksList(historyTracks)
+        view.showContent(historyTracks, true)
     }
 
     fun setHistoryTracks() {
-        view.updateTracksList(historyTracks)
+        view.showContent(historyTracks, true)
     }
 
     fun setSearchTracks() {
-        view.updateTracksList(tracks)
+        view.showContent(tracks)
     }
 
     fun clearHistory() {
         historyTracks.clear()
-        view.updateTracksList(historyTracks)
+        view.showContent(historyTracks, true)
     }
 
     companion object {
