@@ -13,6 +13,8 @@ interface AudioPlayerInteractor {
 
     fun getTrackTime(timer: AudioPlayerTrackTimeConsumer)
 
+    fun release(consumer: AudioPlayerConsumer)
+
     interface AudioPlayerConsumer {
         fun consume(status: State)
     }

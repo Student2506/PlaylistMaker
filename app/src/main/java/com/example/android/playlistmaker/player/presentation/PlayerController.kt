@@ -3,6 +3,7 @@ package com.example.android.playlistmaker.player.presentation
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.util.TypedValue
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -113,6 +114,7 @@ class PlayerController(
     }
 
     fun onDestroy() {
+        releasePlayer()
         handler.removeCallbacks(trackTime)
     }
 
@@ -136,6 +138,14 @@ class PlayerController(
             }
         })
         handler.removeCallbacks(trackTime)
+    }
+
+    fun releasePlayer() {
+        playerInteractor.release(object : AudioPlayerInteractor.AudioPlayerConsumer {
+            override fun consume(status: State) {
+                Log.d(TAG, "Released")
+            }
+        })
     }
 
     private fun playbackControl() {

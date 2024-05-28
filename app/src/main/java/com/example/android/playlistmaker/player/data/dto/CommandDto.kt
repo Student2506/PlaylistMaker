@@ -9,4 +9,6 @@ sealed interface CommandDto {
     data class Prepare(val trackUrl: String) : CommandDto
 
     object PlayPause : CommandDto
+
+    object Release : CommandDto
 }

@@ -13,7 +13,7 @@ import com.example.android.playlistmaker.player.data.dto.StateDto
 
 class AndroidStandardPlayerClient : PlayerClient {
 
-    private val mediaPlayer = MediaPlayer()
+    private var mediaPlayer: MediaPlayer? = null
     private var currentTrack: String? = null
     private var statePlayer: StateDto = StateDto.Default
 
@@ -24,6 +24,7 @@ class AndroidStandardPlayerClient : PlayerClient {
                 is CommandDto.Play -> startPlayer()
                 is CommandDto.Pause -> pausePlayer()
                 is CommandDto.PlayPause -> playbackControl()
+                is CommandDto.Release -> releasePlayer()
             }
             return PlayerResponse(statePlayer).apply { resultCode = 0 }
         } else if (dto is PlayerTimeRequest) {
@@ -36,29 +37,30 @@ class AndroidStandardPlayerClient : PlayerClient {
     private fun preparePlayer(
         trackUrl: String,
     ) {
+        if (mediaPlayer == null) mediaPlayer = MediaPlayer()
         if (currentTrack != trackUrl) {
             currentTrack = trackUrl
-            mediaPlayer.reset()
+            mediaPlayer?.reset()
         }
-        mediaPlayer.setDataSource(trackUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
+        mediaPlayer?.setDataSource(trackUrl)
+        mediaPlayer?.prepareAsync()
+        mediaPlayer?.setOnPreparedListener {
             statePlayer = StateDto.Prepared
         }
-        mediaPlayer.setOnCompletionListener {
+        mediaPlayer?.setOnCompletionListener {
             statePlayer = StateDto.Prepared
         }
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
+        mediaPlayer?.start()
         Log.d(TAG, "Playing")
         statePlayer = StateDto.Playing
     }
 
     private fun pausePlayer() {
         Log.d(TAG, "Not playing")
-        if (statePlayer is StateDto.Playing) mediaPlayer.pause()
+        if (statePlayer is StateDto.Playing) mediaPlayer?.pause()
         statePlayer = StateDto.Paused
     }
 
@@ -76,8 +78,13 @@ class AndroidStandardPlayerClient : PlayerClient {
         }
     }
 
+    private fun releasePlayer() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
     private fun trackPlayedLength(): Int =
-        if (statePlayer !is StateDto.Default) mediaPlayer.currentPosition else 0
+        if (statePlayer !is StateDto.Default) mediaPlayer?.currentPosition!! else 0
 
 
     companion object {

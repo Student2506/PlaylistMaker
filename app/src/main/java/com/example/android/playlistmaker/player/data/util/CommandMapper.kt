@@ -11,6 +11,7 @@ class CommandMapper {
                 is Command.Pause -> CommandDto.Pause
                 is Command.PlayPause -> CommandDto.PlayPause
                 is Command.Prepare -> CommandDto.Prepare(command.trackUrl)
+                is Command.Release -> CommandDto.Release
             }
         }
     }

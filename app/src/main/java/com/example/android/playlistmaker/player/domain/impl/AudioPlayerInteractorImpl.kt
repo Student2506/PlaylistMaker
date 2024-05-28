@@ -28,6 +28,12 @@ class AudioPlayerInteractorImpl(private val player: AudioPlayerRepository) : Aud
         }
     }
 
+    override fun release(consumer: AudioPlayerInteractor.AudioPlayerConsumer) {
+        executor.execute {
+            consumer.consume(player.controlPlayer(Command.Release))
+        }
+    }
+
     override fun preparePlayer(
         trackUrl: String,
         consumer: AudioPlayerInteractor.AudioPlayerConsumer,
