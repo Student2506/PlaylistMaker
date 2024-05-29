@@ -1,23 +1,29 @@
 package com.example.android.playlistmaker.search.presentation
 
-import android.content.Context
+import android.app.Application
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.android.playlistmaker.creator.Creator
+import com.example.android.playlistmaker.main.CustomApp
 import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.google.gson.Gson
 
-class TrackSearchPresenter(
-    private val view: TrackSearchView,
-    private val context: Context,
-) {
-    private val sharedPreferencesInteractor = Creator.provideSharedPreferncesInteractor(context)
-    private val tracksInteractor = Creator.provideTracksInteractor(context)
+class TrackSearchViewModel(application: Application) : AndroidViewModel(application) {
+    private val sharedPreferencesInteractor =
+        Creator.provideSharedPreferncesInteractor(getApplication<CustomApp>())
+    private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
 
     private val historyTracks: ArrayList<Track> = arrayListOf()
     private val tracks = ArrayList<Track>()
@@ -25,8 +31,10 @@ class TrackSearchPresenter(
 
     private val handler = Handler(Looper.getMainLooper())
     private var searchQuery: String? = null
+    private val stateLiveData = MutableLiveData<TracksState>()
+    fun observeState(): LiveData<TracksState> = stateLiveData
 
-    fun onDestroy() {
+    override fun onCleared() {
         handler.removeCallbacksAndMessages(SEARCH_REQEUEST_TOKEN)
     }
 
@@ -54,9 +62,7 @@ class TrackSearchPresenter(
                             historyTracksJson, Array<Track>::class.java
                         )
                     )
-                    handler.post {
-                        view.render(TracksState.HistoryContent(historyTracks))
-                    }
+                    setHistoryTracks()
                 }
             }
         })
@@ -83,21 +89,18 @@ class TrackSearchPresenter(
     }
 
     fun searchSong(songTitle: String) {
-        view.render(TracksState.Loading)
+        renderState(TracksState.Loading)
 
         tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {
             override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                handler.post {
-                    if (foundTracks != null) {
-                        tracks.clear()
-                        tracks.addAll(foundTracks)
-
-                    }
-                    when {
-                        errorMessage != null -> view.render(TracksState.ServerError)
-                        tracks.isEmpty() -> view.render(TracksState.Empty)
-                        else -> view.render(TracksState.Content(tracks))
-                    }
+                if (foundTracks != null) {
+                    tracks.clear()
+                    tracks.addAll(foundTracks)
+                }
+                when {
+                    errorMessage != null -> renderState(TracksState.ServerError)
+                    tracks.isEmpty() -> renderState(TracksState.Empty)
+                    else -> renderState(TracksState.Content(tracks))
                 }
             }
         })
@@ -121,25 +124,35 @@ class TrackSearchPresenter(
         if (historyTracks.size > 10) {
             historyTracks.removeLast()
         }
-        view.render(TracksState.HistoryContent(historyTracks))
+        setHistoryTracks()
     }
 
     fun setHistoryTracks() {
-        view.render(TracksState.HistoryContent(historyTracks))
+        renderState(TracksState.HistoryContent(historyTracks))
     }
 
     fun setSearchTracks() {
-        view.render(TracksState.Content(tracks))
+        renderState(TracksState.Content(tracks))
     }
 
     fun clearHistory() {
         historyTracks.clear()
-        view.render(TracksState.HistoryContent(historyTracks))
+        renderState(TracksState.HistoryContent(historyTracks))
+    }
+
+    private fun renderState(state: TracksState) {
+        stateLiveData.postValue(state)
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQEUEST_TOKEN = Any()
         private const val TAG = "SearchController"
+
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                TrackSearchViewModel(this[APPLICATION_KEY] as Application)
+            }
+        }
     }
 }
