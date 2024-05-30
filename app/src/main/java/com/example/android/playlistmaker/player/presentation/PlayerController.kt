@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
+import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.android.playlistmaker.search.domain.models.Track
@@ -96,8 +97,7 @@ class PlayerController(
         country.text = track.country
         playButton.isEnabled = false
         if (track.previewUrl != null) {
-            playerInteractor.preparePlayer(
-                track.previewUrl,
+            playerInteractor.controlPlayer(Command.Prepare(track.previewUrl),
                 object : AudioPlayerInteractor.AudioPlayerConsumer {
                     override fun consume(status: State) {
                         handler.post {
@@ -119,49 +119,53 @@ class PlayerController(
     }
 
     private fun startPlayer() {
-        playerInteractor.startPlayer(object : AudioPlayerInteractor.AudioPlayerConsumer {
-            override fun consume(status: State) {
-                handler.post {
-                    playButton.setImageResource(R.drawable.pause)
-                    handler.postDelayed(trackTime, REFRESH_TRACK_DELAY_MILLIS)
+        playerInteractor.controlPlayer(Command.Play,
+            object : AudioPlayerInteractor.AudioPlayerConsumer {
+                override fun consume(status: State) {
+                    handler.post {
+                        playButton.setImageResource(R.drawable.pause)
+                        handler.postDelayed(trackTime, REFRESH_TRACK_DELAY_MILLIS)
+                    }
                 }
-            }
-        })
+            })
     }
 
     fun pausePlayer() {
-        playerInteractor.pausePlayer(object : AudioPlayerInteractor.AudioPlayerConsumer {
-            override fun consume(status: State) {
-                handler.post {
-                    playButton.setImageResource(R.drawable.play)
-                }
-            }
-        })
-        handler.removeCallbacks(trackTime)
-    }
-
-    fun releasePlayer() {
-        playerInteractor.release(object : AudioPlayerInteractor.AudioPlayerConsumer {
-            override fun consume(status: State) {
-                Log.d(TAG, "Released")
-            }
-        })
-    }
-
-    private fun playbackControl() {
-        playerInteractor.playbackControl(object : AudioPlayerInteractor.AudioPlayerConsumer {
-            override fun consume(status: State) {
-                if (status == State.STATE_PLAYING) {
-                    handler.post {
-                        playButton.setImageResource(R.drawable.pause)
-                    }
-                } else {
+        playerInteractor.controlPlayer(Command.Pause,
+            object : AudioPlayerInteractor.AudioPlayerConsumer {
+                override fun consume(status: State) {
                     handler.post {
                         playButton.setImageResource(R.drawable.play)
                     }
                 }
-            }
-        })
+            })
+        handler.removeCallbacks(trackTime)
+    }
+
+    fun releasePlayer() {
+        playerInteractor.controlPlayer(Command.Release,
+            object : AudioPlayerInteractor.AudioPlayerConsumer {
+                override fun consume(status: State) {
+                    Log.d(TAG, "Released")
+                }
+            })
+    }
+
+    private fun playbackControl() {
+        playerInteractor.controlPlayer(Command.PlayPause,
+            object : AudioPlayerInteractor.AudioPlayerConsumer {
+                override fun consume(status: State) {
+                    if (status == State.STATE_PLAYING) {
+                        handler.post {
+                            playButton.setImageResource(R.drawable.pause)
+                        }
+                    } else {
+                        handler.post {
+                            playButton.setImageResource(R.drawable.play)
+                        }
+                    }
+                }
+            })
     }
 
     companion object {
