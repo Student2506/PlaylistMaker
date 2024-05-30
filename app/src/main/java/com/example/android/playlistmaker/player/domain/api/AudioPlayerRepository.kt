@@ -5,5 +5,5 @@ import com.example.android.playlistmaker.player.domain.models.State
 
 interface AudioPlayerRepository {
     fun controlPlayer(command: Command): State
-    fun getTrackStatus(): Int
+    fun getTrackStatus(): Long
 }

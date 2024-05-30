@@ -6,8 +6,6 @@ import com.example.android.playlistmaker.player.data.player.AndroidStandardPlaye
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerRepository
 import com.example.android.playlistmaker.player.domain.impl.AudioPlayerInteractorImpl
-import com.example.android.playlistmaker.player.presentation.PlayerPresenter
-import com.example.android.playlistmaker.player.presentation.PlayerView
 import com.example.android.playlistmaker.search.data.SharedPreferncesRepositoryImpl
 import com.example.android.playlistmaker.search.data.TracksRepositoryImpl
 import com.example.android.playlistmaker.search.data.network.RetrofitNetworkClient
@@ -49,7 +47,16 @@ object Creator {
         return AudioPlayerInteractorImpl(getPlayerRepository())
     }
 
-    fun providePlayerPresenter(view: PlayerView, track: Track): PlayerPresenter {
-        return PlayerPresenter(view, track)
+
+    fun provideTrackSearchPresenter(
+        trackSearchView: TrackSearchView,
+        context: Context,
+    ): TrackSearchPresenter {
+        return TrackSearchPresenter(trackSearchView, context)
     }
+
+    fun provideSettingsControler(activity: Activity): SettingsController {
+        return SettingsController(activity)
+    }
+
 }

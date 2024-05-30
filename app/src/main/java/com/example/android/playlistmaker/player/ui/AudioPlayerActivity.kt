@@ -1,69 +1,49 @@
 package com.example.android.playlistmaker.player.ui
 
 import android.os.Bundle
-import android.util.Log
+
 import android.util.TypedValue
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
-import com.example.android.playlistmaker.creator.Creator
-import com.example.android.playlistmaker.player.presentation.PlayerPresenter
-import com.example.android.playlistmaker.player.presentation.PlayerView
+import com.example.android.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.example.android.playlistmaker.player.presentation.PlayerState
+import com.example.android.playlistmaker.player.presentation.PlayerViewModel
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.ui.SearchActivity
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.util.Locale
 
 
-class AudioPlayerActivity : AppCompatActivity(), PlayerView {
+class AudioPlayerActivity : ComponentActivity() {
 
-    private var playerPresenter: PlayerPresenter? = null
-    private val trackImage: ImageView by lazy { findViewById(R.id.ivTrackImage) }
-    private val trackName: TextView by lazy { findViewById(R.id.tvTrackName) }
-    private val artistName: TextView by lazy { findViewById(R.id.tvArtistName) }
-    private val trackDurationTime: TextView by lazy { findViewById(R.id.tvTrackDurationTime) }
-    private val albumName: TextView by lazy { findViewById(R.id.tvAlbumName) }
-    private val albumNameHeader: TextView by lazy { findViewById(R.id.tvAlbum) }
-    private val year: TextView by lazy { findViewById(R.id.tvYearValue) }
-    private val genre: TextView by lazy { findViewById(R.id.tvGenreValue) }
-    private val country: TextView by lazy { findViewById(R.id.tvCountryValue) }
-    private val playButton: ImageButton by lazy { findViewById(R.id.ibPlayButton) }
-    private val elapsedTime: TextView by lazy { findViewById(R.id.tvTrackElapsed) }
-    private val header: FrameLayout by lazy { findViewById<FrameLayout>(R.id.flBackToMain) }
+    private var playerViewModel: PlayerViewModel? = null
+    private var binding: ActivityAudioPlayerBinding? = null
+
+    private val timeFormatter: SimpleDateFormat by lazy {
+        SimpleDateFormat(
+            "mm:ss", Locale.getDefault()
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_audio_player)
-
-        val track: Track = intent.getParcelableExtra(SearchActivity.TRACK_TO_SHOW)!!
-        playerPresenter = Creator.providePlayerPresenter(this, track)
-        playButton.setOnClickListener {
-            playerPresenter?.playbackControl()
-        }
-        header.setOnClickListener {
+        binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
+        binding?.flBackToMain?.setOnClickListener {
             finish()
         }
-        playerPresenter?.onCreate()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        playerPresenter?.pausePlayer()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        playerPresenter?.onDestroy()
-    }
-
-    override fun setupPosterImage(imageUrl: String) {
-        Log.d(TAG, "Load poster")
+        val track: Track = intent.getParcelableExtra(SearchActivity.TRACK_TO_SHOW)!!
+        playerViewModel = ViewModelProvider(
+            this, PlayerViewModel.getViewModelFactory(track)
+        )[PlayerViewModel::class.java]
         Glide.with(applicationContext)
-            .load(imageUrl)
+            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder).centerInside().transform(
                 RoundedCorners(
                     TypedValue.applyDimension(
@@ -72,55 +52,54 @@ class AudioPlayerActivity : AppCompatActivity(), PlayerView {
                         applicationContext.resources.displayMetrics
                     ).toInt()
                 )
-            ).into(trackImage)
-    }
+            ).into(binding?.ivTrackImage!!)
+        binding?.tvTrackName?.text = track.trackName
+        binding?.tvArtistName?.text = track.artistName
+        binding?.tvTrackDurationTime?.text = timeFormatter.format(track.trackTime)
+        if (track.collectionName.isNotEmpty()) binding?.tvAlbumName?.text = track.collectionName
+        else {
+            binding?.tvAlbumName?.isVisible = false
+            binding?.tvAlbum?.isVisible = false
+        }
+        val instant = Instant.parse(track.releaseDate)
+        val zone = ZoneId.of("Z")
+        val date = instant.atZone(zone).toLocalDate()
+        binding?.tvYearValue?.text = date.year.toString()
+        binding?.tvGenreValue?.text = track.primaryGenreName
+        binding?.tvCountryValue?.text = track.country
+        binding?.ibPlayButton?.isEnabled = false
+        playerViewModel?.preparePlayer()
 
-    override fun enableCollectionName(isVisible: Boolean) {
-        albumName.isVisible = isVisible
-        albumNameHeader.isVisible = isVisible
-    }
-
-    override fun setupCollectionName(collectionName: String?) {
-        if (collectionName != null) {
-            albumName.text = collectionName
-            enableCollectionName(true)
-        } else enableCollectionName(false)
-    }
-
-    override fun setupTextElements(track: Track) {
-        trackName.text = track.trackName
-        artistName.text = track.artistName
-        genre.text = track.primaryGenreName
-        country.text = track.country
-    }
-
-    override fun enableTrackPlay(isVisible: Boolean) {
-        playButton.isEnabled = isVisible
-        if (isVisible) {
-            playerPresenter?.loadPlayer()
-            Log.d(TAG, "Load button")
-            playButton.setImageResource(R.drawable.play)
-
+        binding?.ibPlayButton?.setOnClickListener {
+            playerViewModel?.playbackControl()
+        }
+        playerViewModel?.observeState()?.observe(this) { state ->
+            updatePlayButton(state)
+        }
+        playerViewModel?.observeTrackState()?.observe(this) {
+            updateElapsedTime(it)
         }
     }
 
-    override fun setTime(trackDuration: String, trackPlayed: String) {
-        trackDurationTime.text = trackDuration
-        elapsedTime.text = trackPlayed
+
+    private fun updateElapsedTime(time: Long) {
+        binding?.tvTrackElapsed?.text = timeFormatter.format(time)
     }
 
-    override fun setYear(yearTrack: String) {
-        year.text = yearTrack
-    }
+    private fun updatePlayButton(state: PlayerState) {
+        when (state) {
+            is PlayerState.isLoaded -> {
+                binding?.ibPlayButton?.isEnabled = true
+            }
 
-    override fun updateTrackTime(time: String) {
-        elapsedTime.text = time
-    }
-
-    override fun updateButtonPlayPause(isPlay: Boolean) {
-        Log.d(TAG, "Load button 2")
-        if (isPlay) playButton.setImageResource(R.drawable.pause)
-        else playButton.setImageResource(R.drawable.play)
+            is PlayerState.Content -> {
+                if (state.isPlay) {
+                    binding?.ibPlayButton?.setImageResource(R.drawable.play)
+                } else {
+                    binding?.ibPlayButton?.setImageResource(R.drawable.pause)
+                }
+            }
+        }
     }
 
     companion object {
