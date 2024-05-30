@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.android.playlistmaker.main.CustomApp
@@ -13,7 +13,7 @@ import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
 
 class SettingsActivity : ComponentActivity() {
 
-    private var settingsViewModel: SettingsViewModel? = null
+    private val settingsViewModel by viewModels<SettingsViewModel> { SettingsViewModel.getViewModelFactory() }
 
     private val binding: ActivitySettingsBinding by lazy {
         ActivitySettingsBinding.inflate(
@@ -23,11 +23,6 @@ class SettingsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        settingsViewModel = ViewModelProvider(
-            this,
-            SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
-
         setContentView(binding.root)
         binding.flBackToMainSettings.setOnClickListener {
             finish()
@@ -62,7 +57,7 @@ class SettingsActivity : ComponentActivity() {
         }
         binding.swNightMode.setOnCheckedChangeListener { _, checked ->
             (applicationContext as CustomApp).switchTheme(checked)
-            settingsViewModel?.themeSwitcher(checked)
+            settingsViewModel.themeSwitcher(checked)
         }
         binding.swNightMode.isChecked = (applicationContext as CustomApp).darkTheme
 
