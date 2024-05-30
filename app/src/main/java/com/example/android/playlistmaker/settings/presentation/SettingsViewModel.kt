@@ -3,6 +3,10 @@ package com.example.android.playlistmaker.settings.presentation
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.main.CustomApp
 import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
@@ -10,15 +14,12 @@ import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInte
 class SettingsViewModel(application: Application) :
     AndroidViewModel(application) {
 
-    private var sharedPreferencesInteractor: SharedPreferencesInteractor? = null
+    private var sharedPreferencesInteractor: SharedPreferencesInteractor =
+        Creator.provideSharedPreferncesInteractor(getApplication<CustomApp>())
 
-    fun onCreate() {
-        sharedPreferencesInteractor =
-            Creator.provideSharedPreferncesInteractor(getApplication<CustomApp>())
-    }
 
     fun themeSwitcher(checked: Boolean) {
-        sharedPreferencesInteractor?.putDarkThemePref(
+        sharedPreferencesInteractor.putDarkThemePref(
             checked,
             object : SharedPreferencesInteractor.SharedPreferencesConsumer {
                 override fun consume(result: Any) {
@@ -30,5 +31,11 @@ class SettingsViewModel(application: Application) :
 
     companion object {
         private const val TAG = "SettingsController"
+
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                SettingsViewModel(this[APPLICATION_KEY] as Application)
+            }
+        }
     }
 }

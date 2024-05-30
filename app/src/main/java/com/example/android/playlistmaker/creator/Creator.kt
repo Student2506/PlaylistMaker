@@ -20,7 +20,6 @@ import com.example.android.playlistmaker.search.domain.impl.SharedPreferencesInt
 import com.example.android.playlistmaker.search.domain.impl.TracksInteractorImpl
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
-import com.example.android.playlistmaker.settings.presentation.SettingsView
 
 object Creator {
 
@@ -48,10 +47,6 @@ object Creator {
 
     fun provideAudioPlayerInteractor(): AudioPlayerInteractor {
         return AudioPlayerInteractorImpl(getPlayerRepository())
-    }
-
-    fun provideSettingsPresenter(view: SettingsView, context: Context): SettingsViewModel {
-        return SettingsViewModel(view, context)
     }
 
     fun providePlayerPresenter(view: PlayerView, track: Track): PlayerPresenter {

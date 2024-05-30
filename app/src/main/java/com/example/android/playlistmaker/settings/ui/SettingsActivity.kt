@@ -4,17 +4,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.android.playlistmaker.R
-import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.main.CustomApp
-import com.example.android.playlistmaker.settings.presentation.SettingsView
+import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
-class SettingsActivity : AppCompatActivity(), SettingsView {
+class SettingsActivity : ComponentActivity() {
 
-    private val settingsPresenter = Creator.provideSettingsPresenter(this, this)
+    private var settingsViewModel: SettingsViewModel? = null
 
     private var header: FrameLayout? = null
     private var licenseAgreement: FrameLayout? = null
@@ -24,13 +24,16 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        settingsViewModel = ViewModelProvider(
+            this,
+            SettingsViewModel.getViewModelFactory()
+        )[SettingsViewModel::class.java]
         setContentView(R.layout.activity_settings)
         header = findViewById<FrameLayout>(R.id.flBackToMainSettings)
         licenseAgreement = findViewById<FrameLayout>(R.id.flShowAgreement)
         techSupport = findViewById<FrameLayout>(R.id.flSendToTechsupport)
         shareApp = findViewById<FrameLayout>(R.id.flShareButton)
         themeSwitcher = findViewById<SwitchMaterial>(R.id.swNightMode)
-        settingsPresenter.onCreate()
         header?.setOnClickListener {
             finish()
         }
@@ -69,10 +72,10 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
 
         themeSwitcher?.setOnCheckedChangeListener { _, checked ->
             (applicationContext as CustomApp).switchTheme(checked)
-            settingsPresenter.themeSwitcher(checked)
+            settingsViewModel?.themeSwitcher(checked)
         }
         themeSwitcher?.isChecked = (applicationContext as CustomApp).darkTheme
-        settingsPresenter.onCreate()
+
     }
 
     companion object {
