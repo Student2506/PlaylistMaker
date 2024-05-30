@@ -1,6 +1,5 @@
 package com.example.android.playlistmaker.creator
 
-import android.app.Activity
 import android.content.Context
 import com.example.android.playlistmaker.player.data.AudioPlayerRepositoryImpl
 import com.example.android.playlistmaker.player.data.player.AndroidStandardPlayerClient
@@ -20,7 +19,7 @@ import com.example.android.playlistmaker.search.domain.api.TracksRepository
 import com.example.android.playlistmaker.search.domain.impl.SharedPreferencesInteractorImpl
 import com.example.android.playlistmaker.search.domain.impl.TracksInteractorImpl
 import com.example.android.playlistmaker.search.domain.models.Track
-import com.example.android.playlistmaker.settings.presentation.SettingsPresenter
+import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
 import com.example.android.playlistmaker.settings.presentation.SettingsView
 
 object Creator {
@@ -51,8 +50,8 @@ object Creator {
         return AudioPlayerInteractorImpl(getPlayerRepository())
     }
 
-    fun provideSettingsPresenter(view: SettingsView, context: Context): SettingsPresenter {
-        return SettingsPresenter(view, context)
+    fun provideSettingsPresenter(view: SettingsView, context: Context): SettingsViewModel {
+        return SettingsViewModel(view, context)
     }
 
     fun providePlayerPresenter(view: PlayerView, track: Track): PlayerPresenter {

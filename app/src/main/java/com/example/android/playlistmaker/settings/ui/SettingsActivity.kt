@@ -3,14 +3,11 @@ package com.example.android.playlistmaker.settings.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.main.CustomApp
-import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
-import com.example.android.playlistmaker.settings.presentation.SettingsPresenter
 import com.example.android.playlistmaker.settings.presentation.SettingsView
 import com.google.android.material.switchmaterial.SwitchMaterial
 
