@@ -46,6 +46,7 @@ class AndroidStandardPlayerClient : PlayerClient {
         mediaPlayer?.prepareAsync()
         mediaPlayer?.setOnPreparedListener {
             statePlayer = StateDto.Prepared
+            startPlayer()
         }
         mediaPlayer?.setOnCompletionListener {
             statePlayer = StateDto.Prepared
