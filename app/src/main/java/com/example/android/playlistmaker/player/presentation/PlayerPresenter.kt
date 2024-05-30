@@ -3,7 +3,6 @@ package com.example.android.playlistmaker.player.presentation
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.models.Command
@@ -35,10 +34,6 @@ class PlayerPresenter(
         }
     }
 
-    fun onCreate() {
-
-    }
-
     fun preparePlayer() {
         if (track.previewUrl != null) {
             playerInteractor.controlPlayer(
@@ -46,7 +41,7 @@ class PlayerPresenter(
                 object : AudioPlayerInteractor.AudioPlayerConsumer {
                     override fun consume(status: State) {
                         handler.post {
-                            view.changePlayButton(true)
+                            view.render(PlayerState.Loading)
                             view.updateElapsedTime(0L)
                         }
                     }
@@ -64,7 +59,7 @@ class PlayerPresenter(
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     handler.post {
-                        view.changePlayButton(isPlay = false)
+                        view.render(PlayerState.Content(true))
                         handler.postDelayed(trackTime, REFRESH_TRACK_DELAY_MILLIS)
                     }
                 }
@@ -76,7 +71,7 @@ class PlayerPresenter(
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     handler.post {
-                        view.changePlayButton(isPlay = true)
+                        view.render(PlayerState.Content(true))
                     }
                 }
             })
@@ -98,11 +93,11 @@ class PlayerPresenter(
                 override fun consume(status: State) {
                     if (status == State.STATE_PLAYING) {
                         handler.post {
-                            view.changePlayButton(isPlay = false)
+                            view.render(PlayerState.Content(false))
                         }
                     } else {
                         handler.post {
-                            view.changePlayButton(isPlay = true)
+                            view.render(PlayerState.Content(true))
                         }
                     }
                 }

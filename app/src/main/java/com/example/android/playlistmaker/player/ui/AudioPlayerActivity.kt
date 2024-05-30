@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.player.presentation.PlayerPresenter
+import com.example.android.playlistmaker.player.presentation.PlayerState
 import com.example.android.playlistmaker.player.presentation.PlayerView
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.ui.SearchActivity
@@ -81,6 +82,7 @@ class AudioPlayerActivity : AppCompatActivity(), PlayerView {
         country.text = track.country
         playButton.isEnabled = false
         playerPresenter?.preparePlayer()
+
         playButton.setOnClickListener {
             playerPresenter?.playbackControl()
         }
@@ -96,17 +98,25 @@ class AudioPlayerActivity : AppCompatActivity(), PlayerView {
         playerPresenter?.onDestroy()
     }
 
-    override fun changePlayButton(isPlay: Boolean) {
-        playButton.isEnabled = true
-        if (isPlay) {
-            playButton.setImageResource(R.drawable.play)
-        } else {
-            playButton.setImageResource(R.drawable.pause)
-        }
-    }
-
     override fun updateElapsedTime(time: Long) {
         elapsedTime.text = timeFormatter.format(time)
+    }
+
+    override fun render(state: PlayerState) {
+        when (state) {
+            is PlayerState.Loading -> {
+
+                playButton.isEnabled = true
+            }
+
+            is PlayerState.Content -> {
+                if (state.isPlay) {
+                    playButton.setImageResource(R.drawable.play)
+                } else {
+                    playButton.setImageResource(R.drawable.pause)
+                }
+            }
+        }
     }
 
     companion object {
