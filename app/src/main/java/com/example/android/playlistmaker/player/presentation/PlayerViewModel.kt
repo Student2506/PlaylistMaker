@@ -35,6 +35,7 @@ class PlayerViewModel(
                 playerInteractor.getTrackTime(object :
                     AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
                     override fun getTime(time: Int) {
+                        Log.d(TAG, time.toString())
                         stateTrackLiveData.postValue(time)
                     }
                 })
@@ -55,6 +56,7 @@ class PlayerViewModel(
                     }
                 })
         }
+        handler.postDelayed(trackTime, REFRESH_TRACK_DELAY_MILLIS)
     }
 
     fun onDestroy() {
@@ -67,7 +69,7 @@ class PlayerViewModel(
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     renderState(PlayerState.Content(true))
-                    handler.postDelayed(trackTime, REFRESH_TRACK_DELAY_MILLIS)
+
                 }
             })
     }
@@ -79,7 +81,6 @@ class PlayerViewModel(
                     renderState(PlayerState.Content(true))
                 }
             })
-        handler.removeCallbacks(trackTime)
     }
 
     fun releasePlayer() {
