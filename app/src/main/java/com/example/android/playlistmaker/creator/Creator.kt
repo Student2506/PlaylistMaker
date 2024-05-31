@@ -47,16 +47,4 @@ object Creator {
         return AudioPlayerInteractorImpl(getPlayerRepository())
     }
 
-
-    fun provideTrackSearchPresenter(
-        trackSearchView: TrackSearchView,
-        context: Context,
-    ): TrackSearchPresenter {
-        return TrackSearchPresenter(trackSearchView, context)
-    }
-
-    fun provideSettingsControler(activity: Activity): SettingsController {
-        return SettingsController(activity)
-    }
-
 }
