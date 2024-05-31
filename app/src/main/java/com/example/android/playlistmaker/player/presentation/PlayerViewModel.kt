@@ -26,15 +26,15 @@ class PlayerViewModel(
     private val handler = Handler(Looper.getMainLooper())
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
-    private val stateTrackLiveData = MutableLiveData<Long>()
-    fun observeTrackState(): LiveData<Long> = stateTrackLiveData
+    private val stateTrackLiveData = MutableLiveData<Int>()
+    fun observeTrackState(): LiveData<Int> = stateTrackLiveData
 
     private val trackTime: Runnable by lazy {
         object : Runnable {
             override fun run() {
                 playerInteractor.getTrackTime(object :
                     AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
-                    override fun getTime(time: Long) {
+                    override fun getTime(time: Int) {
                         stateTrackLiveData.postValue(time)
                     }
                 })
@@ -51,7 +51,7 @@ class PlayerViewModel(
                 object : AudioPlayerInteractor.AudioPlayerConsumer {
                     override fun consume(status: State) {
                         renderState(PlayerState.isLoaded)
-                        stateTrackLiveData.postValue(0L)
+                        stateTrackLiveData.postValue(0)
                     }
                 })
         }

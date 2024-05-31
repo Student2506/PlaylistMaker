@@ -13,6 +13,6 @@ interface AudioPlayerInteractor {
     }
 
     interface AudioPlayerTrackTimeConsumer {
-        fun getTime(time: Long)
+        fun getTime(time: Int)
     }
 }

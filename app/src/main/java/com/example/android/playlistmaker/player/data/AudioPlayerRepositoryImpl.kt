@@ -19,7 +19,7 @@ class AudioPlayerRepositoryImpl(private val playerClient: PlayerClient) : AudioP
         }
     }
 
-    override fun getTrackStatus(): Long {
-        TODO("Not yet implemented")
+    override fun getTime(): Int {
+        return playerClient.getTime()
     }
 }
