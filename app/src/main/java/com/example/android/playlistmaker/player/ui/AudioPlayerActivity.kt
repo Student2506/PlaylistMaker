@@ -79,6 +79,13 @@ class AudioPlayerActivity : ComponentActivity() {
         playerViewModel?.observeTrackState()?.observe(this) {
             updateElapsedTime(it)
         }
+        playerViewModel?.observeFavoriteState()?.observe(this) {
+            val imageResource = if (it) R.drawable.like_done else R.drawable.like
+            binding?.ivLikeButton?.setImageResource(imageResource)
+        }
+        binding?.ivLikeButton?.setOnClickListener {
+            playerViewModel?.updateFavorite()
+        }
     }
 
     override fun onDestroy() {

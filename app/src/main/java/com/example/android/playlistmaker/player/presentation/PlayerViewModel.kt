@@ -28,6 +28,8 @@ class PlayerViewModel(
     fun observeState(): LiveData<PlayerState> = stateLiveData
     private val stateTrackLiveData = MutableLiveData<Int>()
     fun observeTrackState(): LiveData<Int> = stateTrackLiveData
+    private val stateFavoriteLiveData = MutableLiveData<Boolean>()
+    fun observeFavoriteState(): LiveData<Boolean> = stateFavoriteLiveData
 
     private val trackTime: Runnable by lazy {
         object : Runnable {
@@ -103,6 +105,11 @@ class PlayerViewModel(
                     }
                 }
             })
+    }
+
+    fun updateFavorite() {
+        track.isFavorite = !track.isFavorite
+        stateFavoriteLiveData.postValue(track.isFavorite)
     }
 
     private fun renderState(state: PlayerState) {
