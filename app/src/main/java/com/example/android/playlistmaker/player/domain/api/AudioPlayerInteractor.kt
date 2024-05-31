@@ -1,5 +1,6 @@
 package com.example.android.playlistmaker.player.domain.api
 
+import androidx.lifecycle.LiveData
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
 
@@ -13,6 +14,6 @@ interface AudioPlayerInteractor {
     }
 
     interface AudioPlayerTrackTimeConsumer {
-        fun getTime(time: Long)
+        fun getTime(time: LiveData<Int>)
     }
 }

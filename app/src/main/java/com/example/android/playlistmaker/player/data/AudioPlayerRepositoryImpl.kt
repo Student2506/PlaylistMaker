@@ -1,5 +1,6 @@
 package com.example.android.playlistmaker.player.data
 
+import androidx.lifecycle.LiveData
 import com.example.android.playlistmaker.player.data.dto.PlayerRequest
 import com.example.android.playlistmaker.player.data.dto.PlayerResponse
 import com.example.android.playlistmaker.player.data.util.CommandMapper
@@ -19,7 +20,7 @@ class AudioPlayerRepositoryImpl(private val playerClient: PlayerClient) : AudioP
         }
     }
 
-    override fun getTrackStatus(): Long {
-        TODO("Not yet implemented")
+    override fun getTrackStatus(): LiveData<Int> {
+        return playerClient.getTrackTime()
     }
 }

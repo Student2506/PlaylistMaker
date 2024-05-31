@@ -82,7 +82,7 @@ class AudioPlayerActivity : ComponentActivity() {
     }
 
 
-    private fun updateElapsedTime(time: Long) {
+    private fun updateElapsedTime(time: Int) {
         binding?.tvTrackElapsed?.text = timeFormatter.format(time)
     }
 

@@ -26,22 +26,8 @@ class PlayerViewModel(
     private val handler = Handler(Looper.getMainLooper())
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
-    private val stateTrackLiveData = MutableLiveData<Long>()
-    fun observeTrackState(): LiveData<Long> = stateTrackLiveData
-
-    private val trackTime: Runnable by lazy {
-        object : Runnable {
-            override fun run() {
-                playerInteractor.getTrackTime(object :
-                    AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
-                    override fun getTime(time: Long) {
-                        stateTrackLiveData.postValue(time)
-                    }
-                })
-                handler.postDelayed(this, REFRESH_TRACK_DELAY_MILLIS)
-            }
-        }
-    }
+    private val stateTrackLiveData = MutableLiveData<Int>()
+    fun observeTrackState(): LiveData<Int> = stateTrackLiveData
 
     fun preparePlayer() {
         Log.d(TAG, "Prepare Player")
@@ -51,7 +37,7 @@ class PlayerViewModel(
                 object : AudioPlayerInteractor.AudioPlayerConsumer {
                     override fun consume(status: State) {
                         renderState(PlayerState.isLoaded)
-                        stateTrackLiveData.postValue(0L)
+                        stateTrackLiveData.postValue(0)
                     }
                 })
         }
@@ -59,15 +45,14 @@ class PlayerViewModel(
 
     fun onDestroy() {
         releasePlayer()
-        handler.removeCallbacks(trackTime)
     }
 
     private fun startPlayer() {
         playerInteractor.controlPlayer(Command.Play,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
+                    getTrackTime()
                     renderState(PlayerState.Content(true))
-                    handler.postDelayed(trackTime, REFRESH_TRACK_DELAY_MILLIS)
                 }
             })
     }
@@ -79,7 +64,6 @@ class PlayerViewModel(
                     renderState(PlayerState.Content(true))
                 }
             })
-        handler.removeCallbacks(trackTime)
     }
 
     fun releasePlayer() {
@@ -106,6 +90,14 @@ class PlayerViewModel(
 
     private fun renderState(state: PlayerState) {
         stateLiveData.postValue(state)
+    }
+
+    private fun getTrackTime() {
+        playerInteractor.getTrackTime(object : AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
+            override fun getTime(time: LiveData<Int>) {
+                Log.d(TAG, time.toString())
+            }
+        })
     }
 
     companion object {
