@@ -81,6 +81,10 @@ class AudioPlayerActivity : ComponentActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        playerViewModel?.onDestroy()
+    }
 
     private fun updateElapsedTime(time: Int) {
         binding?.tvTrackElapsed?.text = timeFormatter.format(time)

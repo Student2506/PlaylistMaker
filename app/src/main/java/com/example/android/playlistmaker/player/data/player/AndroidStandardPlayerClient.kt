@@ -60,6 +60,7 @@ class AndroidStandardPlayerClient : PlayerClient {
         if (currentTrack != trackUrl) {
             currentTrack = trackUrl
             mediaPlayer?.reset()
+            handler.removeCallbacks(trackTime)
         }
         mediaPlayer?.setDataSource(trackUrl)
         mediaPlayer?.prepareAsync()
@@ -100,6 +101,7 @@ class AndroidStandardPlayerClient : PlayerClient {
     }
 
     private fun releasePlayer() {
+        handler.removeCallbacks(trackTime)
         mediaPlayer?.release()
         mediaPlayer = null
     }
