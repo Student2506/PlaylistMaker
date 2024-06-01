@@ -64,17 +64,6 @@
         <item name="thumbTint">@color/switch_thumb_selector</item>
     </style>
 
-
-    <!--    <style name="SwitchCompat" parent="Theme.AppCompat.Light">-->
-    <!--        <item name="colorControlActivated">?attr/switchActivatedColor</item>-->
-    <!--        <item name="colorSwitchThumbNormal">?attr/switchThumbNormalColor</item>-->
-    <!--        <item name="android:colorForeground">?attr/switchColor</item>-->
-
-    <!--        <item name="android:minWidth">@dimen/dp_56</item>-->
-    <!--        <item name="android:minHeight">@dimen/dp_40</item>-->
-    <!--        <item name="android:paddingStart">@dimen/dp_8</item>-->
-    <!--    </style>-->
-
     <style name="TopHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -86,6 +75,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:padding">@dimen/dp_16</item>
         <item name="android:layout_marginEnd">@dimen/dp_8</item>
         <item name="android:src">@drawable/arrow_back</item>
         <item name="tint">?attr/colorOnPrimary</item>
