@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.android.playlistmaker.creator.Creator
-import com.example.android.playlistmaker.main.CustomApp
+import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.models.Track
@@ -22,7 +22,7 @@ import com.google.gson.Gson
 
 class TrackSearchViewModel(application: Application) : AndroidViewModel(application) {
     private val sharedPreferencesInteractor =
-        Creator.provideSharedPreferncesInteractor(getApplication<CustomApp>())
+        Creator.provideSharedPreferncesInteractor(getApplication<PlaylistMakerApp>())
     private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
 
     private val historyTracks: ArrayList<Track> = arrayListOf()

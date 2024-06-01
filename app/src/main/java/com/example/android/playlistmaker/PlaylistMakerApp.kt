@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker.main
+package com.example.android.playlistmaker
 
 import android.app.Application
 import android.content.res.Configuration
@@ -7,7 +7,7 @@ import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
 
 
-class CustomApp : Application() {
+class PlaylistMakerApp : Application() {
 
     var darkTheme = false
 

@@ -8,14 +8,14 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.android.playlistmaker.creator.Creator
-import com.example.android.playlistmaker.main.CustomApp
+import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
 
 class SettingsViewModel(application: Application) :
     AndroidViewModel(application) {
 
     private var sharedPreferencesInteractor: SharedPreferencesInteractor =
-        Creator.provideSharedPreferncesInteractor(getApplication<CustomApp>())
+        Creator.provideSharedPreferncesInteractor(getApplication<PlaylistMakerApp>())
 
 
     fun themeSwitcher(checked: Boolean) {

@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivitySettingsBinding
-import com.example.android.playlistmaker.main.CustomApp
+import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
 
 
@@ -56,10 +56,10 @@ class SettingsActivity : ComponentActivity() {
             startActivity(shareAppIntent)
         }
         binding.swNightMode.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as CustomApp).switchTheme(checked)
+            (applicationContext as PlaylistMakerApp).switchTheme(checked)
             settingsViewModel.themeSwitcher(checked)
         }
-        binding.swNightMode.isChecked = (applicationContext as CustomApp).darkTheme
+        binding.swNightMode.isChecked = (applicationContext as PlaylistMakerApp).darkTheme
 
     }
 
