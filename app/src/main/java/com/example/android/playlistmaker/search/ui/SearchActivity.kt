@@ -184,8 +184,8 @@ class SearchActivity : ComponentActivity() {
         binding?.btRefresh?.isVisible = false
         binding?.tvNothingFound?.isVisible = false
         binding?.rvTracks?.isVisible = true
-        binding?.btClearHistory?.isVisible = isHistory
-        binding?.tvHistoryHeader?.isVisible = isHistory
+        binding?.btClearHistory?.isVisible = isHistory && tracks.isNotEmpty()
+        binding?.tvHistoryHeader?.isVisible = isHistory && tracks.isNotEmpty()
 
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
