@@ -19,21 +19,9 @@ class AndroidStandardPlayerClient : PlayerClient {
     private var currentTrack: String? = null
     private var statePlayer: State = State.Default
     private val handler = Handler(Looper.getMainLooper())
-    private var currentTime = 0
-    private val trackTime: Runnable by lazy {
-        object : Runnable {
-            override fun run() {
-                currentTime = mediaPlayer?.currentPosition ?: 0
-                handler.postDelayed(
-                    this,
-                    REFRESH_TRACK_DELAY_MILLIS
-                )
-            }
-        }
-    }
 
     override fun getTime(): Int {
-        return currentTime
+        return mediaPlayer?.currentPosition ?: 0
     }
 
     override fun doRequest(dto: Any): Response {
@@ -60,7 +48,6 @@ class AndroidStandardPlayerClient : PlayerClient {
         if (currentTrack != trackUrl) {
             currentTrack = trackUrl
             mediaPlayer?.reset()
-            handler.removeCallbacks(trackTime)
         }
         mediaPlayer?.setDataSource(trackUrl)
         mediaPlayer?.prepareAsync()
@@ -88,12 +75,10 @@ class AndroidStandardPlayerClient : PlayerClient {
         when (statePlayer) {
             is State.Playing -> {
                 pausePlayer()
-                handler.removeCallbacks(trackTime)
             }
 
             is State.Prepared, State.Paused -> {
                 startPlayer()
-                handler.post(trackTime)
             }
 
             is State.Default -> throw IllegalStateException("Player is not ready!")
@@ -101,7 +86,6 @@ class AndroidStandardPlayerClient : PlayerClient {
     }
 
     private fun releasePlayer() {
-        handler.removeCallbacks(trackTime)
         mediaPlayer?.release()
         mediaPlayer = null
     }
