@@ -1,3 +1,5 @@
 package com.example.android.playlistmaker.player.data.dto
 
-class PlayerResponse(val stateDto: StateDto) : Response()
+import com.example.android.playlistmaker.player.domain.models.State
+
+class PlayerResponse(val stateDto: State) : Response()

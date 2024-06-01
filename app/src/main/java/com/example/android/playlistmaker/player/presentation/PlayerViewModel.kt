@@ -98,7 +98,7 @@ class PlayerViewModel(
         playerInteractor.controlPlayer(Command.PlayPause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
-                    if (status == State.STATE_PLAYING) {
+                    if (status == State.Playing) {
                         renderState(PlayerState.Content(false))
                     } else {
                         renderState(PlayerState.Content(true))
