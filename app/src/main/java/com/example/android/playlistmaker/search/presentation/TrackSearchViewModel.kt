@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.PlaylistMakerApp
+import com.example.android.playlistmaker.creator.Creator
 import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.models.Track
@@ -121,7 +121,7 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
             counter++
         }
         historyTracks.add(0, track)
-        if (historyTracks.size > 10) {
+        if (historyTracks.size > MAXIMUM_HISTORY_LENGTH) {
             historyTracks.removeLast()
         }
         setHistoryTracks()
@@ -147,6 +147,7 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQEUEST_TOKEN = Any()
+        private const val MAXIMUM_HISTORY_LENGTH = 10
         private const val TAG = "SearchController"
 
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
