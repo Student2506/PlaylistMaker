@@ -3,15 +3,15 @@ package com.example.android.playlistmaker.settings.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivitySettingsBinding
-import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
 
 
-class SettingsActivity : ComponentActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private val settingsViewModel by viewModels<SettingsViewModel> { SettingsViewModel.getViewModelFactory() }
 

@@ -8,6 +8,7 @@ import android.os.Looper
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +20,7 @@ import com.example.android.playlistmaker.search.presentation.TrackSearchViewMode
 import com.example.android.playlistmaker.search.presentation.TracksState
 
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var binding: ActivitySearchBinding? = null

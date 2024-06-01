@@ -4,6 +4,7 @@ import android.os.Bundle
 
 import android.util.TypedValue
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -20,7 +21,7 @@ import java.time.ZoneId
 import java.util.Locale
 
 
-class AudioPlayerActivity : ComponentActivity() {
+class AudioPlayerActivity : AppCompatActivity() {
 
     private var playerViewModel: PlayerViewModel? = null
     private var binding: ActivityAudioPlayerBinding? = null
