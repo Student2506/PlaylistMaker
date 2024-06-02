@@ -37,7 +37,6 @@ class PlayerViewModel(
                 playerInteractor.getTrackTime(object :
                     AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
                     override fun getTime(time: Int) {
-                        Log.d(TAG, time.toString())
                         stateTrackLiveData.postValue(time)
                     }
                 })
