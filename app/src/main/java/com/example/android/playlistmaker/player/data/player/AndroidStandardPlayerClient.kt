@@ -5,11 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.example.android.playlistmaker.player.data.PlayerClient
-import com.example.android.playlistmaker.player.data.dto.PlayerRequest
-import com.example.android.playlistmaker.player.data.dto.PlayerResponse
-import com.example.android.playlistmaker.player.data.dto.PlayerTimeRequest
-import com.example.android.playlistmaker.player.data.dto.PlayerTimeResponse
-import com.example.android.playlistmaker.player.data.dto.Response
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
 
@@ -24,20 +19,18 @@ class AndroidStandardPlayerClient : PlayerClient {
         return mediaPlayer?.currentPosition ?: 0
     }
 
-    override fun doRequest(dto: Any): Response {
-        if (dto is PlayerRequest) {
-            when (dto.command) {
-                is Command.Prepare -> preparePlayer(dto.command.trackUrl)
+    override fun doRequest(dto: Any): State {
+        if (dto is Command) {
+            when (dto) {
+                is Command.Prepare -> preparePlayer(dto.trackUrl)
                 is Command.Play -> startPlayer()
                 is Command.Pause -> pausePlayer()
                 is Command.PlayPause -> playbackControl()
                 is Command.Release -> releasePlayer()
             }
-            return PlayerResponse(statePlayer).apply { resultCode = 0 }
-        } else if (dto is PlayerTimeRequest) {
-            return PlayerTimeResponse(trackPlayedLength())
+            return statePlayer
         } else {
-            return Response().apply { resultCode = 400 }
+            return State.Default
         }
     }
 
