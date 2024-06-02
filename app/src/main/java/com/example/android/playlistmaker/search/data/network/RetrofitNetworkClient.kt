@@ -7,18 +7,19 @@ import android.util.Log
 import com.example.android.playlistmaker.search.data.NetworkClient
 import com.example.android.playlistmaker.search.data.dto.ITunesTrackRequest
 import com.example.android.playlistmaker.search.data.dto.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient(private val context: Context) : NetworkClient {
+class RetrofitNetworkClient(
+    private val itunesService: ITunesApiService,
+    private val context: Context,
+) : NetworkClient {
 
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit =
-        Retrofit.Builder().baseUrl(itunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-    private val itunesService = retrofit.create(ITunesApiService::class.java)
+//    private val itunesBaseUrl = "https://itunes.apple.com"
+//
+//    private val retrofit =
+//        Retrofit.Builder().baseUrl(itunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//
+//    private val itunesService = retrofit.create(ITunesApiService::class.java)
 
     override fun doRequest(dto: Any): Response {
         Log.d(TAG, "Start request")

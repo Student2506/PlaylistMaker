@@ -22,22 +22,22 @@ import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
 object Creator {
 
 
-    private fun getTrackRepository(context: Context): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient(context))
-    }
+//    private fun getTrackRepository(context: Context): TracksRepository {
+//        return TracksRepositoryImpl(RetrofitNetworkClient(context))
+//    }
 
-    fun provideTracksInteractor(context: Context): TracksInteractor {
-        return TracksInteractorImpl(getTrackRepository(context))
-    }
+//    fun provideTracksInteractor(context: Context): TracksInteractor {
+//        return TracksInteractorImpl(getTrackRepository(context))
+//    }
 
 
     private fun getSharedPreferncesRepository(context: Context): SharedPreferencesRepository {
         return SharedPreferncesRepositoryImpl(SharedPreferncesClient(context))
     }
 
-    fun provideSharedPreferncesInteractor(context: Context): SharedPreferencesInteractor {
-        return SharedPreferencesInteractorImpl(getSharedPreferncesRepository(context))
-    }
+//    fun provideSharedPreferncesInteractor(context: Context): SharedPreferencesInteractor {
+//        return SharedPreferencesInteractorImpl(getSharedPreferncesRepository(context))
+//    }
 
     private fun getPlayerRepository(): AudioPlayerRepository {
         return AudioPlayerRepositoryImpl(AndroidStandardPlayerClient())

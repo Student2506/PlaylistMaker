@@ -18,6 +18,7 @@ import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.presentation.TrackSearchViewModel
 import com.example.android.playlistmaker.search.presentation.TracksState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
@@ -30,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
             showTrack(it)
         }
     }
-    private var trackSearchViewModel: TrackSearchViewModel? = null
+    private val trackSearchViewModel by viewModel<TrackSearchViewModel>()
 
     private var isClickAllowed = true
 
@@ -40,10 +41,10 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-        trackSearchViewModel = ViewModelProvider(
-            this,
-            TrackSearchViewModel.getViewModelFactory()
-        )[TrackSearchViewModel::class.java]
+//        trackSearchViewModel = ViewModelProvider(
+//            this,
+//            TrackSearchViewModel.getViewModelFactory()
+//        )[TrackSearchViewModel::class.java]
         trackSearchViewModel?.observeState()?.observe(this) {
             render(it)
         }

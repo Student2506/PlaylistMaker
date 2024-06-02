@@ -3,17 +3,17 @@ package com.example.android.playlistmaker.settings.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val settingsViewModel by viewModels<SettingsViewModel> { SettingsViewModel.getViewModelFactory() }
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     private val binding: ActivitySettingsBinding by lazy {
         ActivitySettingsBinding.inflate(
