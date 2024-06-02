@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import com.example.android.playlistmaker.search.data.NetworkClient
 import com.example.android.playlistmaker.search.data.dto.ITunesTrackRequest
+import com.example.android.playlistmaker.search.data.dto.ITunesTrackResponse
 import com.example.android.playlistmaker.search.data.dto.Response
 
 class RetrofitNetworkClient(
@@ -20,10 +21,17 @@ class RetrofitNetworkClient(
             return Response().apply { resultCode = -1 }
         }
         if (dto !is ITunesTrackRequest) {
-            Log.d(TAG, "error!!!!!")
+            Log.e(TAG, "Error dto is: ${dto::class.qualifiedName}")
             return Response().apply { resultCode = 400 }
         }
-        val response = itunesService.searchTracks(term = dto.term, entity = dto.entity).execute()
+
+        val response: retrofit2.Response<ITunesTrackResponse> =
+            try {
+                itunesService.searchTracks(term = dto.term, entity = dto.entity).execute()
+            } catch (exc: java.io.IOException) {
+                Log.e(TAG, exc.stackTrace.toString())
+                throw exc
+            }
         Log.d(TAG, response.toString())
         val body = response.body()
         Log.d(TAG, body.toString())
