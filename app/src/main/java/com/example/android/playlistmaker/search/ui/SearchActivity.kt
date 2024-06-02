@@ -111,11 +111,6 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    override fun onStop() {
-        super.onStop()
-        trackSearchViewModel.onStop()
-    }
-
     override fun onStart() {
         super.onStart()
         trackSearchViewModel.onStart()
