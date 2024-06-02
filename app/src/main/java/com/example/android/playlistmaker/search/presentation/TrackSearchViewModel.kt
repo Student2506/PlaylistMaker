@@ -39,16 +39,12 @@ class TrackSearchViewModel(
         val searchRunnable = Runnable { searchSong(changedText) }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             handler.postDelayed(
-                searchRunnable,
-                SEARCH_REQEUEST_TOKEN,
-                SEARCH_DEBOUNCE_DELAY
+                searchRunnable, SEARCH_REQEUEST_TOKEN, SEARCH_DEBOUNCE_DELAY
             )
         } else {
             val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
             handler.postAtTime(
-                searchRunnable,
-                SEARCH_REQEUEST_TOKEN,
-                postTime
+                searchRunnable, SEARCH_REQEUEST_TOKEN, postTime
             )
         }
     }
@@ -69,7 +65,6 @@ class TrackSearchViewModel(
                 }
             }
         })
-
     }
 
 
@@ -80,12 +75,11 @@ class TrackSearchViewModel(
         sharedPreferencesInteractor.getFilmsHistory(object :
             SharedPreferencesInteractor.SharedPreferencesConsumer {
             override fun consume(result: Any) {
-                if (result is String && result != "")
-                    historyTracks.addAll(
-                        Gson().fromJson(
-                            result, Array<Track>::class.java
-                        )
+                if (result is String && result != "") historyTracks.addAll(
+                    Gson().fromJson(
+                        result, Array<Track>::class.java
                     )
+                )
                 val historyIterator = historyTracks.iterator()
                 var counter = 0
                 while (historyIterator.hasNext()) {
@@ -106,11 +100,8 @@ class TrackSearchViewModel(
                             setHistoryTracks()
                         }
                     })
-
             }
         })
-
-
     }
 
     fun setHistoryTracks() {
@@ -118,16 +109,14 @@ class TrackSearchViewModel(
         sharedPreferencesInteractor.getFilmsHistory(object :
             SharedPreferencesInteractor.SharedPreferencesConsumer {
             override fun consume(result: Any) {
-                if (result is String && result != "")
-                    historyTracks.addAll(
-                        Gson().fromJson(
-                            result, Array<Track>::class.java
-                        )
+                if (result is String && result != "") historyTracks.addAll(
+                    Gson().fromJson(
+                        result, Array<Track>::class.java
                     )
+                )
                 renderState(TracksState.HistoryContent(historyTracks))
             }
         })
-
     }
 
     fun setSearchTracks() {
@@ -147,6 +136,5 @@ class TrackSearchViewModel(
         private val SEARCH_REQEUEST_TOKEN = Any()
         private const val MAXIMUM_HISTORY_LENGTH = 10
         private const val TAG = "SearchController"
-
     }
 }
