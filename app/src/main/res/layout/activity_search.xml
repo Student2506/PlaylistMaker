@@ -73,7 +73,7 @@
                 android:layout_weight="1"
                 android:scrollbars="vertical" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btClearHistory"
                 style="@style/SearchDialog.History.Button"
                 android:layout_width="wrap_content"
@@ -109,10 +109,10 @@
 
         <ProgressBar
             android:id="@+id/pbProgressBar"
-            android:layout_marginTop="@dimen/dp_140"
             android:layout_width="@dimen/dp_44"
             android:layout_height="@dimen/dp_44"
             android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/dp_140"
             android:indeterminateTint="@color/progress_bar_tint"
             android:visibility="gone" />
 

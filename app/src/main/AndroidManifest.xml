@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".CustomApp"
+        android:name=".PlaylistMakerApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,21 +17,21 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.audioplayer.AudioPlayerActivity"
+            android:name=".player.ui.AudioPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.search.SearchActivity"
+            android:name=".search.ui.SearchActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".presentation.ui.medialibrary.MediaLibraryActivity"
+            android:name=".medialibrary.ui.MediaLibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.general_settings.SettingsActivity"
+            android:name=".settings.ui.SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker" />
         <activity
-            android:name=".presentation.ui.MainActivity"
+            android:name=".main.ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.PlaylistMaker">
             <intent-filter>
