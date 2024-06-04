@@ -3,8 +3,19 @@ package com.example.android.playlistmaker
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.android.playlistmaker.creator.Creator
+import com.example.android.playlistmaker.player.di.playerDataModule
+import com.example.android.playlistmaker.player.di.playerInteractorModule
+import com.example.android.playlistmaker.player.di.playerRepositoryModule
+import com.example.android.playlistmaker.player.di.playerViewModelModule
+import com.example.android.playlistmaker.search.di.dataModule
+import com.example.android.playlistmaker.search.di.interactorModule
+import com.example.android.playlistmaker.search.di.repositoryModule
+import com.example.android.playlistmaker.search.di.viewModelModule
 import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
+import com.example.android.playlistmaker.settings.di.settingsViewModelModule
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 
 class PlaylistMakerApp : Application() {
@@ -13,9 +24,23 @@ class PlaylistMakerApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        startKoin {
+            androidContext(this@PlaylistMakerApp)
+            modules(
+                dataModule,
+                repositoryModule,
+                interactorModule,
+                viewModelModule,
+                settingsViewModelModule,
+                playerDataModule,
+                playerRepositoryModule,
+                playerInteractorModule,
+                playerViewModelModule
+            )
+        }
         val darkModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val isDarkMode = darkModeFlags == Configuration.UI_MODE_NIGHT_YES
-        val sharedPreferencesInteractor = Creator.provideSharedPreferncesInteractor(this)
+        val sharedPreferencesInteractor: SharedPreferencesInteractor by inject()
         sharedPreferencesInteractor.getDarkThemePref(object :
             SharedPreferencesInteractor.SharedPreferencesConsumer {
             override fun consume(result: Any) {

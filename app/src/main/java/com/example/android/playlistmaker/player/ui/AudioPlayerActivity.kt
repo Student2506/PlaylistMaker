@@ -15,6 +15,8 @@ import com.example.android.playlistmaker.player.presentation.PlayerState
 import com.example.android.playlistmaker.player.presentation.PlayerViewModel
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.ui.SearchActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -23,7 +25,10 @@ import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    private var playerViewModel: PlayerViewModel? = null
+    private val track: Track by lazy { intent.getParcelableExtra(SearchActivity.TRACK_TO_SHOW)!! }
+    private val playerViewModel: PlayerViewModel by viewModel {
+        parametersOf(track)
+    }
     private var binding: ActivityAudioPlayerBinding? = null
 
     private val timeFormatter: SimpleDateFormat by lazy {
@@ -39,10 +44,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding?.flBackToMain?.setOnClickListener {
             finish()
         }
-        val track: Track = intent.getParcelableExtra(SearchActivity.TRACK_TO_SHOW)!!
-        playerViewModel = ViewModelProvider(
-            this, PlayerViewModel.getViewModelFactory(track)
-        )[PlayerViewModel::class.java]
         Glide.with(applicationContext)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder).centerInside().transform(
@@ -69,29 +70,29 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding?.tvGenreValue?.text = track.primaryGenreName
         binding?.tvCountryValue?.text = track.country
         binding?.ibPlayButton?.isEnabled = false
-        playerViewModel?.preparePlayer()
+        playerViewModel.preparePlayer()
 
         binding?.ibPlayButton?.setOnClickListener {
-            playerViewModel?.playbackControl()
+            playerViewModel.playbackControl()
         }
-        playerViewModel?.observeState()?.observe(this) { state ->
+        playerViewModel.observeState().observe(this) { state ->
             updatePlayButton(state)
         }
-        playerViewModel?.observeTrackState()?.observe(this) {
+        playerViewModel.observeTrackState().observe(this) {
             updateElapsedTime(it)
         }
-        playerViewModel?.observeFavoriteState()?.observe(this) {
+        playerViewModel.observeFavoriteState().observe(this) {
             val imageResource = if (it) R.drawable.like_done else R.drawable.like
             binding?.ivLikeButton?.setImageResource(imageResource)
         }
         binding?.ivLikeButton?.setOnClickListener {
-            playerViewModel?.updateFavorite()
+            playerViewModel.updateFavorite()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerViewModel?.onDestroy()
+        playerViewModel.onDestroy()
     }
 
     private fun updateElapsedTime(time: Int) {

@@ -6,19 +6,13 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import com.example.android.playlistmaker.search.data.NetworkClient
 import com.example.android.playlistmaker.search.data.dto.ITunesTrackRequest
+import com.example.android.playlistmaker.search.data.dto.ITunesTrackResponse
 import com.example.android.playlistmaker.search.data.dto.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient(private val context: Context) : NetworkClient {
-
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit =
-        Retrofit.Builder().baseUrl(itunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-    private val itunesService = retrofit.create(ITunesApiService::class.java)
+class RetrofitNetworkClient(
+    private val itunesService: ITunesApiService,
+    private val context: Context,
+) : NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         Log.d(TAG, "Start request")
@@ -27,10 +21,17 @@ class RetrofitNetworkClient(private val context: Context) : NetworkClient {
             return Response().apply { resultCode = -1 }
         }
         if (dto !is ITunesTrackRequest) {
-            Log.d(TAG, "error!!!!!")
+            Log.e(TAG, "Error dto is: ${dto::class.qualifiedName}")
             return Response().apply { resultCode = 400 }
         }
-        val response = itunesService.searchTracks(term = dto.term, entity = dto.entity).execute()
+
+        val response: retrofit2.Response<ITunesTrackResponse> =
+            try {
+                itunesService.searchTracks(term = dto.term, entity = dto.entity).execute()
+            } catch (exc: java.io.IOException) {
+                Log.e(TAG, exc.stackTrace.toString())
+                throw exc
+            }
         Log.d(TAG, response.toString())
         val body = response.body()
         Log.d(TAG, body.toString())

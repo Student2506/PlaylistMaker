@@ -18,6 +18,7 @@ import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.presentation.TrackSearchViewModel
 import com.example.android.playlistmaker.search.presentation.TracksState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
@@ -30,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
             showTrack(it)
         }
     }
-    private var trackSearchViewModel: TrackSearchViewModel? = null
+    private val trackSearchViewModel by viewModel<TrackSearchViewModel>()
 
     private var isClickAllowed = true
 
@@ -40,11 +41,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-        trackSearchViewModel = ViewModelProvider(
-            this,
-            TrackSearchViewModel.getViewModelFactory()
-        )[TrackSearchViewModel::class.java]
-        trackSearchViewModel?.observeState()?.observe(this) {
+        trackSearchViewModel.observeState().observe(this) {
             render(it)
         }
 
@@ -56,7 +53,7 @@ class SearchActivity : AppCompatActivity() {
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding?.etInput?.windowToken, 0)
-            trackSearchViewModel?.setHistoryTracks()
+            trackSearchViewModel.setHistoryTracks()
             if (adapter.tracks.isNotEmpty()) {
                 binding?.tvHistoryHeader?.isVisible = true
                 binding?.btClearHistory?.isVisible = true
@@ -68,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
                 if (binding?.etInput?.text?.isNotEmpty() ?: false) {
                     binding?.tvHistoryHeader?.isVisible = false
                     binding?.btClearHistory?.isVisible = false
-                    trackSearchViewModel?.searchSong(binding?.etInput?.text.toString())
+                    trackSearchViewModel.searchSong(binding?.etInput?.text.toString())
                 }
                 val inputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -81,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
         binding?.etInput?.addTextChangedListener(beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
                 binding?.ivClear?.isVisible = !charSequence.isNullOrEmpty()
-                trackSearchViewModel?.searchDebounce(changedText = charSequence?.toString() ?: "")
+                trackSearchViewModel.searchDebounce(changedText = charSequence?.toString() ?: "")
             },
             afterTextChanged = { _ ->
             })
@@ -94,17 +91,17 @@ class SearchActivity : AppCompatActivity() {
                 adapter.tracks = arrayListOf()
                 adapter.notifyItemRangeRemoved(0, size)
             } else {
-                trackSearchViewModel?.setSearchTracks()
+                trackSearchViewModel.setSearchTracks()
             }
         }
         binding?.btRefresh?.setOnClickListener {
-            trackSearchViewModel?.searchSong(lastRequest!!)
+            trackSearchViewModel.searchSong(lastRequest!!)
         }
         binding?.btClearHistory?.isVisible = false
 
         binding?.tvHistoryHeader?.isVisible = false
         binding?.btClearHistory?.setOnClickListener {
-            trackSearchViewModel?.clearHistory()
+            trackSearchViewModel.clearHistory()
             binding?.tvHistoryHeader?.isVisible = false
             binding?.btClearHistory?.isVisible = false
         }
@@ -114,14 +111,9 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    override fun onStop() {
-        super.onStop()
-        trackSearchViewModel?.onStop()
-    }
-
     override fun onStart() {
         super.onStart()
-        trackSearchViewModel?.onStart()
+        trackSearchViewModel.onStart()
     }
 
     private fun clickDebounce(): Boolean {
@@ -134,7 +126,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showTrack(track: Track) {
-        trackSearchViewModel?.showTrack(track)
+        trackSearchViewModel.showTrack(track)
         val settingsIntent = Intent(this, AudioPlayerActivity::class.java)
         settingsIntent.putExtra(SearchActivity.TRACK_TO_SHOW, track)
         startActivity(settingsIntent)

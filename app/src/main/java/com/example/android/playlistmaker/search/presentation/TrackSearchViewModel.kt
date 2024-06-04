@@ -1,33 +1,24 @@
 package com.example.android.playlistmaker.search.presentation
 
-import android.app.Application
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.android.playlistmaker.PlaylistMakerApp
-import com.example.android.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.google.gson.Gson
 
-class TrackSearchViewModel(application: Application) : AndroidViewModel(application) {
-    private val sharedPreferencesInteractor =
-        Creator.provideSharedPreferncesInteractor(getApplication<PlaylistMakerApp>())
-    private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
+class TrackSearchViewModel(
+    private val tracksInteractor: TracksInteractor,
+    private val sharedPreferencesInteractor: SharedPreferencesInteractor,
+) : ViewModel() {
 
-    private val historyTracks: ArrayList<Track> = arrayListOf()
     private val tracks = ArrayList<Track>()
-
 
     private val handler = Handler(Looper.getMainLooper())
     private var searchQuery: String? = null
@@ -38,34 +29,8 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
         handler.removeCallbacksAndMessages(SEARCH_REQEUEST_TOKEN)
     }
 
-    fun onStop() {
-        val historyTracksJson = Gson().toJson(historyTracks)
-        sharedPreferencesInteractor.putFilmsHistory(historyTracksJson,
-            object : SharedPreferencesInteractor.SharedPreferencesConsumer {
-                override fun consume(result: Any) {
-                    if (result is String) {
-                        Log.d(TAG, result)
-                    }
-                }
-            })
-    }
-
     fun onStart() {
-        sharedPreferencesInteractor.getFilmsHistory(object :
-            SharedPreferencesInteractor.SharedPreferencesConsumer {
-            override fun consume(result: Any) {
-                if (result is String && result != "") {
-                    val historyTracksJson = result
-                    historyTracks.clear()
-                    historyTracks.addAll(
-                        Gson().fromJson(
-                            historyTracksJson, Array<Track>::class.java
-                        )
-                    )
-                    setHistoryTracks()
-                }
-            }
-        })
+        setHistoryTracks()
     }
 
     fun searchDebounce(changedText: String) {
@@ -74,16 +39,12 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
         val searchRunnable = Runnable { searchSong(changedText) }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             handler.postDelayed(
-                searchRunnable,
-                SEARCH_REQEUEST_TOKEN,
-                SEARCH_DEBOUNCE_DELAY
+                searchRunnable, SEARCH_REQEUEST_TOKEN, SEARCH_DEBOUNCE_DELAY
             )
         } else {
             val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
             handler.postAtTime(
-                searchRunnable,
-                SEARCH_REQEUEST_TOKEN,
-                postTime
+                searchRunnable, SEARCH_REQEUEST_TOKEN, postTime
             )
         }
     }
@@ -104,31 +65,58 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
                 }
             }
         })
-
     }
 
 
     fun showTrack(track: Track) {
         val message = "${track.trackName} - ${track.artistName}\nTime:${track.trackTime}"
         Log.d(TAG, message)
-        val historyIterator = historyTracks.iterator()
-        var counter = 0
-        while (historyIterator.hasNext()) {
-            if (track.trackId == historyIterator.next().trackId) {
-                historyIterator.remove()
-                break
+        val historyTracks = arrayListOf<Track>()
+        sharedPreferencesInteractor.getFilmsHistory(object :
+            SharedPreferencesInteractor.SharedPreferencesConsumer {
+            override fun consume(result: Any) {
+                if (result is String && result != "") historyTracks.addAll(
+                    Gson().fromJson(
+                        result, Array<Track>::class.java
+                    )
+                )
+                val historyIterator = historyTracks.iterator()
+                var counter = 0
+                while (historyIterator.hasNext()) {
+                    if (track.trackId == historyIterator.next().trackId) {
+                        historyIterator.remove()
+                        break
+                    }
+                    counter++
+                }
+                historyTracks.add(0, track)
+                if (historyTracks.size > MAXIMUM_HISTORY_LENGTH) {
+                    historyTracks.removeLast()
+                }
+                val historyTracksJson = Gson().toJson(historyTracks)
+                sharedPreferencesInteractor.putFilmsHistory(historyTracksJson,
+                    object : SharedPreferencesInteractor.SharedPreferencesConsumer {
+                        override fun consume(result: Any) {
+                            setHistoryTracks()
+                        }
+                    })
             }
-            counter++
-        }
-        historyTracks.add(0, track)
-        if (historyTracks.size > MAXIMUM_HISTORY_LENGTH) {
-            historyTracks.removeLast()
-        }
-        setHistoryTracks()
+        })
     }
 
     fun setHistoryTracks() {
-        renderState(TracksState.HistoryContent(historyTracks))
+        val historyTracks = arrayListOf<Track>()
+        sharedPreferencesInteractor.getFilmsHistory(object :
+            SharedPreferencesInteractor.SharedPreferencesConsumer {
+            override fun consume(result: Any) {
+                if (result is String && result != "") historyTracks.addAll(
+                    Gson().fromJson(
+                        result, Array<Track>::class.java
+                    )
+                )
+                renderState(TracksState.HistoryContent(historyTracks))
+            }
+        })
     }
 
     fun setSearchTracks() {
@@ -136,8 +124,7 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun clearHistory() {
-        historyTracks.clear()
-        renderState(TracksState.HistoryContent(historyTracks))
+        renderState(TracksState.HistoryContent(arrayListOf<Track>()))
     }
 
     private fun renderState(state: TracksState) {
@@ -149,11 +136,5 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
         private val SEARCH_REQEUEST_TOKEN = Any()
         private const val MAXIMUM_HISTORY_LENGTH = 10
         private const val TAG = "SearchController"
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                TrackSearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
     }
 }
