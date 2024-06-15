@@ -52,6 +52,8 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
     implementation("io.insert-koin:koin-android:3.5.6")
+    implementation("androidx.fragment:fragment-ktx:1.8.0")
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
