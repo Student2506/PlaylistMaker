@@ -1,11 +1,12 @@
 package com.example.android.playlistmaker.medialibrary.ui
 
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivityMediaLibraryBinding
 import com.example.android.playlistmaker.medialibrary.presentation.MediaLibraryPagerAdapter
+import com.example.android.playlistmaker.medialibrary.presentation.MediaLibraryViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MediaLibraryActivity : AppCompatActivity() {
@@ -16,6 +17,7 @@ class MediaLibraryActivity : AppCompatActivity() {
         )
     }
 
+    private val viewModel: MediaLibraryViewModel by viewModels()
     private lateinit var tabMediator: TabLayoutMediator
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +31,9 @@ class MediaLibraryActivity : AppCompatActivity() {
             }
         }
         tabMediator.attach()
+        binding.flBackToMainSettings.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onDestroy() {

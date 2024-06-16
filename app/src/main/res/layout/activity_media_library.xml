@@ -9,6 +9,8 @@
         android:id="@+id/flBackToMainSettings"
         style="@style/TopHeader"
         android:layout_marginBottom="0dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@id/tlMediaLib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +26,7 @@
     </FrameLayout>
 
     <com.google.android.material.tabs.TabLayout
+        style="@style/MediaLibraryTabLayout"
         android:id="@+id/tlMediaLib"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
