@@ -1,12 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MainScreen"
     android:background="?attr/colorPrimaryVariant"
     android:theme="@style/Theme.PlaylistMaker">
 
     <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:id="@+id/flBackToMainSettings"
+        style="@style/TopHeader"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@id/tlMediaLib"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</LinearLayout>
+        <ImageView
+            style="@style/TopHeaderImageView"
+            android:contentDescription="@string/return_back" />
+
+        <TextView
+            style="@style/TopHeaderTextView"
+            android:text="@string/medialibrary" />
+    </FrameLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tlMediaLib"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/vpMediaLib"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/flBackToMainSettings" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpMediaLib"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tlMediaLib"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tlMediaLib" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
