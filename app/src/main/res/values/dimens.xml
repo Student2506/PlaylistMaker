@@ -37,4 +37,5 @@
     <dimen name="dp_140">140dp</dimen>
     <dimen name="dp_148">148dp</dimen>
     <dimen name="dp_108">108dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
 </resources>

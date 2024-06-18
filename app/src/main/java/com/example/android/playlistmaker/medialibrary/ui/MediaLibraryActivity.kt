@@ -31,7 +31,7 @@ class MediaLibraryActivity : AppCompatActivity() {
             }
         }
         tabMediator.attach()
-        binding.flBackToMainSettings.setOnClickListener {
+        binding.tbToolbar.setOnClickListener {
             finish()
         }
     }
