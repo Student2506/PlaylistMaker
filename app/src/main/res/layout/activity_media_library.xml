@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MainScreen"
-    android:background="?attr/colorPrimaryVariant"
-    android:theme="@style/Theme.PlaylistMaker">
+    android:theme="@style/AnotherTheme.Theme.PlaylistMaker">
 
     <FrameLayout
         android:id="@+id/flBackToMainSettings"
@@ -26,8 +25,8 @@
     </FrameLayout>
 
     <com.google.android.material.tabs.TabLayout
-        style="@style/MediaLibraryTabLayout"
         android:id="@+id/tlMediaLib"
+        style="@style/MediaLibraryTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/vpMediaLib"
