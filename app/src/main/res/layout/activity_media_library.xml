@@ -1,12 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MainScreen"
-    android:background="?attr/colorPrimaryVariant"
-    android:theme="@style/Theme.PlaylistMaker">
+    android:theme="@style/AnotherTheme.Theme.PlaylistMaker">
 
-    <FrameLayout
-        android:layout_width="0dp"
+    <Toolbar
+        android:id="@+id/tbToolbar"
+        style="@style/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_56"
+        android:title="@string/medialibrary"
+        app:layout_constraintBottom_toTopOf="@id/tlMediaLib"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tlMediaLib"
+        style="@style/MediaLibraryTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        app:layout_constraintBottom_toTopOf="@id/vpMediaLib"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tbToolbar" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpMediaLib"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tlMediaLib"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tlMediaLib" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

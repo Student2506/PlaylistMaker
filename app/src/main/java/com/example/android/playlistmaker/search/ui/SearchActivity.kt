@@ -7,11 +7,9 @@ import android.os.Handler
 import android.os.Looper
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.playlistmaker.databinding.ActivitySearchBinding
 import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
@@ -45,7 +43,7 @@ class SearchActivity : AppCompatActivity() {
             render(it)
         }
 
-        binding?.flBackToMain?.setOnClickListener {
+        binding?.tbToolbar?.setOnClickListener {
             finish()
         }
         binding?.ivClear?.setOnClickListener {

@@ -57,42 +57,11 @@
         <item name="android:textFontWeight">400</item>
         <item name="iconTint">@color/icon_color</item>
         <item name="android:paddingHorizontal">@dimen/dp_16</item>
-        <item name="android:paddingVertical">@dimen/dp_20</item>
+        <item name="android:paddingVertical">@dimen/dp_16</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
 
         <item name="trackTint">@color/switch_track_selector</item>
         <item name="thumbTint">@color/switch_thumb_selector</item>
-    </style>
-
-    <style name="TopHeader">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/dp_24</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
-    </style>
-
-    <style name="TopHeaderImageView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:padding">@dimen/dp_16</item>
-        <item name="android:layout_marginEnd">@dimen/dp_8</item>
-        <item name="android:src">@drawable/arrow_back</item>
-        <item name="tint">?attr/colorOnPrimary</item>
-    </style>
-
-    <style name="TopHeaderTextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/dp_12</item>
-        <item name="android:layout_marginTop">@dimen/dp_12</item>
-        <item name="android:layout_marginBottom">@dimen/dp_12</item>
-        <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:paddingStart">@dimen/dp_48</item>
-        <item name="android:paddingEnd">@dimen/dp_48</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:textFontWeight">500</item>
-        <item name="android:textSize">@dimen/sp_22</item>
     </style>
 
     <style name="MainScreen">
@@ -239,4 +208,52 @@
         <item name="android:textSize">@dimen/sp_13</item>
     </style>
 
+    <style name="Text.MediaLibraryTabLayout" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+    </style>
+
+    <style name="MediaLibraryTabLayout" parent="">
+        <item name="tabTextColor">?attr/colorOnPrimary</item>
+        <item name="tabTextAppearance">@style/Text.MediaLibraryTabLayout</item>
+        <item name="tabBackground">?attr/colorSecondary</item>
+        <item name="tabIndicatorHeight">@dimen/dp_2</item>
+        <item name="tabIndicator">@drawable/underline</item>
+        <item name="tabIndicatorColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="Text.MediaLibraryFragment" parent="">
+        <item name="android:layout_marginTop">@dimen/dp_16</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/sp_19</item>
+    </style>
+
+    <style name="MaterialButton.MediaLibraryFragment" parent="">
+        <item name="android:layout_marginTop">@dimen/dp_24</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="backgroundTint">@color/button_color</item>
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/sp_22</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">?attr/textColorMain</item>
+    </style>
+
+    <style name="Toolbar" parent="">
+        <item name="android:contentInsetStart">0dp</item>
+        <item name="android:contentInsetStartWithNavigation">0dp</item>
+        <item name="android:navigationIcon">@drawable/arrow_back</item>
+        <item name="android:titleMarginStart">@dimen/dp_12</item>
+        <item name="android:titleTextAppearance">@style/Toolbar.TitleText</item>
+    </style>
 </resources>

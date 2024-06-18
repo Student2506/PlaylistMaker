@@ -35,4 +35,7 @@
     <dimen name="dp_32">32dp</dimen>
     <dimen name="sp_13">13sp</dimen>
     <dimen name="dp_140">140dp</dimen>
+    <dimen name="dp_148">148dp</dimen>
+    <dimen name="dp_108">108dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
 </resources>

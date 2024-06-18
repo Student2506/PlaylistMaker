@@ -6,13 +6,14 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.playlistmaker.R
-import com.example.android.playlistmaker.settings.ui.SettingsActivity
 import com.example.android.playlistmaker.medialibrary.ui.MediaLibraryActivity
 import com.example.android.playlistmaker.search.ui.SearchActivity
+import com.example.android.playlistmaker.settings.ui.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.statusBarColor = resources.getColor(R.color.main_status_bar_color)
         setContentView(R.layout.activity_main)
 
         val searchButton = findViewById<Button>(R.id.search)

@@ -7,4 +7,5 @@
     <attr name="switchActivatedColor" />
     <attr name="switchThumbNormalColor" />
     <attr name="hintText" />
+    <attr name="bgStatusBar" />
 </resources>

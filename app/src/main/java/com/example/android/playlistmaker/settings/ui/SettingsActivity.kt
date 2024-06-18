@@ -24,7 +24,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.flBackToMainSettings.setOnClickListener {
+        binding.tbToolbar.setOnClickListener {
             finish()
         }
         binding.flShowAgreement.setOnClickListener {
