@@ -6,14 +6,10 @@
 
     <Toolbar
         android:id="@+id/tbToolbar"
+        style="@style/Toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_56"
-        android:contentInsetStart="0dp"
-        android:contentInsetStartWithNavigation="0dp"
-        android:navigationIcon="@drawable/arrow_back"
         android:title="@string/medialibrary"
-        android:titleMarginStart="@dimen/dp_12"
-        android:titleTextAppearance="@style/Toolbar.TitleText"
         app:layout_constraintBottom_toTopOf="@id/tlMediaLib"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

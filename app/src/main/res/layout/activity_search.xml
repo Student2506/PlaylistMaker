@@ -4,19 +4,12 @@
     style="@style/MainScreen"
     android:theme="@style/AnotherTheme.Theme.PlaylistMaker">
 
-    <FrameLayout
-        android:id="@+id/flBackToMain"
-        style="@style/TopHeader">
-
-        <ImageView
-            style="@style/TopHeaderImageView"
-            android:contentDescription="@string/return_back" />
-
-        <TextView
-            style="@style/TopHeaderTextView"
-            android:text="@string/search_title" />
-    </FrameLayout>
-
+    <Toolbar
+        android:id="@+id/tbToolbar"
+        style="@style/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_56"
+        android:title="@string/search_title" />
 
     <FrameLayout
         android:id="@+id/flContainer"
