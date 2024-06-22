@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.android.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import com.example.android.playlistmaker.medialibrary.presentation.FavoriteTracksViewModel
-import com.example.android.playlistmaker.medialibrary.presentation.SelectPage
 
 class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() {
 
