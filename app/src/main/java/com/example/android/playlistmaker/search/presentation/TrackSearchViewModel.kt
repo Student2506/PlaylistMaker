@@ -50,6 +50,7 @@ class TrackSearchViewModel(
     }
 
     fun searchSong(songTitle: String) {
+        if (songTitle.equals("")) return
         renderState(TracksState.Loading)
 
         tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {

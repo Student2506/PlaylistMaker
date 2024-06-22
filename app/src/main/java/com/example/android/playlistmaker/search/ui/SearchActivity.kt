@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -56,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
                 binding?.tvHistoryHeader?.isVisible = true
                 binding?.btClearHistory?.isVisible = true
             }
-
+            Log.d(TAG, "And canceled search")
         }
         binding?.etInput?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
