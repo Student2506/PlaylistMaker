@@ -85,7 +85,7 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
 
 
     companion object {
-        private final val TAG = "AndroidStandardPlayerClient"
+        private val TAG = "AndroidStandardPlayerClient"
         private const val REFRESH_TRACK_DELAY_MILLIS = 400L
     }
 }

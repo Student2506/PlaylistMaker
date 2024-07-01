@@ -41,8 +41,7 @@ class PlayerViewModel(
     fun preparePlayer() {
         Log.d(TAG, "Prepare Player")
         if (track.previewUrl != null) {
-            playerInteractor.controlPlayer(
-                Command.Prepare(track.previewUrl),
+            playerInteractor.controlPlayer(Command.Prepare(track.previewUrl),
                 object : AudioPlayerInteractor.AudioPlayerConsumer {
                     override fun consume(status: State) {
                         renderState(PlayerState.isLoaded)
@@ -59,7 +58,8 @@ class PlayerViewModel(
     }
 
     private fun startPlayer() {
-        playerInteractor.controlPlayer(Command.Play,
+        playerInteractor.controlPlayer(
+            Command.Play,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     renderState(PlayerState.Content(true))
@@ -69,7 +69,8 @@ class PlayerViewModel(
     }
 
     fun pausePlayer() {
-        playerInteractor.controlPlayer(Command.Pause,
+        playerInteractor.controlPlayer(
+            Command.Pause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     renderState(PlayerState.Content(true))
@@ -78,7 +79,8 @@ class PlayerViewModel(
     }
 
     fun releasePlayer() {
-        playerInteractor.controlPlayer(Command.Release,
+        playerInteractor.controlPlayer(
+            Command.Release,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     Log.d(TAG, "Released")
@@ -87,7 +89,8 @@ class PlayerViewModel(
     }
 
     fun playbackControl() {
-        playerInteractor.controlPlayer(Command.PlayPause,
+        playerInteractor.controlPlayer(
+            Command.PlayPause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     if (status == State.Playing) {

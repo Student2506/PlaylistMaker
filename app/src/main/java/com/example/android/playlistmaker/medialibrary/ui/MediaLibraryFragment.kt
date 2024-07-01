@@ -33,9 +33,6 @@ class MediaLibraryFragment : BindingFragment<FragmentMediaLibraryBinding>() {
             }
         }
         tabMediator.attach()
-//        binding.tbToolbar.setOnClickListener {
-//            finish()
-//        }
     }
 
     override fun onDestroyView() {
