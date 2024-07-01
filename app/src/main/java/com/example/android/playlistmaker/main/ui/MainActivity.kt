@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.medialibrary.ui.MediaLibraryActivity
 import com.example.android.playlistmaker.search.ui.SearchActivity
-import com.example.android.playlistmaker.settings.ui.SettingsActivity
+//import com.example.android.playlistmaker.settings.ui.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,10 +23,10 @@ class MainActivity : AppCompatActivity() {
         }
         searchButton.setOnClickListener(searchClickListener)
         val settingsButton = findViewById<Button>(R.id.settings)
-        settingsButton.setOnClickListener {
-            val settingsIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(settingsIntent)
-        }
+//        settingsButton.setOnClickListener {
+//            val settingsIntent = Intent(this, SettingsActivity::class.java)
+//            startActivity(settingsIntent)
+//        }
         val mediaLibraryButton = findViewById<Button>(R.id.media_library)
         mediaLibraryButton.setOnClickListener {
             val mediaLibraryIntent = Intent(this, MediaLibraryActivity::class.java)
