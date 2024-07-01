@@ -11,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,10 +34,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private var isClickAllowed = true
     private var lastRequest: String? = null
 
-    private var clearButton: ImageView? = null
-    private var editInput: EditText? = null
-
-
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,11 +45,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         trackSearchViewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-        clearButton = binding.ivClear
-        editInput = binding.etInput
 
-        clearButton?.setOnClickListener {
-            editInput?.setText("")
+        binding.ivClear.setOnClickListener {
+            binding.etInput.setText("")
             val inputMethodManager =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.etInput.windowToken, 0)
