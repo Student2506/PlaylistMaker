@@ -27,9 +27,7 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-    ): FragmentSettingsBinding {
-        return FragmentSettingsBinding.inflate(inflater, container, false)
-    }
+    ): FragmentSettingsBinding = FragmentSettingsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
