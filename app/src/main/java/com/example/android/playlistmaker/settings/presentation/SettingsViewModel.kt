@@ -14,8 +14,8 @@ class SettingsViewModel(private var sharedPreferencesInteractor: SharedPreferenc
                 override fun consume(result: Any) {
                     Log.d(TAG, result.toString())
                 }
-            })
 
+            })
     }
 
     companion object {

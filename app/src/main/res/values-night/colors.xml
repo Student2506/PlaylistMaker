@@ -18,4 +18,6 @@
     <color name="switch_foreground_off">#AEAFB4</color>
     <color name="textview_values">#FFFFFF</color>
     <color name="progress_bar_tint">#3772E7</color>
+    <color name="bottom_navigation_color">#1A1B22</color>
+    <color name="bottom_navigation_inactive">#FFFFFFFF</color>
 </resources>

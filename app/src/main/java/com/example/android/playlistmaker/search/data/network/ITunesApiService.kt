@@ -10,6 +10,6 @@ interface ITunesApiService {
     @GET("/search")
     fun searchTracks(
         @Query("term") term: String,
-        @Query("entity") entity: String = "song"
+        @Query("entity") entity: String = "song",
     ): Call<ITunesTrackResponse>
 }
