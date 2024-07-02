@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/MainScreen"
-    android:theme="@style/AnotherTheme.Theme.PlaylistMaker"
     tools:context="com.example.android.playlistmaker.search.ui.SearchFragment">
 
     <Toolbar

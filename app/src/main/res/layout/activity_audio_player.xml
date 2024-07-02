@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/bgStatusBar"
-    android:theme="@style/AnotherTheme.Theme.PlaylistMaker">
+    android:background="?attr/bgStatusBar">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
@@ -15,7 +14,7 @@
 
         <Toolbar
             android:id="@+id/tbToolbar"
-            style="@style/Toolbar"
+            style="@style/AudioPlayer.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_56"
             android:title=""

@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/main_screen_color</item>
+        <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -11,7 +11,7 @@
         <item name="colorSecondary">@color/black</item>
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">@color/black</item>
         <item name="textColorMain">?attr/colorOnPrimary</item>
         <item name="backgroundTintColor">?attr/colorSecondaryVariant</item>
         <item name="textColorAlternative">?attr/colorOnSecondary</item>
@@ -19,14 +19,8 @@
         <item name="switchActivatedColor">@color/switch_activated</item>
         <item name="switchThumbNormalColor">#AEAFB4</item>
         <item name="hintText">@color/white</item>
-    </style>
-
-    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
-    <style name="AnotherTheme.Theme.PlaylistMaker" parent="Theme.PlaylistMaker">
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorPrimary">@color/black</item>
-        <item name="android:statusBarColor">@color/black</item>
         <item name="bgStatusBar">@color/black</item>
     </style>
 
+    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
 </resources>
