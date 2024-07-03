@@ -11,8 +11,11 @@ import com.example.android.playlistmaker.search.di.dataModule
 import com.example.android.playlistmaker.search.di.interactorModule
 import com.example.android.playlistmaker.search.di.repositoryModule
 import com.example.android.playlistmaker.search.di.viewModelModule
-import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
+import com.example.android.playlistmaker.settings.di.settingsDataModule
+import com.example.android.playlistmaker.settings.di.settingsInteractorModule
+import com.example.android.playlistmaker.settings.di.settingsRepositoryModule
 import com.example.android.playlistmaker.settings.di.settingsViewModelModule
+import com.example.android.playlistmaker.settings.domain.api.SettingsInteractor
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -35,14 +38,16 @@ class PlaylistMakerApp : Application() {
                 playerDataModule,
                 playerRepositoryModule,
                 playerInteractorModule,
-                playerViewModelModule
+                playerViewModelModule,
+                settingsDataModule,
+                settingsRepositoryModule,
+                settingsInteractorModule,
             )
         }
         val darkModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val isDarkMode = darkModeFlags == Configuration.UI_MODE_NIGHT_YES
-        val sharedPreferencesInteractor: SharedPreferencesInteractor by inject()
-        sharedPreferencesInteractor.getDarkThemePref(object :
-            SharedPreferencesInteractor.SharedPreferencesConsumer {
+        val settingsInteractor: SettingsInteractor by inject()
+        settingsInteractor.getDarkThemePref(object : SettingsInteractor.SettingsConsumer {
             override fun consume(result: Any) {
                 if (result is Boolean) darkTheme = result
                 else darkTheme = isDarkMode
