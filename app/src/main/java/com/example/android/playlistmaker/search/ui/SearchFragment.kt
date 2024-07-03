@@ -33,6 +33,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private val trackSearchViewModel by viewModel<TrackSearchViewModel>()
     private var isClickAllowed = true
     private var lastRequest: String? = null
+    private var isHistory = true
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -56,13 +57,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 binding.tvHistoryHeader.isVisible = true
                 binding.btClearHistory.isVisible = true
             }
-            Log.d(TAG, "And canceled search")
+            isHistory = true
         }
         binding.etInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (binding.etInput.text.isNotEmpty()) {
                     binding.tvHistoryHeader.isVisible = false
                     binding.btClearHistory.isVisible = false
+                    isHistory = false
                     trackSearchViewModel.searchSong(binding.etInput.text.toString())
                 }
                 val inputMethodManager =
@@ -76,6 +78,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         binding.etInput.addTextChangedListener(beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
                 binding.ivClear.isVisible = !charSequence.isNullOrEmpty()
+                isHistory = false
                 trackSearchViewModel.searchDebounce(changedText = charSequence?.toString() ?: "")
             },
             afterTextChanged = { _ ->
@@ -106,11 +109,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
         binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTracks.adapter = adapter
-        trackSearchViewModel.setSearchTracks()
+        trackSearchViewModel.setHistoryTracks()
     }
 
     private fun showTrack(track: Track) {
-        trackSearchViewModel.showTrack(track)
+        trackSearchViewModel.showTrack(track, isHistory)
         val settingsIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
         settingsIntent.putExtra(TRACK_TO_SHOW, track)
         startActivity(settingsIntent)

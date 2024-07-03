@@ -69,7 +69,7 @@ class TrackSearchViewModel(
     }
 
 
-    fun showTrack(track: Track) {
+    fun showTrack(track: Track, isFromHistory: Boolean) {
         val message = "${track.trackName} - ${track.artistName}\nTime:${track.trackTime}"
         Log.d(TAG, message)
         val historyTracks = arrayListOf<Track>()
@@ -95,10 +95,13 @@ class TrackSearchViewModel(
                     historyTracks.removeLast()
                 }
                 val historyTracksJson = Gson().toJson(historyTracks)
+
                 sharedPreferencesInteractor.putFilmsHistory(historyTracksJson,
                     object : SharedPreferencesInteractor.SharedPreferencesConsumer {
                         override fun consume(result: Any) {
-                            setHistoryTracks()
+                            if (isFromHistory) {
+                                setHistoryTracks()
+                            }
                         }
                     })
             }
