@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.android.playlistmaker.player.data.PlayerClient
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
+import com.example.android.playlistmaker.player.domain.models.TrackTimeState
 
 class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : PlayerClient {
 
@@ -14,8 +15,8 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
     private var statePlayer: State = State.Default
     private val handler = Handler(Looper.getMainLooper())
 
-    override fun getTime(): Int {
-        return mediaPlayer.currentPosition
+    override fun getTime(): TrackTimeState {
+        return TrackTimeState(time = mediaPlayer.currentPosition, state = statePlayer)
     }
 
     override fun doRequest(dto: Any): State {
@@ -46,6 +47,7 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
             statePlayer = State.Prepared
         }
         mediaPlayer.setOnCompletionListener {
+            mediaPlayer.seekTo(0)
             statePlayer = State.Prepared
         }
     }
