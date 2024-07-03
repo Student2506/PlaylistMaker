@@ -255,7 +255,7 @@
         <item name="android:titleMarginStart">@dimen/dp_16</item>
         <item name="android:titleTextAppearance">@style/Toolbar.TitleText</item>
     </style>
-    
+
     <style name="AudioPlayer.Toolbar" parent="Toolbar">
         <item name="android:navigationIcon">@drawable/arrow_back</item>
         <item name="android:titleMarginStart">@dimen/dp_12</item>
@@ -273,4 +273,7 @@
         <item name="itemIconTint">@color/bottom_nav_color</item>
     </style>
 
+    <style name="Divider" parent="">
+        <item name="dividerColor">@color/topborder</item>
+    </style>
 </resources>
