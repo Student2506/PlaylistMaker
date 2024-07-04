@@ -7,9 +7,9 @@ import com.example.android.playlistmaker.player.di.playerDataModule
 import com.example.android.playlistmaker.player.di.playerInteractorModule
 import com.example.android.playlistmaker.player.di.playerRepositoryModule
 import com.example.android.playlistmaker.player.di.playerViewModelModule
+import com.example.android.playlistmaker.search.di.historyTrackRepositoryModule
 import com.example.android.playlistmaker.search.di.historyTracksDataModule
 import com.example.android.playlistmaker.search.di.historyTracksInteractorModule
-import com.example.android.playlistmaker.search.di.historyTrackRepositoryModule
 import com.example.android.playlistmaker.search.di.viewModelModule
 import com.example.android.playlistmaker.settings.di.settingsDataModule
 import com.example.android.playlistmaker.settings.di.settingsInteractorModule
@@ -51,9 +51,9 @@ class PlaylistMakerApp : Application() {
             override fun consume(result: Any) {
                 if (result is Boolean) darkTheme = result
                 else darkTheme = isDarkMode
+                switchTheme(darkTheme)
             }
         })
-        switchTheme(darkTheme)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
