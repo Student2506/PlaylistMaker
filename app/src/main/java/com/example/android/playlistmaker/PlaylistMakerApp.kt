@@ -7,9 +7,9 @@ import com.example.android.playlistmaker.player.di.playerDataModule
 import com.example.android.playlistmaker.player.di.playerInteractorModule
 import com.example.android.playlistmaker.player.di.playerRepositoryModule
 import com.example.android.playlistmaker.player.di.playerViewModelModule
-import com.example.android.playlistmaker.search.di.dataModule
-import com.example.android.playlistmaker.search.di.interactorModule
-import com.example.android.playlistmaker.search.di.repositoryModule
+import com.example.android.playlistmaker.search.di.historyTracksDataModule
+import com.example.android.playlistmaker.search.di.historyTracksInteractorModule
+import com.example.android.playlistmaker.search.di.historyTrackRepositoryModule
 import com.example.android.playlistmaker.search.di.viewModelModule
 import com.example.android.playlistmaker.settings.di.settingsDataModule
 import com.example.android.playlistmaker.settings.di.settingsInteractorModule
@@ -30,9 +30,9 @@ class PlaylistMakerApp : Application() {
         startKoin {
             androidContext(this@PlaylistMakerApp)
             modules(
-                dataModule,
-                repositoryModule,
-                interactorModule,
+                historyTracksDataModule,
+                historyTrackRepositoryModule,
+                historyTracksInteractorModule,
                 viewModelModule,
                 settingsViewModelModule,
                 playerDataModule,
