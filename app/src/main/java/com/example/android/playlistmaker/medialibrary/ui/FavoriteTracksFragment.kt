@@ -1,13 +1,11 @@
 package com.example.android.playlistmaker.medialibrary.ui
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.android.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import com.example.android.playlistmaker.medialibrary.presentation.FavoriteTracksViewModel
-import com.example.android.playlistmaker.medialibrary.presentation.SelectPage
+import com.example.android.playlistmaker.util.ui.BindingFragment
 
 class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() {
 
@@ -23,10 +21,4 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
     ): FragmentFavoriteTracksBinding {
         return FragmentFavoriteTracksBinding.inflate(inflater, container, false)
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
 }

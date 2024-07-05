@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
+import com.example.android.playlistmaker.player.domain.models.TrackTimeState
 import com.example.android.playlistmaker.search.domain.models.Track
 
 class PlayerViewModel(
@@ -19,7 +20,7 @@ class PlayerViewModel(
     private val handler = Handler(Looper.getMainLooper())
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
-    private val stateTrackLiveData = MutableLiveData<Int>()
+    private val stateTrackLiveData = SingleLiveEvent<Int>()
     fun observeTrackState(): LiveData<Int> = stateTrackLiveData
     private val stateFavoriteLiveData = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = stateFavoriteLiveData
@@ -29,8 +30,14 @@ class PlayerViewModel(
             override fun run() {
                 playerInteractor.getTrackTime(object :
                     AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
-                    override fun getTime(time: Int) {
-                        stateTrackLiveData.postValue(time)
+                    override fun getTime(trackTimeState: TrackTimeState) {
+                        stateTrackLiveData.postValue(trackTimeState.time)
+                        if (trackTimeState.state == State.Playing) renderState(
+                            PlayerState.Content(
+                                false
+                            )
+                        )
+                        else renderState(PlayerState.Content(true))
                     }
                 })
                 handler.postDelayed(this, REFRESH_TRACK_DELAY_MILLIS)
@@ -41,8 +48,7 @@ class PlayerViewModel(
     fun preparePlayer() {
         Log.d(TAG, "Prepare Player")
         if (track.previewUrl != null) {
-            playerInteractor.controlPlayer(
-                Command.Prepare(track.previewUrl),
+            playerInteractor.controlPlayer(Command.Prepare(track.previewUrl),
                 object : AudioPlayerInteractor.AudioPlayerConsumer {
                     override fun consume(status: State) {
                         renderState(PlayerState.isLoaded)
@@ -61,19 +67,14 @@ class PlayerViewModel(
     private fun startPlayer() {
         playerInteractor.controlPlayer(Command.Play,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {
-                    renderState(PlayerState.Content(true))
-
-                }
+                override fun consume(status: State) {}
             })
     }
 
     fun pausePlayer() {
         playerInteractor.controlPlayer(Command.Pause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {
-                    renderState(PlayerState.Content(true))
-                }
+                override fun consume(status: State) {}
             })
     }
 
@@ -89,13 +90,7 @@ class PlayerViewModel(
     fun playbackControl() {
         playerInteractor.controlPlayer(Command.PlayPause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {
-                    if (status == State.Playing) {
-                        renderState(PlayerState.Content(false))
-                    } else {
-                        renderState(PlayerState.Content(true))
-                    }
-                }
+                override fun consume(status: State) {}
             })
     }
 

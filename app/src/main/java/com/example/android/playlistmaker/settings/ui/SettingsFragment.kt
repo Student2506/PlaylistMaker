@@ -3,30 +3,28 @@ package com.example.android.playlistmaker.settings.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.R
-import com.example.android.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.android.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.android.playlistmaker.settings.presentation.SettingsViewModel
+import com.example.android.playlistmaker.util.ui.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
 
     private val settingsViewModel by viewModel<SettingsViewModel>()
 
-    private val binding: ActivitySettingsBinding by lazy {
-        ActivitySettingsBinding.inflate(
-            layoutInflater
-        )
-    }
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ): FragmentSettingsBinding = FragmentSettingsBinding.inflate(inflater, container, false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        binding.tbToolbar.setOnClickListener {
-            finish()
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.flShowAgreement.setOnClickListener {
             val showAgreement = Intent(Intent.ACTION_VIEW)
             showAgreement.data = Uri.parse(getString(R.string.license_agreement_url))
@@ -36,16 +34,13 @@ class SettingsActivity : AppCompatActivity() {
             val techSupportIntent = Intent(Intent.ACTION_SENDTO)
             techSupportIntent.data = Uri.parse("mailto:")
             techSupportIntent.putExtra(
-                Intent.EXTRA_EMAIL,
-                arrayOf(getString(R.string.main_email_address))
+                Intent.EXTRA_EMAIL, arrayOf(getString(R.string.main_email_address))
             )
             techSupportIntent.putExtra(
-                Intent.EXTRA_SUBJECT,
-                getString(R.string.generic_email_title_template)
+                Intent.EXTRA_SUBJECT, getString(R.string.generic_email_title_template)
             )
             techSupportIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                getString(R.string.generic_email_body_template)
+                Intent.EXTRA_TEXT, getString(R.string.generic_email_body_template)
             )
             startActivity(techSupportIntent)
         }
@@ -56,14 +51,16 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareAppIntent)
         }
         binding.swNightMode.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as PlaylistMakerApp).switchTheme(checked)
+            (requireContext().applicationContext as PlaylistMakerApp).switchTheme(checked)
             settingsViewModel.themeSwitcher(checked)
         }
-        binding.swNightMode.isChecked = (applicationContext as PlaylistMakerApp).darkTheme
-
+        binding.swNightMode.isChecked =
+            (requireContext().applicationContext as PlaylistMakerApp).darkTheme
     }
 
     companion object {
+        @JvmStatic
+        fun newInstance() = SettingsFragment()
         private const val TAG = "SettingsActivity"
     }
 }

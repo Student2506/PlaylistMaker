@@ -2,6 +2,7 @@ package com.example.android.playlistmaker.player.domain.api
 
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
+import com.example.android.playlistmaker.player.domain.models.TrackTimeState
 
 interface AudioPlayerInteractor {
     fun controlPlayer(request: Command, consumer: AudioPlayerConsumer)
@@ -13,6 +14,6 @@ interface AudioPlayerInteractor {
     }
 
     interface AudioPlayerTrackTimeConsumer {
-        fun getTime(time: Int)
+        fun getTime(trackTimeState: TrackTimeState)
     }
 }

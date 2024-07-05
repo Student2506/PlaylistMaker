@@ -25,13 +25,12 @@ class RetrofitNetworkClient(
             return Response().apply { resultCode = 400 }
         }
 
-        val response: retrofit2.Response<ITunesTrackResponse> =
-            try {
-                itunesService.searchTracks(term = dto.term, entity = dto.entity).execute()
-            } catch (exc: java.io.IOException) {
-                Log.e(TAG, exc.stackTrace.toString())
-                throw exc
-            }
+        val response: retrofit2.Response<ITunesTrackResponse> = try {
+            itunesService.searchTracks(term = dto.term, entity = dto.entity).execute()
+        } catch (exc: java.io.IOException) {
+            Log.e(TAG, exc.stackTrace.toString())
+            throw exc
+        }
         Log.d(TAG, response.toString())
         val body = response.body()
         Log.d(TAG, body.toString())

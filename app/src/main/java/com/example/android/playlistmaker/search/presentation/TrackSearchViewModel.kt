@@ -8,14 +8,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.playlistmaker.search.domain.api.SharedPreferencesInteractor
+import com.example.android.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.google.gson.Gson
 
 class TrackSearchViewModel(
     private val tracksInteractor: TracksInteractor,
-    private val sharedPreferencesInteractor: SharedPreferencesInteractor,
+    private val historyTracksInteractor: HistoryTracksInteractor,
 ) : ViewModel() {
 
     private val tracks = ArrayList<Track>()
@@ -50,6 +50,7 @@ class TrackSearchViewModel(
     }
 
     fun searchSong(songTitle: String) {
+        if (songTitle.equals("")) return
         renderState(TracksState.Loading)
 
         tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {
@@ -68,12 +69,12 @@ class TrackSearchViewModel(
     }
 
 
-    fun showTrack(track: Track) {
+    fun showTrack(track: Track, isFromHistory: Boolean) {
         val message = "${track.trackName} - ${track.artistName}\nTime:${track.trackTime}"
         Log.d(TAG, message)
         val historyTracks = arrayListOf<Track>()
-        sharedPreferencesInteractor.getFilmsHistory(object :
-            SharedPreferencesInteractor.SharedPreferencesConsumer {
+        historyTracksInteractor.getHistoryTracks(object :
+            HistoryTracksInteractor.HistoryTracksConsumer {
             override fun consume(result: Any) {
                 if (result is String && result != "") historyTracks.addAll(
                     Gson().fromJson(
@@ -94,10 +95,13 @@ class TrackSearchViewModel(
                     historyTracks.removeLast()
                 }
                 val historyTracksJson = Gson().toJson(historyTracks)
-                sharedPreferencesInteractor.putFilmsHistory(historyTracksJson,
-                    object : SharedPreferencesInteractor.SharedPreferencesConsumer {
+
+                historyTracksInteractor.putHistoryTracks(historyTracksJson,
+                    object : HistoryTracksInteractor.HistoryTracksConsumer {
                         override fun consume(result: Any) {
-                            setHistoryTracks()
+                            if (isFromHistory) {
+                                setHistoryTracks()
+                            }
                         }
                     })
             }
@@ -106,8 +110,8 @@ class TrackSearchViewModel(
 
     fun setHistoryTracks() {
         val historyTracks = arrayListOf<Track>()
-        sharedPreferencesInteractor.getFilmsHistory(object :
-            SharedPreferencesInteractor.SharedPreferencesConsumer {
+        historyTracksInteractor.getHistoryTracks(object :
+            HistoryTracksInteractor.HistoryTracksConsumer {
             override fun consume(result: Any) {
                 if (result is String && result != "") historyTracks.addAll(
                     Gson().fromJson(
