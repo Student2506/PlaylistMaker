@@ -1,16 +1,14 @@
 package com.example.android.playlistmaker.search.presentation
 
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.models.Track
+import com.example.android.playlistmaker.util.debounce
 import com.google.gson.Gson
 
 class TrackSearchViewModel(
@@ -20,32 +18,23 @@ class TrackSearchViewModel(
 
     private val tracks = ArrayList<Track>()
 
-    private val handler = Handler(Looper.getMainLooper())
-    private var searchQuery: String? = null
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
 
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQEUEST_TOKEN)
-    }
+    private val trackSearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+            searchSong(changedText)
+        }
+    private var latestSearchText = ""
 
     fun onStart() {
         setHistoryTracks()
     }
 
     fun searchDebounce(changedText: String) {
-
-        handler.removeCallbacksAndMessages(SEARCH_REQEUEST_TOKEN)
-        val searchRunnable = Runnable { searchSong(changedText) }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            handler.postDelayed(
-                searchRunnable, SEARCH_REQEUEST_TOKEN, SEARCH_DEBOUNCE_DELAY
-            )
-        } else {
-            val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-            handler.postAtTime(
-                searchRunnable, SEARCH_REQEUEST_TOKEN, postTime
-            )
+        if (latestSearchText != changedText) {
+            latestSearchText = changedText
+            trackSearchDebounce(changedText)
         }
     }
 
@@ -137,7 +126,6 @@ class TrackSearchViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val SEARCH_REQEUEST_TOKEN = Any()
         private const val MAXIMUM_HISTORY_LENGTH = 10
         private const val TAG = "SearchController"
     }
