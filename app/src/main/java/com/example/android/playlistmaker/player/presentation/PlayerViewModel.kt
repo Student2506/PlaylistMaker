@@ -18,8 +18,8 @@ class PlayerViewModel(
 ) : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
-    private val stateLiveData = MutableLiveData<PlayerState>()
-    fun observeState(): LiveData<PlayerState> = stateLiveData
+    private val stateLiveData = MutableLiveData<State>()
+    fun observeState(): LiveData<State> = stateLiveData
     private val stateTrackLiveData = SingleLiveEvent<Int>()
     fun observeTrackState(): LiveData<Int> = stateTrackLiveData
     private val stateFavoriteLiveData = MutableLiveData<Boolean>()
@@ -33,11 +33,9 @@ class PlayerViewModel(
                     override fun getTime(trackTimeState: TrackTimeState) {
                         stateTrackLiveData.postValue(trackTimeState.time)
                         if (trackTimeState.state == State.Playing) renderState(
-                            PlayerState.Content(
-                                false
-                            )
+                            State.Paused
                         )
-                        else renderState(PlayerState.Content(true))
+                        else renderState(State.Playing)
                     }
                 })
                 handler.postDelayed(this, REFRESH_TRACK_DELAY_MILLIS)
@@ -51,7 +49,7 @@ class PlayerViewModel(
             playerInteractor.controlPlayer(Command.Prepare(track.previewUrl),
                 object : AudioPlayerInteractor.AudioPlayerConsumer {
                     override fun consume(status: State) {
-                        renderState(PlayerState.isLoaded)
+                        renderState(State.Prepared)
                         stateTrackLiveData.postValue(0)
                     }
                 })
@@ -65,21 +63,24 @@ class PlayerViewModel(
     }
 
     private fun startPlayer() {
-        playerInteractor.controlPlayer(Command.Play,
+        playerInteractor.controlPlayer(
+            Command.Play,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {}
             })
     }
 
     fun pausePlayer() {
-        playerInteractor.controlPlayer(Command.Pause,
+        playerInteractor.controlPlayer(
+            Command.Pause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {}
             })
     }
 
     fun releasePlayer() {
-        playerInteractor.controlPlayer(Command.Release,
+        playerInteractor.controlPlayer(
+            Command.Release,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     Log.d(TAG, "Released")
@@ -88,7 +89,8 @@ class PlayerViewModel(
     }
 
     fun playbackControl() {
-        playerInteractor.controlPlayer(Command.PlayPause,
+        playerInteractor.controlPlayer(
+            Command.PlayPause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {}
             })
@@ -99,7 +101,7 @@ class PlayerViewModel(
         stateFavoriteLiveData.postValue(track.isFavorite)
     }
 
-    private fun renderState(state: PlayerState) {
+    private fun renderState(state: State) {
         stateLiveData.postValue(state)
     }
 
