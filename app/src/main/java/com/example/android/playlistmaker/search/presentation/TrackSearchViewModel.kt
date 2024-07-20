@@ -10,6 +10,7 @@ import com.example.android.playlistmaker.search.domain.api.TracksInteractor
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.util.debounce
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 
 class TrackSearchViewModel(
     private val tracksInteractor: TracksInteractor,
@@ -42,21 +43,24 @@ class TrackSearchViewModel(
         if (songTitle.equals("")) return
         renderState(TracksState.Loading)
 
-        tracksInteractor.searchTracks(songTitle, object : TracksInteractor.TracksConsumer {
-            override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                if (foundTracks != null) {
-                    tracks.clear()
-                    tracks.addAll(foundTracks)
+        viewModelScope.launch {
+            tracksInteractor.searchTracks(songTitle).collect { pair ->
+                    processResult(pair.first, pair.second)
                 }
-                when {
-                    errorMessage != null -> renderState(TracksState.ServerError)
-                    tracks.isEmpty() -> renderState(TracksState.Empty)
-                    else -> renderState(TracksState.Content(tracks))
-                }
-            }
-        })
+        }
     }
 
+    private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
+        if (foundTracks != null) {
+            tracks.clear()
+            tracks.addAll(foundTracks)
+        }
+        when {
+            errorMessage != null -> renderState(TracksState.ServerError)
+            tracks.isEmpty() -> renderState(TracksState.Empty)
+            else -> renderState(TracksState.Content(tracks))
+        }
+    }
 
     fun showTrack(track: Track, isFromHistory: Boolean) {
         val message = "${track.trackName} - ${track.artistName}\nTime:${track.trackTime}"
@@ -85,7 +89,8 @@ class TrackSearchViewModel(
                 }
                 val historyTracksJson = Gson().toJson(historyTracks)
 
-                historyTracksInteractor.putHistoryTracks(historyTracksJson,
+                historyTracksInteractor.putHistoryTracks(
+                    historyTracksJson,
                     object : HistoryTracksInteractor.HistoryTracksConsumer {
                         override fun consume(result: Any) {
                             if (isFromHistory) {
