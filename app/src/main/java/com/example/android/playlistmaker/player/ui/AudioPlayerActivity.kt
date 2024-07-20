@@ -87,18 +87,13 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        playerViewModel.onDestroy()
-    }
-
     private fun updateElapsedTime(time: Int) {
         binding?.tvTrackElapsed?.text = timeFormatter.format(time)
     }
 
     private fun updatePlayButton(state: State) {
         binding?.ibPlayButton?.isEnabled = state.isPlayButtonEnabled
-        if (state.buttonState is State.ButtonState.Pause) {
+        if (state.buttonState is State.ButtonState.Play) {
             binding?.ibPlayButton?.setImageResource(R.drawable.play)
         } else {
             binding?.ibPlayButton?.setImageResource(R.drawable.pause)

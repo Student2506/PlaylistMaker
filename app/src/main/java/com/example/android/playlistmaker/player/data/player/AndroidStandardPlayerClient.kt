@@ -5,15 +5,16 @@ import android.util.Log
 import com.example.android.playlistmaker.player.data.PlayerClient
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
-import com.example.android.playlistmaker.player.domain.models.TrackTimeState
 
 class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : PlayerClient {
 
     private var currentTrack: String? = null
     private var statePlayer: State = State.Default
 
-    override fun getTime(): TrackTimeState {
-        return TrackTimeState(time = mediaPlayer.currentPosition, state = statePlayer)
+    override fun getTime(): State {
+        if (statePlayer is State.Playing) statePlayer = State.Playing(mediaPlayer.currentPosition)
+        if (statePlayer is State.Paused) statePlayer = State.Paused(mediaPlayer.currentPosition)
+        return statePlayer
     }
 
     override fun doRequest(dto: Any): State {
@@ -52,13 +53,13 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
     private fun startPlayer() {
         mediaPlayer.start()
         Log.d(TAG, "Playing")
-        statePlayer = State.Playing
+        statePlayer = State.Playing(mediaPlayer.currentPosition)
     }
 
     private fun pausePlayer() {
         Log.d(TAG, "Not playing")
         if (statePlayer is State.Playing) mediaPlayer.pause()
-        statePlayer = State.Paused
+        statePlayer = State.Paused(mediaPlayer.currentPosition)
     }
 
     private fun playbackControl() {
@@ -67,7 +68,11 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
                 pausePlayer()
             }
 
-            is State.Prepared, State.Paused -> {
+            is State.Prepared -> {
+                startPlayer()
+            }
+
+            is State.Paused -> {
                 startPlayer()
             }
 
@@ -79,12 +84,8 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
         mediaPlayer.reset()
     }
 
-    private fun trackPlayedLength(): Int =
-        if (statePlayer !is State.Default) mediaPlayer.currentPosition else 0
-
 
     companion object {
         private val TAG = "AndroidStandardPlayerClient"
-        private const val REFRESH_TRACK_DELAY_MILLIS = 400L
     }
 }
