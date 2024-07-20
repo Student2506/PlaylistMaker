@@ -101,6 +101,11 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        playerViewModel.pausePlayer()
+    }
+
     companion object {
         const val ROUND_CORNERS_SIZE_PX = 8f
         private const val TAG = "AudioPlayerActivity"
