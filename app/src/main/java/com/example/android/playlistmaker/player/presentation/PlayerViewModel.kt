@@ -30,13 +30,10 @@ class PlayerViewModel(
         timerJob = viewModelScope.launch {
             while (true) {
                 delay(REFRESH_TRACK_DELAY_MILLIS)
-                playerInteractor.getTrackTime(object :
-                    AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
-                    override fun getTime(state: State) {
-                        stateTrackLiveData.postValue(state.progress)
-                        renderState(state)
-                    }
-                })
+                playerInteractor.getTrackTime().collect { state ->
+                    stateTrackLiveData.postValue(state.progress)
+                    renderState(state)
+                }
             }
         }
     }
@@ -62,24 +59,21 @@ class PlayerViewModel(
     }
 
     private fun startPlayer() {
-        playerInteractor.controlPlayer(
-            Command.Play,
+        playerInteractor.controlPlayer(Command.Play,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {}
             })
     }
 
     fun pausePlayer() {
-        playerInteractor.controlPlayer(
-            Command.Pause,
+        playerInteractor.controlPlayer(Command.Pause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {}
             })
     }
 
     fun releasePlayer() {
-        playerInteractor.controlPlayer(
-            Command.Release,
+        playerInteractor.controlPlayer(Command.Release,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {
                     Log.d(TAG, "Released")
@@ -88,8 +82,7 @@ class PlayerViewModel(
     }
 
     fun playbackControl() {
-        playerInteractor.controlPlayer(
-            Command.PlayPause,
+        playerInteractor.controlPlayer(Command.PlayPause,
             object : AudioPlayerInteractor.AudioPlayerConsumer {
                 override fun consume(status: State) {}
             })

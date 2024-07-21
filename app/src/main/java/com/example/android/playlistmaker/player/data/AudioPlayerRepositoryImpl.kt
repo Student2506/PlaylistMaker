@@ -3,6 +3,8 @@ package com.example.android.playlistmaker.player.data
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerRepository
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class AudioPlayerRepositoryImpl(private val playerClient: PlayerClient) : AudioPlayerRepository {
 
@@ -12,7 +14,7 @@ class AudioPlayerRepositoryImpl(private val playerClient: PlayerClient) : AudioP
         return response
     }
 
-    override fun getTime(): State {
-        return playerClient.getTime()
+    override fun getTime(): Flow<State> = flow {
+        emit(playerClient.getTime())
     }
 }

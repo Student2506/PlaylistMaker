@@ -11,7 +11,7 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
     private var currentTrack: String? = null
     private var statePlayer: State = State.Default
 
-    override fun getTime(): State {
+    override suspend fun getTime(): State {
         if (statePlayer is State.Playing) statePlayer = State.Playing(mediaPlayer.currentPosition)
         if (statePlayer is State.Paused) statePlayer = State.Paused(mediaPlayer.currentPosition)
         return statePlayer
