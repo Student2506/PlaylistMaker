@@ -35,10 +35,8 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
     private fun preparePlayer(
         trackUrl: String,
     ) {
-        if (currentTrack != trackUrl) {
-            currentTrack = trackUrl
-            mediaPlayer.reset()
-        }
+        currentTrack = trackUrl
+        mediaPlayer.reset()
         mediaPlayer.setDataSource(trackUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
