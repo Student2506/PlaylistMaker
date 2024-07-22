@@ -39,14 +39,16 @@ class PlayerViewModel(
     }
 
     fun preparePlayer() {
+        Log.d(TAG, "Start to prepare")
         if (track.previewUrl != null) {
-            playerInteractor.controlPlayer(Command.Prepare(track.previewUrl),
-                object : AudioPlayerInteractor.AudioPlayerConsumer {
-                    override fun consume(status: State) {
-                        renderState(State.Prepared)
-                        stateTrackLiveData.postValue(0)
-                    }
-                })
+            viewModelScope.launch {
+                playerInteractor.controlPlayer(Command.Prepare(track.previewUrl)).collect { state ->
+                    renderState(state)
+                    Log.d(TAG, "Cooking")
+                    stateTrackLiveData.postValue(state.progress)
+                }
+                Log.d(TAG, "Done prepare")
+            }
         }
         startTimer()
     }
@@ -59,33 +61,37 @@ class PlayerViewModel(
     }
 
     private fun startPlayer() {
-        playerInteractor.controlPlayer(Command.Play,
-            object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {}
-            })
+        viewModelScope.launch {
+            playerInteractor.controlPlayer(Command.Play).collect { state ->
+                renderState(state)
+            }
+        }
     }
 
     fun pausePlayer() {
-        playerInteractor.controlPlayer(Command.Pause,
-            object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {}
-            })
+        viewModelScope.launch {
+            playerInteractor.controlPlayer(Command.Pause).collect { state ->
+                renderState(state)
+            }
+        }
     }
 
     fun releasePlayer() {
-        playerInteractor.controlPlayer(Command.Release,
-            object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {
-                    Log.d(TAG, "Released")
-                }
-            })
+        viewModelScope.launch {
+            playerInteractor.controlPlayer(Command.Release).collect { state ->
+                renderState(state)
+            }
+        }
+
     }
 
     fun playbackControl() {
-        playerInteractor.controlPlayer(Command.PlayPause,
-            object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {}
-            })
+        viewModelScope.launch {
+            playerInteractor.controlPlayer(Command.PlayPause).collect { state ->
+                renderState(state)
+            }
+        }
+
     }
 
     fun updateFavorite() {

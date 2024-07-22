@@ -5,6 +5,8 @@ import android.util.Log
 import com.example.android.playlistmaker.player.data.PlayerClient
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : PlayerClient {
 
@@ -17,8 +19,11 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
         return statePlayer
     }
 
-    override fun doRequest(dto: Any): State {
-        if (dto is Command) {
+    override suspend fun doRequest(dto: Any): State {
+        return withContext(Dispatchers.Unconfined) {
+            if (dto !is Command) {
+                State.Default
+            }
             when (dto) {
                 is Command.Prepare -> preparePlayer(dto.trackUrl)
                 is Command.Play -> startPlayer()
@@ -26,9 +31,7 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
                 is Command.PlayPause -> playbackControl()
                 is Command.Release -> releasePlayer()
             }
-            return statePlayer
-        } else {
-            return State.Default
+            statePlayer
         }
     }
 
