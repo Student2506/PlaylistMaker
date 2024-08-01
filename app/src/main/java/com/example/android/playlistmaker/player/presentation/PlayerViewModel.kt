@@ -1,97 +1,97 @@
 package com.example.android.playlistmaker.player.presentation
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
-import com.example.android.playlistmaker.player.domain.models.TrackTimeState
 import com.example.android.playlistmaker.search.domain.models.Track
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val track: Track,
     private val playerInteractor: AudioPlayerInteractor,
 ) : ViewModel() {
 
-    private val handler = Handler(Looper.getMainLooper())
-    private val stateLiveData = MutableLiveData<PlayerState>()
-    fun observeState(): LiveData<PlayerState> = stateLiveData
+    private val stateLiveData = MutableLiveData<State>()
+    fun observeState(): LiveData<State> = stateLiveData
     private val stateTrackLiveData = SingleLiveEvent<Int>()
     fun observeTrackState(): LiveData<Int> = stateTrackLiveData
     private val stateFavoriteLiveData = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = stateFavoriteLiveData
+    private var timerJob: Job? = null
 
-    private val trackTime: Runnable by lazy {
-        object : Runnable {
-            override fun run() {
-                playerInteractor.getTrackTime(object :
-                    AudioPlayerInteractor.AudioPlayerTrackTimeConsumer {
-                    override fun getTime(trackTimeState: TrackTimeState) {
-                        stateTrackLiveData.postValue(trackTimeState.time)
-                        if (trackTimeState.state == State.Playing) renderState(
-                            PlayerState.Content(
-                                false
-                            )
-                        )
-                        else renderState(PlayerState.Content(true))
-                    }
-                })
-                handler.postDelayed(this, REFRESH_TRACK_DELAY_MILLIS)
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (true) {
+                delay(REFRESH_TRACK_DELAY_MILLIS)
+                playerInteractor.getTrackTime().collect { state ->
+                    stateTrackLiveData.postValue(state.progress)
+                    renderState(state)
+                }
             }
         }
     }
 
     fun preparePlayer() {
-        Log.d(TAG, "Prepare Player")
+        Log.d(TAG, "Start to prepare")
         if (track.previewUrl != null) {
-            playerInteractor.controlPlayer(Command.Prepare(track.previewUrl),
-                object : AudioPlayerInteractor.AudioPlayerConsumer {
-                    override fun consume(status: State) {
-                        renderState(PlayerState.isLoaded)
-                        stateTrackLiveData.postValue(0)
-                    }
-                })
+            viewModelScope.launch {
+                playerInteractor.controlPlayer(Command.Prepare(track.previewUrl)).collect { state ->
+                    renderState(state)
+                    Log.d(TAG, "Cooking")
+                    stateTrackLiveData.postValue(state.progress)
+                }
+                Log.d(TAG, "Done prepare")
+            }
         }
-        handler.postDelayed(trackTime, REFRESH_TRACK_DELAY_MILLIS)
+        startTimer()
     }
 
-    fun onDestroy() {
+
+    override fun onCleared() {
+        super.onCleared()
+        timerJob?.cancel()
         releasePlayer()
-        handler.removeCallbacks(trackTime)
     }
 
     private fun startPlayer() {
-        playerInteractor.controlPlayer(Command.Play,
-            object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {}
-            })
+        viewModelScope.launch {
+            playerInteractor.controlPlayer(Command.Play).collect { state ->
+                renderState(state)
+            }
+        }
     }
 
     fun pausePlayer() {
-        playerInteractor.controlPlayer(Command.Pause,
-            object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {}
-            })
+        viewModelScope.launch {
+            playerInteractor.controlPlayer(Command.Pause).collect { state ->
+                renderState(state)
+            }
+        }
     }
 
     fun releasePlayer() {
-        playerInteractor.controlPlayer(Command.Release,
-            object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {
-                    Log.d(TAG, "Released")
-                }
-            })
+        viewModelScope.launch {
+            playerInteractor.controlPlayer(Command.Release).collect { state ->
+                renderState(state)
+            }
+        }
+
     }
 
     fun playbackControl() {
-        playerInteractor.controlPlayer(Command.PlayPause,
-            object : AudioPlayerInteractor.AudioPlayerConsumer {
-                override fun consume(status: State) {}
-            })
+        viewModelScope.launch {
+            playerInteractor.controlPlayer(Command.PlayPause).collect { state ->
+                renderState(state)
+            }
+        }
+
     }
 
     fun updateFavorite() {
@@ -99,12 +99,12 @@ class PlayerViewModel(
         stateFavoriteLiveData.postValue(track.isFavorite)
     }
 
-    private fun renderState(state: PlayerState) {
+    private fun renderState(state: State) {
         stateLiveData.postValue(state)
     }
 
     companion object {
-        private const val REFRESH_TRACK_DELAY_MILLIS = 400L  // 2-3 time a second
+        private const val REFRESH_TRACK_DELAY_MILLIS = 300L  // 2-3 time a second
         private const val TAG = "PlayerController"
     }
 

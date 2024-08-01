@@ -3,9 +3,6 @@ package com.example.android.playlistmaker.search.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,23 +10,24 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.playlistmaker.databinding.FragmentSearchBinding
 import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.presentation.TrackSearchViewModel
 import com.example.android.playlistmaker.search.presentation.TracksState
+import com.example.android.playlistmaker.util.debounce
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
-    private val handler = Handler(Looper.getMainLooper())
-    private val adapter = TrackAdapter {
-        if (clickDebounce()) {
-            showTrack(it)
-        }
+    private val adapter = TrackAdapter { track ->
+        onTrackClickDebounce(track)
     }
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
+
     private val trackSearchViewModel by viewModel<TrackSearchViewModel>()
     private var isClickAllowed = true
     private var lastRequest: String? = null
@@ -43,6 +41,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { track ->
+            showTrack(track)
+        }
         trackSearchViewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -117,16 +120,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         val settingsIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
         settingsIntent.putExtra(TRACK_TO_SHOW, track)
         startActivity(settingsIntent)
-    }
-
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
     }
 
     private fun showLoading() {

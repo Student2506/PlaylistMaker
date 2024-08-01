@@ -1,26 +1,29 @@
 package com.example.android.playlistmaker.player.data.player
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.example.android.playlistmaker.player.data.PlayerClient
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
-import com.example.android.playlistmaker.player.domain.models.TrackTimeState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : PlayerClient {
 
     private var currentTrack: String? = null
     private var statePlayer: State = State.Default
-    private val handler = Handler(Looper.getMainLooper())
 
-    override fun getTime(): TrackTimeState {
-        return TrackTimeState(time = mediaPlayer.currentPosition, state = statePlayer)
+    override suspend fun getTime(): State {
+        if (statePlayer is State.Playing) statePlayer = State.Playing(mediaPlayer.currentPosition)
+        if (statePlayer is State.Paused) statePlayer = State.Paused(mediaPlayer.currentPosition)
+        return statePlayer
     }
 
-    override fun doRequest(dto: Any): State {
-        if (dto is Command) {
+    override suspend fun doRequest(dto: Any): State {
+        return withContext(Dispatchers.Unconfined) {
+            if (dto !is Command) {
+                State.Default
+            }
             when (dto) {
                 is Command.Prepare -> preparePlayer(dto.trackUrl)
                 is Command.Play -> startPlayer()
@@ -28,19 +31,15 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
                 is Command.PlayPause -> playbackControl()
                 is Command.Release -> releasePlayer()
             }
-            return statePlayer
-        } else {
-            return State.Default
+            statePlayer
         }
     }
 
     private fun preparePlayer(
         trackUrl: String,
     ) {
-        if (currentTrack != trackUrl) {
-            currentTrack = trackUrl
-            mediaPlayer.reset()
-        }
+        currentTrack = trackUrl
+        mediaPlayer.reset()
         mediaPlayer.setDataSource(trackUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -55,13 +54,13 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
     private fun startPlayer() {
         mediaPlayer.start()
         Log.d(TAG, "Playing")
-        statePlayer = State.Playing
+        statePlayer = State.Playing(mediaPlayer.currentPosition)
     }
 
     private fun pausePlayer() {
         Log.d(TAG, "Not playing")
         if (statePlayer is State.Playing) mediaPlayer.pause()
-        statePlayer = State.Paused
+        statePlayer = State.Paused(mediaPlayer.currentPosition)
     }
 
     private fun playbackControl() {
@@ -70,7 +69,11 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
                 pausePlayer()
             }
 
-            is State.Prepared, State.Paused -> {
+            is State.Prepared -> {
+                startPlayer()
+            }
+
+            is State.Paused -> {
                 startPlayer()
             }
 
@@ -82,12 +85,8 @@ class AndroidStandardPlayerClient(private var mediaPlayer: MediaPlayer) : Player
         mediaPlayer.reset()
     }
 
-    private fun trackPlayedLength(): Int =
-        if (statePlayer !is State.Default) mediaPlayer.currentPosition else 0
-
 
     companion object {
         private val TAG = "AndroidStandardPlayerClient"
-        private const val REFRESH_TRACK_DELAY_MILLIS = 400L
     }
 }

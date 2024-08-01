@@ -2,18 +2,9 @@ package com.example.android.playlistmaker.player.domain.api
 
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
-import com.example.android.playlistmaker.player.domain.models.TrackTimeState
+import kotlinx.coroutines.flow.Flow
 
 interface AudioPlayerInteractor {
-    fun controlPlayer(request: Command, consumer: AudioPlayerConsumer)
-
-    fun getTrackTime(timer: AudioPlayerTrackTimeConsumer)
-
-    interface AudioPlayerConsumer {
-        fun consume(status: State)
-    }
-
-    interface AudioPlayerTrackTimeConsumer {
-        fun getTime(trackTimeState: TrackTimeState)
-    }
+    fun controlPlayer(request: Command): Flow<State>
+    fun getTrackTime(): Flow<State>
 }

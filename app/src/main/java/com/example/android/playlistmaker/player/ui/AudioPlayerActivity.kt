@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.example.android.playlistmaker.player.presentation.PlayerState
+import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.player.presentation.PlayerViewModel
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.ui.SearchFragment
@@ -87,29 +87,23 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        playerViewModel.onDestroy()
-    }
-
     private fun updateElapsedTime(time: Int) {
         binding?.tvTrackElapsed?.text = timeFormatter.format(time)
     }
 
-    private fun updatePlayButton(state: PlayerState) {
-        when (state) {
-            is PlayerState.isLoaded -> {
-                binding?.ibPlayButton?.isEnabled = true
-            }
-
-            is PlayerState.Content -> {
-                if (state.isPlay) {
-                    binding?.ibPlayButton?.setImageResource(R.drawable.play)
-                } else {
-                    binding?.ibPlayButton?.setImageResource(R.drawable.pause)
-                }
-            }
+    private fun updatePlayButton(state: State) {
+        binding?.ibPlayButton?.isEnabled = state.isPlayButtonEnabled
+        if (state.buttonState is State.ButtonState.Play) {
+            binding?.ibPlayButton?.setImageResource(R.drawable.play)
+        } else {
+            binding?.ibPlayButton?.setImageResource(R.drawable.pause)
         }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        playerViewModel.pausePlayer()
     }
 
     companion object {
