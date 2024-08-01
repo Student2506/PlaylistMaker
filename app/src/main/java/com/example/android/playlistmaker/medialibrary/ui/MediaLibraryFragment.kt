@@ -4,17 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentMediaLibraryBinding
 import com.example.android.playlistmaker.medialibrary.presentation.MediaLibraryPagerAdapter
-import com.example.android.playlistmaker.medialibrary.presentation.MediaLibraryViewModel
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MediaLibraryFragment : BindingFragment<FragmentMediaLibraryBinding>() {
 
-    private val viewModel: MediaLibraryViewModel by viewModels()
     private lateinit var tabMediator: TabLayoutMediator
 
     override fun createBinding(

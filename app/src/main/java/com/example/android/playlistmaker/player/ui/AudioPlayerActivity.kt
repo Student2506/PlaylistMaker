@@ -9,9 +9,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.android.playlistmaker.player.domain.models.State
+import com.example.android.playlistmaker.player.domain.models.Track
 import com.example.android.playlistmaker.player.presentation.PlayerViewModel
-import com.example.android.playlistmaker.search.domain.models.Track
-import com.example.android.playlistmaker.search.ui.SearchFragment
+import com.example.android.playlistmaker.util.TrackConverter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -22,7 +22,9 @@ import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    private val track: Track by lazy { intent.getParcelableExtra(SearchFragment.TRACK_TO_SHOW)!! }
+    private val track: Track by lazy {
+        intent.getParcelableExtra(TRACK_TO_SHOW)!!
+    }
     private val playerViewModel: PlayerViewModel by viewModel {
         parametersOf(track)
     }
@@ -108,6 +110,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     companion object {
         const val ROUND_CORNERS_SIZE_PX = 8f
+        const val TRACK_TO_SHOW = "track_to_show"
         private const val TAG = "AudioPlayerActivity"
     }
 }

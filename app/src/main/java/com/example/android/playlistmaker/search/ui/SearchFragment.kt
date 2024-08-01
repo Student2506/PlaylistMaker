@@ -17,6 +17,7 @@ import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.android.playlistmaker.search.domain.models.Track
 import com.example.android.playlistmaker.search.presentation.TrackSearchViewModel
 import com.example.android.playlistmaker.search.presentation.TracksState
+import com.example.android.playlistmaker.util.TrackConverter
 import com.example.android.playlistmaker.util.debounce
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,7 +30,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val trackSearchViewModel by viewModel<TrackSearchViewModel>()
-    private var isClickAllowed = true
     private var lastRequest: String? = null
     private var isHistory = true
 
@@ -118,7 +118,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun showTrack(track: Track) {
         trackSearchViewModel.showTrack(track, isHistory)
         val settingsIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-        settingsIntent.putExtra(TRACK_TO_SHOW, track)
+        val trackConverter: TrackConverter = TrackConverter()
+        settingsIntent.putExtra(TRACK_TO_SHOW, trackConverter.map(track))
         startActivity(settingsIntent)
     }
 

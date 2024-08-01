@@ -6,11 +6,23 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.playlistmaker.medialibrary.ui.FavoriteTracksFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFavoriteTracks"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imError"
         android:layout_width="@dimen/dp_120"
         android:layout_height="@dimen/dp_120"
         android:layout_marginTop="@dimen/dp_108"
+        android:contentDescription="@string/image_description"
         android:src="@drawable/not_found_image"
         app:layout_constraintBottom_toTopOf="@+id/tvError"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +34,7 @@
 
     <TextView
         android:id="@+id/tvError"
-        style="Text.MediaLibraryFragment"
+        style="@style/Text.MediaLibraryFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty_medialibrary"
@@ -31,5 +43,12 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imError" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/grError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="imError,tvError" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
