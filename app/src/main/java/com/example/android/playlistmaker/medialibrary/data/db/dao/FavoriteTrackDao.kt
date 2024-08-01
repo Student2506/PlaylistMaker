@@ -7,6 +7,6 @@ import com.example.android.playlistmaker.medialibrary.data.db.entity.TrackEntity
 @Dao
 interface FavoriteTrackDao {
 
-    @Query("SELECT * FROM favorite_tracks")
+    @Query("SELECT * FROM favorite_tracks ORDER BY createdAt DESC;")
     suspend fun getFavoriteTracks(): List<TrackEntity>
 }

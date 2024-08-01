@@ -69,6 +69,11 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
         viewModel.onStart()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onStart()
+    }
+
     private fun showLoading() {
         binding.rvFavoriteTracks.isVisible = false
         binding.grError.isVisible = false
@@ -83,6 +88,7 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
         binding.grError.isVisible = false
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
+        adapter.notifyDataSetChanged()
         binding.rvFavoriteTracks.isVisible = true
     }
 }

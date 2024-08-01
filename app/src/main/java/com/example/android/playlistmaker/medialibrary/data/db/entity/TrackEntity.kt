@@ -1,5 +1,6 @@
 package com.example.android.playlistmaker.medialibrary.data.db.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -15,4 +16,5 @@ data class TrackEntity(
     val releaseDate: String,
     val country: String,
     val previewUrl: String?,
+    val createdAt: Long
 )

@@ -16,7 +16,8 @@ class TrackConverter {
                 primaryGenreName,
                 releaseDate ?: "",
                 country,
-                previewUrl
+                previewUrl,
+                createdAt = createdAt
             )
         }
     }
