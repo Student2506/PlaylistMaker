@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
-import com.example.android.playlistmaker.search.domain.models.Track
+import com.example.android.playlistmaker.player.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -40,6 +40,12 @@ class PlayerViewModel(
 
     fun preparePlayer() {
         Log.d(TAG, "Start to prepare")
+        viewModelScope.launch {
+            playerInteractor.favoriteTrack(track.trackId).collect { is_favorite ->
+                stateFavoriteLiveData.postValue(is_favorite)
+            }
+        }
+
         if (track.previewUrl != null) {
             viewModelScope.launch {
                 playerInteractor.controlPlayer(Command.Prepare(track.previewUrl)).collect { state ->
@@ -95,8 +101,11 @@ class PlayerViewModel(
     }
 
     fun updateFavorite() {
-        track.isFavorite = !track.isFavorite
-        stateFavoriteLiveData.postValue(track.isFavorite)
+        viewModelScope.launch {
+            playerInteractor.switchFavorite(track).collect { is_favorite ->
+                stateFavoriteLiveData.postValue(is_favorite)
+            }
+        }
     }
 
     private fun renderState(state: State) {

@@ -236,6 +236,7 @@
     <style name="MaterialButton.MediaLibraryFragment" parent="">
         <item name="android:layout_marginTop">@dimen/dp_24</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/button_text_color</item>
         <item name="android:textSize">@dimen/sp_14</item>
