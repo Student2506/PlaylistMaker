@@ -17,6 +17,7 @@ import com.example.android.playlistmaker.util.TrackConverter
 import com.example.android.playlistmaker.util.debounce
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.ArrayList
 
 class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() {
 
@@ -86,9 +87,7 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
 
     private fun showContent(tracks: List<Track>) {
         binding.grError.isVisible = false
-        adapter.tracks.clear()
-        adapter.tracks.addAll(tracks)
-        adapter.notifyDataSetChanged()
+        adapter.updateRecycleView(ArrayList(tracks))
         binding.rvFavoriteTracks.isVisible = true
     }
 }
