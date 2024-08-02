@@ -2,9 +2,6 @@ package com.example.android.playlistmaker.player.domain.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 
 @Parcelize
 data class Track(
@@ -19,5 +16,5 @@ data class Track(
     val country: String,
     val previewUrl: String?,
     var isFavorite: Boolean = false,
-    val createdAt: Long = java.time.Instant.now().toEpochMilli()
+    val createdAt: Long = java.time.Instant.now().toEpochMilli(),
 ) : Parcelable

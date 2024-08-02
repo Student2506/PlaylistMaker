@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android.playlistmaker.player.data.converters.TrackConverter
-import com.example.android.playlistmaker.player.data.db.AppDatabase
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
@@ -43,10 +41,9 @@ class PlayerViewModel(
     fun preparePlayer() {
         Log.d(TAG, "Start to prepare")
         viewModelScope.launch {
-            playerInteractor.favoriteTrack(track.trackId)
-                .collect { is_favorite ->
-                    stateFavoriteLiveData.postValue(is_favorite)
-                }
+            playerInteractor.favoriteTrack(track.trackId).collect { is_favorite ->
+                stateFavoriteLiveData.postValue(is_favorite)
+            }
         }
 
         if (track.previewUrl != null) {
@@ -105,10 +102,9 @@ class PlayerViewModel(
 
     fun updateFavorite() {
         viewModelScope.launch {
-            playerInteractor.switchFavorite(track)
-                .collect { is_favorite ->
-                    stateFavoriteLiveData.postValue(is_favorite)
-                }
+            playerInteractor.switchFavorite(track).collect { is_favorite ->
+                stateFavoriteLiveData.postValue(is_favorite)
+            }
         }
     }
 

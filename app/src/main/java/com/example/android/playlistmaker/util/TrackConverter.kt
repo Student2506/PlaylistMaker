@@ -5,7 +5,6 @@ import com.example.android.playlistmaker.player.domain.models.Track as TrackPlay
 import com.example.android.playlistmaker.search.domain.models.Track as TrackSearch
 
 
-
 class TrackConverter {
     fun map(track: TrackSearch): TrackPlayer {
         return with(track) {
@@ -23,6 +22,7 @@ class TrackConverter {
             )
         }
     }
+
     fun map(track: TrackLibrary): TrackPlayer {
         return with(track) {
             TrackPlayer(

@@ -3,7 +3,8 @@ package com.example.android.playlistmaker.medialibrary.ui
 import androidx.recyclerview.widget.DiffUtil
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
 
-class TracksCallback(private val oldList: List<Track>, private val newList: List<Track>) : DiffUtil.Callback() {
+class TracksCallback(private val oldList: List<Track>, private val newList: List<Track>) :
+    DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size
@@ -16,7 +17,4 @@ class TracksCallback(private val oldList: List<Track>, private val newList: List
         return oldList[oldItemPosition].equals(newList[newItemPosition])
     }
 
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        return super.getChangePayload(oldItemPosition, newItemPosition)
-    }
 }

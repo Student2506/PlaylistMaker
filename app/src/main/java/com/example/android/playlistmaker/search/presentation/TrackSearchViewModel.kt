@@ -45,8 +45,8 @@ class TrackSearchViewModel(
 
         viewModelScope.launch {
             tracksInteractor.searchTracks(songTitle).collect { pair ->
-                    processResult(pair.first, pair.second)
-                }
+                processResult(pair.first, pair.second)
+            }
         }
     }
 
@@ -89,8 +89,7 @@ class TrackSearchViewModel(
                 }
                 val historyTracksJson = Gson().toJson(historyTracks)
 
-                historyTracksInteractor.putHistoryTracks(
-                    historyTracksJson,
+                historyTracksInteractor.putHistoryTracks(historyTracksJson,
                     object : HistoryTracksInteractor.HistoryTracksConsumer {
                         override fun consume(result: Any) {
                             if (isFromHistory) {

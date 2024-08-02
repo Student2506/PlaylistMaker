@@ -11,7 +11,6 @@ import com.example.android.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.player.domain.models.Track
 import com.example.android.playlistmaker.player.presentation.PlayerViewModel
-import com.example.android.playlistmaker.util.TrackConverter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat

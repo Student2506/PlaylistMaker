@@ -1,7 +1,7 @@
 package com.example.android.playlistmaker.player.data.converters
 
-import com.example.android.playlistmaker.player.data.db.entity.TrackEntity
 import com.example.android.playlistmaker.player.domain.models.Track
+import com.example.android.playlistmaker.util.data.db.entity.TrackEntity
 
 class TrackConverter {
     fun map(track: Track): TrackEntity {

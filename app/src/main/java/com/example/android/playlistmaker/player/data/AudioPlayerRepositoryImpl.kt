@@ -1,11 +1,11 @@
 package com.example.android.playlistmaker.player.data
 
 import com.example.android.playlistmaker.player.data.converters.TrackConverter
-import com.example.android.playlistmaker.player.data.db.AppDatabase
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerRepository
 import com.example.android.playlistmaker.player.domain.models.Command
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.player.domain.models.Track
+import com.example.android.playlistmaker.util.data.db.AppDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

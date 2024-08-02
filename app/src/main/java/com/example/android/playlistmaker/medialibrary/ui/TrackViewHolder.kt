@@ -27,14 +27,14 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         val urlCover = itemView.findViewById<ImageView>(R.id.ivTrack)
         Glide.with(itemView.context).load(model.artworkUrl100).placeholder(R.drawable.placeholder)
             .centerInside().transform(
-            RoundedCorners(
-                TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    ROUND_CORNERS_SIZE_PX,
-                    itemView.context.resources.displayMetrics
-                ).toInt()
-            )
-        ).into(urlCover)
+                RoundedCorners(
+                    TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        ROUND_CORNERS_SIZE_PX,
+                        itemView.context.resources.displayMetrics
+                    ).toInt()
+                )
+            ).into(urlCover)
     }
 
     companion object {

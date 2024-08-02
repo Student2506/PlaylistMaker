@@ -17,7 +17,6 @@ import com.example.android.playlistmaker.util.TrackConverter
 import com.example.android.playlistmaker.util.debounce
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.ArrayList
 
 class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() {
 
