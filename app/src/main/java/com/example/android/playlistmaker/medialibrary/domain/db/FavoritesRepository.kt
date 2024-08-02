@@ -4,5 +4,5 @@ import com.example.android.playlistmaker.medialibrary.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 interface FavoritesRepository {
-    fun favoritesTracks(): Flow<List<Track>>
+    suspend fun favoritesTracks(): Flow<List<Track>>
 }
