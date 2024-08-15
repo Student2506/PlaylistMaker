@@ -5,6 +5,10 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
+import com.example.android.playlistmaker.util.data.db.entity.PlaylistEntity
+import com.example.android.playlistmaker.util.data.db.entity.PlaylistTrackCrossRef
+import com.example.android.playlistmaker.util.data.db.entity.PlaylistWithTracksEntity
 import com.example.android.playlistmaker.util.data.db.entity.TrackEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -14,7 +18,7 @@ interface FavoriteTrackDao {
     @Query("SELECT * FROM favorite_tracks ORDER BY createdAt DESC;")
     fun getFavoriteTracks(): Flow<List<TrackEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(TrackEntity::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(trackEntity: TrackEntity)
 
     @Delete
@@ -22,4 +26,12 @@ interface FavoriteTrackDao {
 
     @Query("SELECT COUNT(*) FROM favorite_tracks WHERE trackId = :trackId")
     suspend fun getFavoriteTrack(trackId: Long): Int
+
+    @Transaction
+    @Query("SELECT * From playlists")
+    suspend fun getPlaylistsWithTracks(): List<PlaylistWithTracksEntity>
+
+    @Insert(PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPlaylist(playlistEntity: PlaylistEntity)
+
 }

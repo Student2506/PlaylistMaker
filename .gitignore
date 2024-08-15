@@ -42,3 +42,4 @@ $RECYCLE.BIN/
 .idea
 .idea/*
 ./local.properties
+.kotlin
