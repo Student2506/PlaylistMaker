@@ -11,7 +11,7 @@
         android:title="@string/medialibrary" />
 
     <item
-        android:id="@id/createPlaylistFragment"
+        android:id="@id/settingsFragment"
         android:icon="@drawable/settings"
         android:title="@string/settings_button" />
 </menu>

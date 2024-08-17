@@ -1,11 +1,14 @@
 package com.example.android.playlistmaker.medialibrary.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.android.playlistmaker.medialibrary.presentation.CreatePlaylistViewModel
@@ -17,7 +20,7 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         @JvmStatic
         fun newInstance() = CreatePlaylistFragment()
 
-        private const val TAG = "CreatePlaylistFragment"
+        const val TAG = "CreatePlaylistFragment"
     }
 
 //    private val viewModel: CreatePlaylistViewModel by viewModels()
@@ -39,5 +42,15 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.tbToolbar.setOnClickListener {
+            findNavController().navigateUp()
+        }
+        binding.tietPlaylistTitle.addTextChangedListener(
+            beforeTextChanged = {_, _, _, _ -> },
+            onTextChanged = { charSequence, _, _, _ ->
+                binding.bCreatePlaylist.isEnabled = !charSequence.isNullOrEmpty()
+            },
+            afterTextChanged = {_ ->}
+        )
     }
 }
