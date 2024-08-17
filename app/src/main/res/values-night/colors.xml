@@ -20,4 +20,5 @@
     <color name="progress_bar_tint">#3772E7</color>
     <color name="bottom_navigation_color">#1A1B22</color>
     <color name="bottom_navigation_inactive">#FFFFFFFF</color>
+    <color name="outline_edittext_inactive">#FFFFFF</color>
 </resources>

@@ -1,32 +1,43 @@
 package com.example.android.playlistmaker.medialibrary.ui
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.fragment.app.viewModels
 import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.android.playlistmaker.medialibrary.presentation.CreatePlaylistViewModel
+import com.example.android.playlistmaker.util.ui.BindingFragment
 
-class CreatePlaylistFragment : Fragment() {
+class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() {
 
     companion object {
+        @JvmStatic
         fun newInstance() = CreatePlaylistFragment()
+
+        private const val TAG = "CreatePlaylistFragment"
     }
 
-    private val viewModel: CreatePlaylistViewModel by viewModels()
+//    private val viewModel: CreatePlaylistViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ): FragmentCreatePlaylistBinding =
+        FragmentCreatePlaylistBinding.inflate(inflater, container, false)
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        return inflater.inflate(R.layout.fragment_create_playlist, container, false)
+    ): View? {
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 }

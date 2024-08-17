@@ -38,4 +38,5 @@
     <dimen name="dp_148">148dp</dimen>
     <dimen name="dp_108">108dp</dimen>
     <dimen name="dp_14">14dp</dimen>
+    <dimen name="dp_312">312dp</dimen>
 </resources>
