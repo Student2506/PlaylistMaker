@@ -75,6 +75,7 @@ class CreatePlaylistViewModel(
         viewModelScope.launch {
             playlistInteractor.createPlaylist(
                 Playlist(
+                    id = 0L,
                     title = title,
                     description = description,
                     tracks = emptyList<Track>(),

@@ -20,7 +20,9 @@ class PlaylistConverter(
 
     fun map(playlistEntity: PlaylistWithTracksEntity): Playlist {
         return with(playlistEntity) {
-            Playlist(title = playlist.playlistTitle,
+            Playlist(
+                id = playlist.playlistId,
+                title = playlist.playlistTitle,
                 description = playlist.playlistDescription,
                 imageUrl = playlist.coverPath,
                 tracks = playlistEntity.tracks.map {
