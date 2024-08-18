@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.playlistmaker.medialibrary.ui.PlaylistTile">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.example.android.playlistmaker.medialibrary.ui.ModifiedImageView
+            android:id="@+id/mivPlaylistCover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_16"
+            android:src="@drawable/placeholder_no_cover" />
+
+        <TextView
+            android:id="@+id/tvPlaylistTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_regular"
+            android:textColor="@color/button_text_color"
+            android:textFontWeight="400"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tvPlaylistTrackQty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_regular"
+            android:textColor="@color/button_text_color"
+            android:textFontWeight="400"
+            android:textSize="@dimen/sp_12" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
