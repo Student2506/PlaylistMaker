@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.android.playlistmaker.medialibrary.presentation.CreatePlaylistViewModel
 import com.example.android.playlistmaker.util.ui.BindingFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() {
 
@@ -23,7 +24,7 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         const val TAG = "CreatePlaylistFragment"
     }
 
-//    private val viewModel: CreatePlaylistViewModel by viewModels()
+    private val viewModel by viewModel<CreatePlaylistViewModel>()
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -45,12 +46,36 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         binding.tbToolbar.setOnClickListener {
             findNavController().navigateUp()
         }
-        binding.tietPlaylistTitle.addTextChangedListener(
-            beforeTextChanged = {_, _, _, _ -> },
+        binding.tietPlaylistTitle.addTextChangedListener(beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
                 binding.bCreatePlaylist.isEnabled = !charSequence.isNullOrEmpty()
             },
-            afterTextChanged = {_ ->}
-        )
+            afterTextChanged = { _ -> })
+
+        viewModel.observeState().observe(viewLifecycleOwner) { uri ->
+            binding.ivPlaylistCover.setImageURI(uri)
+        }
+        val pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    binding.ivPlaylistCover.setImageURI(uri)
+                    viewModel.chooseFileCopyToCache(uri)
+                } else {
+                    Log.d(TAG, "No media selected")
+                }
+            }
+        binding.ivPlaylistCover.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+        binding.bCreatePlaylist.setOnClickListener {
+            Log.d(TAG, "create playlist button")
+            viewModel.savePlaylist(
+                binding.tietPlaylistTitle.text.toString(),
+                binding.tietPlaylistDescription.text.toString()
+            )
+            findNavController().navigateUp()
+        }
     }
+
+
 }
