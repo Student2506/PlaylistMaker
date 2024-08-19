@@ -71,6 +71,7 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         }
         binding.bCreatePlaylist.setOnClickListener {
             Log.d(TAG, "create playlist button")
+
             viewModel.savePlaylist(
                 binding.tietPlaylistTitle.text.toString(),
                 binding.tietPlaylistDescription.text.toString()
@@ -83,6 +84,7 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
     }
 
     fun showToast(title: String) {
+        Log.d(TAG, "GET SHOW TOAST")
         Toast.makeText(requireContext(), getString(R.string.playlist_created, title), Toast.LENGTH_LONG).show()
     }
 }
