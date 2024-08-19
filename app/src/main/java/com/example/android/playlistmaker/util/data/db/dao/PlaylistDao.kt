@@ -16,5 +16,5 @@ interface PlaylistDao {
     fun getPlaylistsWithTracks(): Flow<List<PlaylistWithTracksEntity>>
 
     @Insert(PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlaylist(playlistEntity: PlaylistEntity)
+    suspend fun insertPlaylist(playlistEntity: PlaylistEntity): Long
 }

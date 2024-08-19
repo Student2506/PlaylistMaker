@@ -12,6 +12,7 @@ import com.example.android.playlistmaker.databinding.FragmentFavoriteTracksBindi
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
 import com.example.android.playlistmaker.medialibrary.presentation.FavoriteState
 import com.example.android.playlistmaker.medialibrary.presentation.FavoriteTracksViewModel
+import com.example.android.playlistmaker.medialibrary.presentation.TrackAdapter
 import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.android.playlistmaker.util.TrackConverter
 import com.example.android.playlistmaker.util.debounce

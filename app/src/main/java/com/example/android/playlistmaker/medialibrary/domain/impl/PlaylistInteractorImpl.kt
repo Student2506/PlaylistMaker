@@ -7,7 +7,11 @@ import kotlinx.coroutines.flow.Flow
 
 class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository) :
     PlaylistInteractor {
-    override suspend fun createPlaylist(playlist: Playlist): Flow<List<Playlist>> {
+    override suspend fun createPlaylist(playlist: Playlist): Flow<Pair<List<Playlist>, Boolean>> {
         return playlistRepository.createPlaylist(playlist)
+    }
+
+    override suspend fun retreivePlaylists(): Flow<List<Playlist>> {
+        return playlistRepository.retrievePlaylists()
     }
 }

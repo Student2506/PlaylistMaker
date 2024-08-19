@@ -1,9 +1,10 @@
-package com.example.android.playlistmaker.medialibrary.ui
+package com.example.android.playlistmaker.medialibrary.presentation
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
+import com.example.android.playlistmaker.medialibrary.ui.TracksCallback
 
 class TrackAdapter(private val clickListener: TrackClickListener) :
     RecyclerView.Adapter<TrackViewHolder>() {

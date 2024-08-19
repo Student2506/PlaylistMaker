@@ -14,6 +14,7 @@ import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.medialibrary.domain.db.PlaylistInteractor
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
+import com.example.android.playlistmaker.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -26,6 +27,8 @@ class CreatePlaylistViewModel(
 
     private val stateLiveData = MutableLiveData<Uri>()
     fun observeState(): LiveData<Uri> = stateLiveData
+    private val toastLiveData = SingleLiveEvent<String>()
+    fun observeToastLiveData(): LiveData<String> = toastLiveData
 
     private var currentUri: Uri? = null
 
@@ -79,9 +82,11 @@ class CreatePlaylistViewModel(
                     title = title,
                     description = description,
                     tracks = emptyList<Track>(),
-                    imageUrl = currentUri.toString()
+                    imageUrl = currentUri?.toString()
                 )
-            )
+            ).collect {
+                if(it.second) toastLiveData.postValue(title)
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
-package com.example.android.playlistmaker.medialibrary.ui
+package com.example.android.playlistmaker.medialibrary.presentation
 
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
+import com.example.android.playlistmaker.medialibrary.ui.ModifiedImageView
 
 class PlaylistTileVH(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -16,18 +18,28 @@ class PlaylistTileVH(view: View) : RecyclerView.ViewHolder(view) {
     private val trackQty: TextView = itemView.findViewById(R.id.tvPlaylistTrackQty)
 
     fun bind(playlist: Playlist) {
-        Glide.with(itemView.context).load(playlist.imageUrl)
-            .placeholder(R.drawable.placeholder_no_cover).centerInside().transform(
-                RoundedCorners(
-                    TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        ROUND_CORNERS_SIZE_PX,
-                        itemView.context.resources.displayMetrics
-                    ).toInt()
-                )
-            ).into(cover)
+
         title.text = playlist.title
         trackQty.text = TrackCount(playlist.tracks?.size ?: 0)
+        Log.d(TAG, playlist.imageUrl ?: "Have null")
+        Log.d(TAG, "Size ${playlist.imageUrl?.length}")
+        if (!playlist.imageUrl.isNullOrEmpty()) {
+            Glide.with(itemView.context).load(playlist.imageUrl)
+                .placeholder(R.drawable.placeholder_no_cover)
+                .fallback(R.drawable.placeholder_no_cover)
+                .centerInside().transform(
+                    RoundedCorners(
+                        TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP,
+                            ROUND_CORNERS_SIZE_PX,
+                            itemView.context.resources.displayMetrics
+                        ).toInt()
+                    )
+                ).into(cover)
+        } else {
+            cover.setImageResource(R.drawable.placeholder_no_cover)
+        }
+
     }
 
     private fun TrackCount(trackQty: Int): String {
@@ -39,5 +51,6 @@ class PlaylistTileVH(view: View) : RecyclerView.ViewHolder(view) {
 
     companion object {
         private const val ROUND_CORNERS_SIZE_PX = 8f
+        private const val TAG = "PlaylistTileVH"
     }
 }

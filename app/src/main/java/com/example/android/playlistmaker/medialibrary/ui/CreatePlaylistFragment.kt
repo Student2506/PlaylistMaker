@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
+import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.android.playlistmaker.medialibrary.presentation.CreatePlaylistViewModel
 import com.example.android.playlistmaker.util.ui.BindingFragment
@@ -73,9 +75,14 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
                 binding.tietPlaylistTitle.text.toString(),
                 binding.tietPlaylistDescription.text.toString()
             )
+            viewModel.observeToastLiveData().observe(viewLifecycleOwner) {
+                showToast(binding.tietPlaylistTitle.text.toString())
+            }
             findNavController().navigateUp()
         }
     }
 
-
+    fun showToast(title: String) {
+        Toast.makeText(requireContext(), getString(R.string.playlist_created, title), Toast.LENGTH_LONG).show()
+    }
 }
