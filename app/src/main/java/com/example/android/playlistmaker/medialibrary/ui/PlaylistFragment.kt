@@ -1,6 +1,7 @@
 package com.example.android.playlistmaker.medialibrary.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
 
     companion object {
         fun newInstance() = PlaylistFragment()
+        private const val TAG = "PlaylistFragment"
     }
 
     private val viewModel by viewModel<PlaylistViewModel>()
@@ -49,10 +51,12 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
         binding.rvPlaylist.adapter = adapter!!
 
         viewModel.setPlaylists()
+        Log.d(TAG, "OnViewCreated called")
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "On resume called")
         viewModel.setPlaylists()
     }
 

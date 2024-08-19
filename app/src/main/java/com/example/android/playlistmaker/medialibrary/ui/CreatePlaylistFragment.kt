@@ -79,12 +79,15 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
             viewModel.observeToastLiveData().observe(viewLifecycleOwner) {
                 showToast(binding.tietPlaylistTitle.text.toString())
             }
+            Log.d(TAG, "create playlist button2")
+            showToast(title = binding.tietPlaylistTitle.text.toString())
             findNavController().navigateUp()
         }
     }
 
     fun showToast(title: String) {
         Log.d(TAG, "GET SHOW TOAST")
+
         Toast.makeText(requireContext(), getString(R.string.playlist_created, title), Toast.LENGTH_LONG).show()
     }
 }
