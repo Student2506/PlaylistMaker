@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -24,6 +25,7 @@ import com.example.android.playlistmaker.databinding.FragmentCreatePlaylistBindi
 import com.example.android.playlistmaker.medialibrary.presentation.CreatePlaylistViewModel
 import com.example.android.playlistmaker.util.extensions.showCustomToast
 import com.example.android.playlistmaker.util.ui.BindingFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -38,6 +40,11 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
     }
 
     private val viewModel by viewModel<CreatePlaylistViewModel>()
+
+    private var isTitleEmpty = true
+    private var isDescriptionEmpty = true
+    private var isCoverEmpty = true
+    private var confirmDialog: MaterialAlertDialogBuilder? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -56,12 +63,42 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        confirmDialog =
+            MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.is_finishing_playlist_creation))
+                .setPositiveButton(getString(R.string.finish_option)) { _, _ ->
+                    findNavController().navigateUp()
+                }.setNegativeButton(getString(R.string.cancel_option)) { _, _ ->
+
+                }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
+                        confirmDialog?.show()
+                    } else {
+                        findNavController().navigateUp()
+                    }
+                }
+            })
         binding.tbToolbar.setOnClickListener {
-            findNavController().navigateUp()
+            if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
+                confirmDialog?.show()
+            } else {
+                findNavController().navigateUp()
+            }
         }
         binding.tietPlaylistTitle.addTextChangedListener(beforeTextChanged = { _, _, _, _ -> },
             onTextChanged = { charSequence, _, _, _ ->
                 binding.bCreatePlaylist.isEnabled = !charSequence.isNullOrEmpty()
+                isTitleEmpty = charSequence.isNullOrEmpty()
+            },
+            afterTextChanged = { _ -> })
+
+        binding.tietPlaylistDescription.addTextChangedListener(beforeTextChanged = { _, _, _, _ -> },
+            onTextChanged = { charSequence, _, _, _ ->
+                isDescriptionEmpty = charSequence.isNullOrEmpty()
             },
             afterTextChanged = { _ -> })
 
@@ -120,7 +157,7 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
                     requestPremissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 } else pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
-
+            isCoverEmpty = binding.ivPlaylistCover.paddingTop == 0
         }
         binding.bCreatePlaylist.setOnClickListener {
             Log.d(TAG, "create playlist button")
