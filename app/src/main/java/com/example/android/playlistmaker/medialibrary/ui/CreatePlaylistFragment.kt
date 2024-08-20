@@ -68,7 +68,13 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         viewModel.observeState().observe(viewLifecycleOwner) { uri ->
             binding.ivPlaylistCover.setImageURI(uri)
         }
-
+        viewModel.observeToastLiveData().observe(viewLifecycleOwner) {
+            Toast(requireContext()).showCustomToast(
+                getString(
+                    R.string.playlist_created, binding.tietPlaylistTitle.text.toString()
+                ), requireActivity()
+            )
+        }
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
@@ -123,26 +129,8 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
                 binding.tietPlaylistTitle.text.toString(),
                 binding.tietPlaylistDescription.text.toString()
             )
-            viewModel.observeToastLiveData().observe(viewLifecycleOwner) {
-                showToast(binding.tietPlaylistTitle.text.toString())
-            }
-            Log.d(TAG, "create playlist button2")
-            Toast(requireContext()).showCustomToast(
-                getString(
-                    R.string.playlist_created,
-                    binding.tietPlaylistTitle.text.toString()
-                ), requireActivity()
-            )
-//            showToast(title = binding.tietPlaylistTitle.text.toString())
+
             findNavController().navigateUp()
         }
-    }
-
-    fun showToast(title: String) {
-        Log.d(TAG, "GET SHOW TOAST")
-
-//        Toast.makeText(
-//            requireContext(), getString(R.string.playlist_created, title), Toast.LENGTH_LONG
-//        ).show()
     }
 }
