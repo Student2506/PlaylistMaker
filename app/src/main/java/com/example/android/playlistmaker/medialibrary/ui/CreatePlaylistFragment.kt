@@ -22,6 +22,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.android.playlistmaker.medialibrary.presentation.CreatePlaylistViewModel
+import com.example.android.playlistmaker.util.extensions.showCustomToast
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -73,14 +74,14 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
                 if (uri != null) {
                     binding.ivPlaylistCover.setPadding(0, 0, 0, 0)
                     Glide.with(requireContext()).load(uri).transform(
-                            CenterCrop(), RoundedCorners(
-                                TypedValue.applyDimension(
-                                    TypedValue.COMPLEX_UNIT_DIP,
-                                    ROUND_CORNERS_SIZE_PX,
-                                    requireContext().resources.displayMetrics
-                                ).toInt()
-                            )
-                        ).into(binding.ivPlaylistCover)
+                        CenterCrop(), RoundedCorners(
+                            TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP,
+                                ROUND_CORNERS_SIZE_PX,
+                                requireContext().resources.displayMetrics
+                            ).toInt()
+                        )
+                    ).into(binding.ivPlaylistCover)
                     viewModel.chooseFileCopyToCache(uri)
                 } else {
                     Log.d(TAG, "No media selected")
@@ -126,7 +127,13 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
                 showToast(binding.tietPlaylistTitle.text.toString())
             }
             Log.d(TAG, "create playlist button2")
-            showToast(title = binding.tietPlaylistTitle.text.toString())
+            Toast(requireContext()).showCustomToast(
+                getString(
+                    R.string.playlist_created,
+                    binding.tietPlaylistTitle.text.toString()
+                ), requireActivity()
+            )
+//            showToast(title = binding.tietPlaylistTitle.text.toString())
             findNavController().navigateUp()
         }
     }
@@ -134,8 +141,8 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
     fun showToast(title: String) {
         Log.d(TAG, "GET SHOW TOAST")
 
-        Toast.makeText(
-            requireContext(), getString(R.string.playlist_created, title), Toast.LENGTH_LONG
-        ).show()
+//        Toast.makeText(
+//            requireContext(), getString(R.string.playlist_created, title), Toast.LENGTH_LONG
+//        ).show()
     }
 }
