@@ -6,12 +6,13 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.ui.ModifiedImageView
 
-class PlaylistTileVH(view: View) : RecyclerView.ViewHolder(view) {
+class PlaylistTileVH(private val view: View) : RecyclerView.ViewHolder(view) {
 
     private val cover: ModifiedImageView = itemView.findViewById(R.id.mivPlaylistCover)
     private val title: TextView = itemView.findViewById(R.id.tvPlaylistTitle)
@@ -26,13 +27,12 @@ class PlaylistTileVH(view: View) : RecyclerView.ViewHolder(view) {
         if (!playlist.imageUrl.isNullOrEmpty()) {
             Glide.with(itemView.context).load(playlist.imageUrl)
                 .placeholder(R.drawable.placeholder_no_cover)
-                .fallback(R.drawable.placeholder_no_cover)
-                .centerInside().transform(
-                    RoundedCorners(
+                .fallback(R.drawable.placeholder_no_cover).transform(
+                    CenterCrop(), RoundedCorners(
                         TypedValue.applyDimension(
                             TypedValue.COMPLEX_UNIT_DIP,
                             ROUND_CORNERS_SIZE_PX,
-                            itemView.context.resources.displayMetrics
+                            view.context.resources.displayMetrics
                         ).toInt()
                     )
                 ).into(cover)

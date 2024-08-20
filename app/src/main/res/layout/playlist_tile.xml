@@ -9,13 +9,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
         android:orientation="vertical">
 
         <com.example.android.playlistmaker.medialibrary.ui.ModifiedImageView
             android:id="@+id/mivPlaylistCover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_16"
+            android:background="@drawable/rounded_rectangle_no_border"
             android:src="@drawable/placeholder_no_cover" />
 
         <TextView

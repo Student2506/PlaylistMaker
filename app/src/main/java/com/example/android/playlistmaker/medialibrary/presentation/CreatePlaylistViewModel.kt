@@ -45,7 +45,7 @@ class CreatePlaylistViewModel(
         val inputStream = getApplication<PlaylistMakerApp>().contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory.decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+            .compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         inputStream?.close()
         stateLiveData.postValue(file.toUri())
         currentUri = file.toUri()
