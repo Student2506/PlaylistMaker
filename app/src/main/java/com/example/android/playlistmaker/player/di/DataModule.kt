@@ -3,6 +3,8 @@ package com.example.android.playlistmaker.player.di
 import android.media.MediaPlayer
 import androidx.room.Room
 import com.example.android.playlistmaker.player.data.PlayerClient
+import com.example.android.playlistmaker.player.data.converters.PlaylistConverter
+import com.example.android.playlistmaker.player.data.converters.TrackConverter
 import com.example.android.playlistmaker.player.data.player.AndroidStandardPlayerClient
 import com.example.android.playlistmaker.util.data.db.AppDatabase
 import org.koin.android.ext.koin.androidContext
@@ -19,5 +21,12 @@ val playerDataModule = module {
 
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
+    }
+
+    factory {
+        PlaylistConverter(get())
+    }
+    factory {
+        TrackConverter()
     }
 }

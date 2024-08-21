@@ -11,7 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.android.playlistmaker.PlaylistMakerApp
-import com.example.android.playlistmaker.medialibrary.domain.db.PlaylistInteractor
+import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistInteractor
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
 import com.example.android.playlistmaker.util.SingleLiveEvent

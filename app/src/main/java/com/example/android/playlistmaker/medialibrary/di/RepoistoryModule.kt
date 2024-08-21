@@ -4,8 +4,8 @@ import com.example.android.playlistmaker.medialibrary.data.FavoritesRepositoryIm
 import com.example.android.playlistmaker.medialibrary.data.PlaylistRepositoryImpl
 import com.example.android.playlistmaker.medialibrary.data.converters.PlaylistConverter
 import com.example.android.playlistmaker.medialibrary.data.converters.TrackConverter
-import com.example.android.playlistmaker.medialibrary.domain.db.FavoritesRepository
-import com.example.android.playlistmaker.medialibrary.domain.db.PlaylistRepository
+import com.example.android.playlistmaker.medialibrary.domain.api.FavoritesRepository
+import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistRepository
 import org.koin.dsl.module
 
 val favoriteRepositoryModule = module {

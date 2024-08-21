@@ -1,7 +1,7 @@
 package com.example.android.playlistmaker.medialibrary.domain.impl
 
-import com.example.android.playlistmaker.medialibrary.domain.db.PlaylistInteractor
-import com.example.android.playlistmaker.medialibrary.domain.db.PlaylistRepository
+import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistInteractor
+import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistRepository
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import kotlinx.coroutines.flow.Flow
 

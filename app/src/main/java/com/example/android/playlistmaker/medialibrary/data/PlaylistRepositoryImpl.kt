@@ -1,7 +1,7 @@
 package com.example.android.playlistmaker.medialibrary.data
 
 import com.example.android.playlistmaker.medialibrary.data.converters.PlaylistConverter
-import com.example.android.playlistmaker.medialibrary.domain.db.PlaylistRepository
+import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistRepository
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.util.data.db.AppDatabase
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistWithTracksEntity

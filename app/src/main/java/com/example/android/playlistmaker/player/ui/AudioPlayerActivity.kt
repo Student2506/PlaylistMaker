@@ -5,13 +5,16 @@ import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.example.android.playlistmaker.player.domain.models.Playlist
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.player.domain.models.Track
 import com.example.android.playlistmaker.player.presentation.PlayerViewModel
+import com.example.android.playlistmaker.player.presentation.PlaylistState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -45,15 +48,18 @@ class AudioPlayerActivity : AppCompatActivity() {
         setContentView(binding?.root)
         bottomSheetBehavior = BottomSheetBehavior.from(binding?.standardBottomSheet!!)
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-        bottomSheetBehavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior?.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         binding?.overlay?.isVisible = false
                     }
+
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {
                         binding?.overlay?.isVisible = true
                     }
+
                     else -> {}
                 }
             }
@@ -112,6 +118,14 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding?.ivAddTrackToPlaylist?.setOnClickListener {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
+        playerViewModel.observePlaylists().observe(this) { state ->
+            when (state) {
+                is PlaylistState.Content -> showContent(state.playlist)
+                is PlaylistState.Empty -> showEmpty()
+            }
+
+        }
+
     }
 
     private fun updateElapsedTime(time: Int) {
@@ -131,6 +145,23 @@ class AudioPlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         playerViewModel.pausePlayer()
+    }
+
+    private fun showContent(playlists: List<Playlist>) {
+        val adapter = TrackAdapter {}
+        adapter.playlists.clear()
+        adapter.playlists.addAll(playlists)
+        binding?.rvPlaylist?.layoutManager = LinearLayoutManager(this)
+        binding?.rvPlaylist?.adapter = adapter
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun showEmpty() {
+        val adapter = TrackAdapter {}
+        adapter.playlists.clear()
+        binding?.rvPlaylist?.layoutManager = LinearLayoutManager(this)
+        binding?.rvPlaylist?.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 
     companion object {
