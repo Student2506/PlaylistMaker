@@ -19,11 +19,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPlaylist"
+        style="@style/PlaylistRecycleView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_16"
         android:visibility="gone"
-        android:paddingHorizontal="@dimen/dp_12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,9 +31,9 @@
 
     <ImageView
         android:id="@+id/ivError"
+        style="@style/PlaylistError"
         android:layout_width="@dimen/dp_120"
         android:layout_height="@dimen/dp_120"
-        android:layout_marginTop="@dimen/dp_44"
         android:contentDescription="@string/not_found_image"
         android:src="@drawable/not_found_image"
         app:layout_constraintBottom_toTopOf="@+id/tvError"
@@ -50,7 +49,6 @@
         style="@style/Text.MediaLibraryFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:text="@string/no_playlist_found"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
