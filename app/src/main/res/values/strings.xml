@@ -54,4 +54,5 @@
     <string name="is_finishing_playlist_creation">Завершить создание плейлиста?</string>
     <string name="finish_option">Завершить</string>
     <string name="cancel_option">Отмена</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
 </resources>

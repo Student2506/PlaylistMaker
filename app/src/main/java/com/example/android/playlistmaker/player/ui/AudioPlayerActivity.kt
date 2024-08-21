@@ -2,6 +2,7 @@ package com.example.android.playlistmaker.player.ui
 
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -11,6 +12,7 @@ import com.example.android.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.player.domain.models.Track
 import com.example.android.playlistmaker.player.presentation.PlayerViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -35,10 +37,31 @@ class AudioPlayerActivity : AppCompatActivity() {
         )
     }
 
+    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+        bottomSheetBehavior = BottomSheetBehavior.from(binding?.standardBottomSheet!!)
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding?.overlay?.isVisible = false
+                    }
+                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                        binding?.overlay?.isVisible = true
+                    }
+                    else -> {}
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+        })
         binding?.tbToolbar?.setOnClickListener {
             finish()
         }
@@ -85,6 +108,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
         binding?.ivLikeButton?.setOnClickListener {
             playerViewModel.updateFavorite()
+        }
+        binding?.ivAddTrackToPlaylist?.setOnClickListener {
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
     }
 

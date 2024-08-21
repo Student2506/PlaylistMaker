@@ -185,6 +185,7 @@
         <item name="android:textSize">@dimen/sp_14</item>
         <item name="android:visibility">visible</item>
         <item name="cornerRadius">@dimen/dp_52</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="AudioPlayer.Track.Description.Value" parent="">
