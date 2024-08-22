@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.playlistmaker.PlaylistMakerApp
 import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistInteractor
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
+import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
 import com.example.android.playlistmaker.util.SingleLiveEvent
 import kotlinx.coroutines.launch
@@ -85,7 +86,7 @@ class CreatePlaylistViewModel(
                     id = 0L,
                     title = title,
                     description = description,
-                    tracks = emptyList<Track>(),
+                    tracks = emptyList<PlaylistTrack>(),
                     imageUrl = currentUri?.toString()
                 )
             )

@@ -7,12 +7,16 @@ import com.example.android.playlistmaker.util.data.db.dao.FavoriteTrackDao
 import com.example.android.playlistmaker.util.data.db.dao.PlaylistDao
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistEntity
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistTrackCrossRef
+import com.example.android.playlistmaker.util.data.db.entity.PlaylistTrackEntity
 import com.example.android.playlistmaker.util.data.db.entity.TrackEntity
 
 @Database(
-    version = 3,
-    entities = [TrackEntity::class, PlaylistEntity::class, PlaylistTrackCrossRef::class],
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)]
+    version = 4,
+    entities = [TrackEntity::class, PlaylistEntity::class, PlaylistTrackCrossRef::class, PlaylistTrackEntity::class],
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(
+        from = 2,
+        to = 3
+    ), AutoMigration(from = 3, to = 4)]
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun favoriteTracksDao(): FavoriteTrackDao

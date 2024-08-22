@@ -3,6 +3,7 @@ package com.example.android.playlistmaker.player.ui
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,8 +14,10 @@ import com.example.android.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.android.playlistmaker.player.domain.models.Playlist
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.player.domain.models.Track
+import com.example.android.playlistmaker.player.presentation.AdditionStatus
 import com.example.android.playlistmaker.player.presentation.PlayerViewModel
 import com.example.android.playlistmaker.player.presentation.PlaylistState
+import com.example.android.playlistmaker.util.extensions.showCustomToast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -125,7 +128,26 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
 
         }
+        playerViewModel.observeToastLiveData().observe(this) { state ->
+            when (state) {
+                is AdditionStatus.Success -> {
+                    Toast(this).showCustomToast(
+                        getString(
+                            R.string.add_to_playlist_success, state.playlistTitle
+                        ), this
+                    )
+                    bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+                }
 
+                is AdditionStatus.Error -> {
+                    Toast(this).showCustomToast(
+                        getString(
+                            R.string.track_already_in_playlist, state.playlistTitle
+                        ), this
+                    )
+                }
+            }
+        }
     }
 
     private fun updateElapsedTime(time: Int) {
@@ -148,7 +170,9 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun showContent(playlists: List<Playlist>) {
-        val adapter = TrackAdapter {}
+        val adapter = TrackAdapter {
+            playerViewModel.addTrackToPlaylist(it)
+        }
         adapter.playlists.clear()
         adapter.playlists.addAll(playlists)
         binding?.rvPlaylist?.layoutManager = LinearLayoutManager(this)

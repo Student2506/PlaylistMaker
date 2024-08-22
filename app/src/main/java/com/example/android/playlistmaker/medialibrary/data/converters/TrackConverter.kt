@@ -1,6 +1,8 @@
 package com.example.android.playlistmaker.medialibrary.data.converters
 
+import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
+import com.example.android.playlistmaker.util.data.db.entity.PlaylistTrackEntity
 import com.example.android.playlistmaker.util.data.db.entity.TrackEntity
 
 class TrackConverter {
@@ -18,6 +20,23 @@ class TrackConverter {
                 country,
                 previewUrl,
                 createdAt = createdAt,
+            )
+        }
+    }
+
+    fun mapPlaylist(track: PlaylistTrackEntity): PlaylistTrack {
+        return with(track) {
+            PlaylistTrack(
+                trackId,
+                trackName,
+                artistName,
+                trackTime,
+                artworkUrl100,
+                collectionName,
+                primaryGenreName,
+                releaseDate,
+                country,
+                previewUrl,
             )
         }
     }

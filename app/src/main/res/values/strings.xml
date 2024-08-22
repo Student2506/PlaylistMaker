@@ -55,4 +55,6 @@
     <string name="finish_option">Завершить</string>
     <string name="cancel_option">Отмена</string>
     <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="add_to_playlist_success">Добавлено в плейлист %1$s</string>
+    <string name="track_already_in_playlist">Трек уже добавлен в плейлист %1$s</string>
 </resources>

@@ -13,7 +13,7 @@ class PlaylistConverter(
                 description = playlistDescription,
                 imageUrl = coverPath,
                 tracks = playlistEntity.tracks.map {
-                    trackConverter.map(it)
+                    trackConverter.mapPlaylist(it)
                 })
         }
     }
