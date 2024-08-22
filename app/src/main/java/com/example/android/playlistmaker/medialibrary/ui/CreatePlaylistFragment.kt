@@ -23,17 +23,19 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.android.playlistmaker.medialibrary.presentation.CreatePlaylistViewModel
+import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.android.playlistmaker.util.extensions.showCustomToast
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() {
+class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
+    BindingFragment<FragmentCreatePlaylistBinding>() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = CreatePlaylistFragment()
+        fun newInstance(isAudioPlayer: Boolean) = CreatePlaylistFragment(isAudioPlayer)
 
         const val TAG = "CreatePlaylistFragment"
         private const val ROUND_CORNERS_SIZE_PX = 8f
@@ -66,7 +68,11 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         confirmDialog =
             MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.is_finishing_playlist_creation))
                 .setPositiveButton(getString(R.string.finish_option)) { _, _ ->
-                    findNavController().navigateUp()
+                    if (isAudioPlayer) {
+                        (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
+                    } else {
+                        findNavController().navigateUp()
+                    }
                 }.setNegativeButton(getString(R.string.cancel_option)) { _, _ ->
 
                 }
@@ -78,7 +84,8 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
                     if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
                         confirmDialog?.show()
                     } else {
-                        findNavController().navigateUp()
+                        if (isAudioPlayer) (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
+                        else findNavController().navigateUp()
                     }
                 }
             })
@@ -86,7 +93,11 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
             if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
                 confirmDialog?.show()
             } else {
-                findNavController().navigateUp()
+                if (isAudioPlayer) {
+                    (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
+                } else {
+                    findNavController().navigateUp()
+                }
             }
         }
         binding.tietPlaylistTitle.addTextChangedListener(beforeTextChanged = { _, _, _, _ -> },
@@ -166,8 +177,11 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
                 binding.tietPlaylistTitle.text.toString(),
                 binding.tietPlaylistDescription.text.toString()
             )
-
-            findNavController().navigateUp()
+            if (isAudioPlayer) {
+                (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
+            } else {
+                findNavController().navigateUp()
+            }
         }
     }
 }

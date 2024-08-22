@@ -6,11 +6,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.example.android.playlistmaker.medialibrary.ui.CreatePlaylistFragment
 import com.example.android.playlistmaker.player.domain.models.Playlist
 import com.example.android.playlistmaker.player.domain.models.State
 import com.example.android.playlistmaker.player.domain.models.Track
@@ -72,7 +74,12 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
         })
         binding?.tbToolbar?.setOnClickListener {
-            finish()
+            if (binding?.playerScreenView?.isVisible == true) {
+                finish()
+            } else {
+                binding?.playerScreenView?.isVisible = true
+                binding?.playerFragemntContainerView?.isVisible = false
+            }
         }
         Glide.with(applicationContext)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
@@ -148,6 +155,21 @@ class AudioPlayerActivity : AppCompatActivity() {
                 }
             }
         }
+        binding?.mbNewPlaylist?.setOnClickListener {
+            binding?.playerScreenView?.isVisible = false
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            binding?.playerFragemntContainerView?.isVisible = true
+            supportFragmentManager.commit {
+                replace(
+                    R.id.player_fragemnt_container_view, CreatePlaylistFragment.newInstance(true)
+                )
+            }
+        }
+    }
+
+    fun closeCreatePlaylist() {
+        binding?.playerScreenView?.isVisible = true
+        binding?.playerFragemntContainerView?.isVisible = false
     }
 
     private fun updateElapsedTime(time: Int) {

@@ -1,6 +1,7 @@
 package com.example.android.playlistmaker.player.data.converters
 
 import com.example.android.playlistmaker.player.domain.models.Playlist
+import com.example.android.playlistmaker.util.data.db.entity.PlaylistEntity
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistWithTracksEntity
 
 class PlaylistConverter(
@@ -13,8 +14,16 @@ class PlaylistConverter(
                 description = playlistDescription,
                 imageUrl = coverPath,
                 tracks = playlistEntity.tracks.map {
-                    trackConverter.mapPlaylist(it)
+                    trackConverter.mapPlaylistTrack(it)
                 })
+        }
+    }
+
+    fun mapPlaylist(playlist: Playlist): PlaylistEntity {
+        return with(playlist) {
+            PlaylistEntity(
+                id ?: 0, title, description ?: "", imageUrl
+            )
         }
     }
 }

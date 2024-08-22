@@ -245,6 +245,7 @@
         <item name="android:textColor">@color/button_text_color</item>
         <item name="android:textSize">@dimen/sp_14</item>
         <item name="backgroundTint">@color/button_color</item>
+        <item name="cornerRadius">@dimen/dp_52</item>
     </style>
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">

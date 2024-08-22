@@ -41,6 +41,12 @@ class PlaylistRepositoryImpl(
         return Status.Succses
     }
 
+    override suspend fun createPlaylist(playlist: Playlist): Boolean {
+        val playlistEntity = playlistConverter.mapPlaylist(playlist)
+        val inserted = appDatabase.playlistDao().insertPlaylist(playlistEntity)
+        return inserted > 0
+    }
+
     companion object {
         private const val TAG = "PlaylistRepositoryImpl"
     }
