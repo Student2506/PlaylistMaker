@@ -87,12 +87,13 @@
 
     <style name="Track.Text.Header">
         <item name="android:textSize">@dimen/sp_16</item>
-
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="Track.Text.Detail">
         <item name="android:textSize">@dimen/sp_12</item>
         <item name="android:textColor">?attr/hintText</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="Track.Separator" parent="">
@@ -163,6 +164,7 @@
         <item name="android:visibility">gone</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/button_color</item>
     </style>
 
     <style name="SearchDialog.ErrorScreen.Button" parent="">
