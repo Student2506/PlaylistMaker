@@ -239,6 +239,7 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+
     <style name="Text.MediaLibraryFragment.NotFound" parent="Text.MediaLibraryFragment">
         <item name="android:textColor">@color/no_playlists</item>
     </style>
@@ -332,6 +333,11 @@
     <style name="CreatePlaylistTextField.TextInputLayout" parent="TextInputLayout">
         <item name="android:layout_marginHorizontal">@dimen/dp_16</item>
         <item name="android:layout_marginTop">@dimen/dp_32</item>
+    </style>
+
+    <style name="CreatePlaylistTextField.TextInputEditText" parent="Base.Widget.MaterialComponents.TextInputEditText">
+        <item name="android:paddingTop">@dimen/dp_20</item>
+        <item name="android:paddingBottom">@dimen/dp_12</item>
     </style>
 
     <style name="CreatePlaylistButton">
