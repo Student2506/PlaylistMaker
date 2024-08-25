@@ -22,4 +22,5 @@
     <color name="bottom_navigation_inactive">#FFFFFFFF</color>
     <color name="outline_edittext_inactive">#FFFFFF</color>
     <color name="bottom_sheet_handle">#FFFFFF</color>
+    <color name="no_playlists">#FFFFFF</color>
 </resources>

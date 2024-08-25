@@ -164,7 +164,7 @@
         <item name="android:visibility">gone</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/button_color</item>
+        <!--        <item name="android:textColor">@color/button_color</item>-->
     </style>
 
     <style name="SearchDialog.ErrorScreen.Button" parent="">
@@ -237,6 +237,10 @@
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">@dimen/sp_19</item>
         <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="Text.MediaLibraryFragment.NotFound" parent="Text.MediaLibraryFragment">
+        <item name="android:textColor">@color/no_playlists</item>
     </style>
 
     <style name="MaterialButton.MediaLibraryFragment" parent="">

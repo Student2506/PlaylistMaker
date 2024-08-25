@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/tvError"
-        style="@style/Text.MediaLibraryFragment"
+        style="@style/Text.MediaLibraryFragment.NotFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty_medialibrary"
