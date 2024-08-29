@@ -37,7 +37,7 @@ class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
         @JvmStatic
         fun newInstance(isAudioPlayer: Boolean) = CreatePlaylistFragment(isAudioPlayer)
 
-        const val TAG = "CreatePlaylistFragment"
+        private const val TAG = "CreatePlaylistFragment"
         private const val ROUND_CORNERS_SIZE_PX = 8f
     }
 

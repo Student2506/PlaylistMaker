@@ -27,4 +27,9 @@ class PlaylistRepositoryImpl(
         appDatabase.playlistDao().getPlaylistsWithTracks().map {
             convertFromPlaylistEntity(it)
         }
+
+    override suspend fun retrievePlaylistById(playlistId: Long): Flow<Playlist> =
+        appDatabase.playlistDao().getPlaylistById(playlistId = playlistId)
+            .map { playlistConverter.map(it) }
+
 }

@@ -47,4 +47,7 @@
     <dimen name="dp_64">64dp</dimen>
     <dimen name="dp_176">176dp</dimen>
     <dimen name="dp_248">248dp</dimen>
+    <dimen name="sp_24">24sp</dimen>
+    <dimen name="sp_18">18sp</dimen>
+    <dimen name="dp_266">266dp</dimen>
 </resources>

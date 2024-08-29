@@ -3,8 +3,8 @@
     android:shape="rectangle">
 
     <size
-        android:width="@dimen/dp_504"
-        android:height="@dimen/dp_360" />
+        android:width="@dimen/dp_360"
+        android:height="@dimen/dp_266" />
 
     <solid android:color="@color/button_text_color" />
     <corners

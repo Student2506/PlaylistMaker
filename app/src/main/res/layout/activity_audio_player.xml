@@ -193,7 +193,7 @@
                 tools:text="Yesterday (Remastered 2009)Yesterday (Remastered 2009)Yesterday (Remastered 2009)" />
 
             <TextView
-                android:id="@+id/tvYear"
+                android:id="@+id/tvDescription"
                 style="@style/AudioPlayer.Track.Description.Key"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -209,7 +209,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tvYear"
+                app:layout_constraintStart_toEndOf="@id/tvDescription"
                 app:layout_constraintTop_toBottomOf="@id/tvAlbumName"
                 tools:text="1965" />
 
@@ -222,7 +222,7 @@
                 app:layout_constraintEnd_toStartOf="@id/tvGenreValue"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvYear" />
+                app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
             <TextView
                 android:id="@+id/tvGenreValue"

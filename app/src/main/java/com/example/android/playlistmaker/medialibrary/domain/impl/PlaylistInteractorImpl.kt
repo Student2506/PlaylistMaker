@@ -14,4 +14,8 @@ class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository)
     override suspend fun retreivePlaylists(): Flow<List<Playlist>> {
         return playlistRepository.retrievePlaylists()
     }
+
+    override suspend fun retreivePlaylistById(playlistId: Long): Flow<Playlist> {
+        return playlistRepository.retrievePlaylistById(playlistId)
+    }
 }
