@@ -3,6 +3,7 @@ package com.example.android.playlistmaker
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.android.playlistmaker.medialibrary.di.createPlaylistViewModelModule
 import com.example.android.playlistmaker.medialibrary.di.favoriteDataModule
 import com.example.android.playlistmaker.medialibrary.di.favoriteRepositoryModule
 import com.example.android.playlistmaker.medialibrary.di.favoriteTracksViewModel
@@ -51,7 +52,8 @@ class PlaylistMakerApp : Application() {
                 favoriteTracksViewModel,
                 favoritesInteractorModule,
                 playlistViewModelModule,
-                favoriteRepositoryModule
+                favoriteRepositoryModule,
+                createPlaylistViewModelModule
             )
         }
         val darkModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK

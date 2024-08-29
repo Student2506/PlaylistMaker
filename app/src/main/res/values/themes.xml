@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
@@ -20,7 +20,17 @@
         <item name="switchThumbNormalColor">@color/white</item>
         <item name="hintText">@color/search_hint</item>
         <item name="bgStatusBar">@color/white</item>
+        <item name="materialAlertDialogTheme">@style/PlaylistMakerAlertDialog</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
+
+    <style name="PlaylistMakerAlertDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyleDialog</item>
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyleDialog</item>
+    </style>
+
+    <style name="ButtonStyleDialog" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imError"
+        android:id="@+id/ivError"
         android:layout_width="@dimen/dp_120"
         android:layout_height="@dimen/dp_120"
         android:layout_marginTop="@dimen/dp_108"
@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/tvError"
-        style="@style/Text.MediaLibraryFragment"
+        style="@style/Text.MediaLibraryFragment.NotFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty_medialibrary"
@@ -42,13 +42,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imError" />
+        app:layout_constraintTop_toBottomOf="@+id/ivError" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/grError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="imError,tvError" />
+        app:constraint_referenced_ids="ivError,tvError" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 package com.example.android.playlistmaker.medialibrary.data
 
 import com.example.android.playlistmaker.medialibrary.data.converters.TrackConverter
-import com.example.android.playlistmaker.medialibrary.domain.db.FavoritesRepository
+import com.example.android.playlistmaker.medialibrary.domain.api.FavoritesRepository
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
 import com.example.android.playlistmaker.util.data.db.AppDatabase
 import com.example.android.playlistmaker.util.data.db.entity.TrackEntity

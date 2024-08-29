@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker.player.presentation
+package com.example.android.playlistmaker.util
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

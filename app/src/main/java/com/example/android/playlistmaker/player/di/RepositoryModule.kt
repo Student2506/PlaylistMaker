@@ -1,8 +1,9 @@
 package com.example.android.playlistmaker.player.di
 
 import com.example.android.playlistmaker.player.data.AudioPlayerRepositoryImpl
-import com.example.android.playlistmaker.player.data.converters.TrackConverter
+import com.example.android.playlistmaker.player.data.PlaylistRepositoryImpl
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerRepository
+import com.example.android.playlistmaker.player.domain.api.PlaylistRepository
 import org.koin.dsl.module
 
 val playerRepositoryModule = module {
@@ -11,7 +12,8 @@ val playerRepositoryModule = module {
         AudioPlayerRepositoryImpl(get(), get(), get())
     }
 
-    factory {
-        TrackConverter()
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get(), get())
     }
+
 }

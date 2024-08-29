@@ -1,14 +1,19 @@
 package com.example.android.playlistmaker.player.presentation
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.playlistmaker.player.domain.api.AudioPlayerInteractor
+import com.example.android.playlistmaker.player.domain.api.PlaylistInteractor
 import com.example.android.playlistmaker.player.domain.models.Command
+import com.example.android.playlistmaker.player.domain.models.Playlist
 import com.example.android.playlistmaker.player.domain.models.State
+import com.example.android.playlistmaker.player.domain.models.Status
 import com.example.android.playlistmaker.player.domain.models.Track
+import com.example.android.playlistmaker.util.SingleLiveEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,7 +21,9 @@ import kotlinx.coroutines.launch
 class PlayerViewModel(
     private val track: Track,
     private val playerInteractor: AudioPlayerInteractor,
-) : ViewModel() {
+    private val playlistInteractor: PlaylistInteractor,
+    private val application: Application,
+) : AndroidViewModel(application) {
 
     private val stateLiveData = MutableLiveData<State>()
     fun observeState(): LiveData<State> = stateLiveData
@@ -25,6 +32,10 @@ class PlayerViewModel(
     private val stateFavoriteLiveData = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = stateFavoriteLiveData
     private var timerJob: Job? = null
+    private val playlistLiveData = MutableLiveData<PlaylistState>()
+    fun observePlaylists(): LiveData<PlaylistState> = playlistLiveData
+    private val toastLiveData = SingleLiveEvent<AdditionStatus>()
+    fun observeToastLiveData(): LiveData<AdditionStatus> = toastLiveData
 
     private fun startTimer() {
         timerJob = viewModelScope.launch {
@@ -43,6 +54,10 @@ class PlayerViewModel(
         viewModelScope.launch {
             playerInteractor.favoriteTrack(track.trackId).collect { is_favorite ->
                 stateFavoriteLiveData.postValue(is_favorite)
+            }
+            playlistInteractor.retrievePlaylists().collect { playlists ->
+                if (playlists.isNullOrEmpty()) playlistLiveData.postValue(PlaylistState.Empty)
+                else playlistLiveData.postValue(PlaylistState.Content(playlists))
             }
         }
 
@@ -110,6 +125,21 @@ class PlayerViewModel(
 
     private fun renderState(state: State) {
         stateLiveData.postValue(state)
+    }
+
+    fun addTrackToPlaylist(playlist: Playlist) {
+        viewModelScope.launch {
+            val status = playlistInteractor.insertTrack(playlist.id!!, track)
+            when (status) {
+                is Status.Succses -> {
+                    toastLiveData.postValue(AdditionStatus.Success(playlist.title))
+                }
+
+                is Status.ExistFailure -> {
+                    toastLiveData.postValue(AdditionStatus.Error(playlist.title))
+                }
+            }
+        }
     }
 
     companion object {

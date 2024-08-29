@@ -12,34 +12,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/new_playlist"
-        app:layout_constraintBottom_toTopOf="@id/imError"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imError"
-        android:layout_width="@dimen/dp_120"
-        android:layout_height="@dimen/dp_120"
-        android:layout_marginTop="@dimen/dp_44"
-        android:src="@drawable/not_found_image"
-        app:layout_constraintBottom_toTopOf="@+id/tvError"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlaylist"
+        style="@style/PlaylistRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mbNewPlaylist" />
 
+
+    <ImageView
+        android:id="@+id/ivError"
+        style="@style/PlaylistError"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_120"
+        android:contentDescription="@string/not_found_image"
+        android:src="@drawable/not_found_image"
+        app:layout_constraintBottom_toTopOf="@+id/tvError"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mbNewPlaylist"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
     <TextView
         android:id="@+id/tvError"
-        style="@style/Text.MediaLibraryFragment"
+        style="@style/Text.MediaLibraryFragment.NotFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:text="@string/no_playlist_found"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imError" />
+        app:layout_constraintTop_toBottomOf="@+id/ivError" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/grNoPlaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="ivError,tvError" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

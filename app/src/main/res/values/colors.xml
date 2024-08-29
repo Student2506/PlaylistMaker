@@ -20,4 +20,7 @@
     <color name="progress_bar_tint">#3772E7</color>
     <color name="bottom_navigation_color">#FFFFFFFF</color>
     <color name="bottom_navigation_inactive">#1A1B22</color>
+    <color name="outline_edittext_inactive">#AEAFB4</color>
+    <color name="bottom_sheet_handle">#E6E8EB</color>
+    <color name="no_playlists">#000000</color>
 </resources>

@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
+    id("androidx.room")
 }
 
 android {
@@ -38,8 +39,15 @@ android {
     buildFeatures {
         viewBinding = true
     }
-}
 
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+
+}
+ksp {
+    arg("generateKotlin", "true")
+}
 dependencies {
     val room_version = "2.6.1"
     implementation("androidx.core:core-ktx:1.13.1")

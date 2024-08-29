@@ -1,4 +1,4 @@
-package com.example.android.playlistmaker.medialibrary.ui
+package com.example.android.playlistmaker.medialibrary.presentation
 
 import android.icu.text.SimpleDateFormat
 import android.util.TypedValue

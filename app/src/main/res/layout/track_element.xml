@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     style="@style/SongElement"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_60"
@@ -10,62 +11,91 @@
     <ImageView
         android:id="@+id/ivTrack"
         style="@style/Track.Icon"
-        android:layout_width="@dimen/dp_48"
-        android:layout_height="@dimen/dp_48"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="8dp"
         android:contentDescription="@string/track_description"
-        android:src="@color/black" />
+        android:src="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/left_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvTrackName"
-            style="@style/Track.Text.Header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Yesterday" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvArtistName"
-                style="@style/Track.Text.Detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="The Beatles" />
-
-            <ImageView
-                style="@style/Track.Separator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                android:src="@drawable/point" />
-
-            <TextView
-                android:id="@+id/tvTrackDuration"
-                style="@style/Track.Text.Detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="t:me" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <ImageView
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/dp_8"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/dp_64" />
+
+    <TextView
+        android:id="@+id/tvTrackName"
+        style="@style/Track.Text.Header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Yesterday" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/dp_64" />
+
+    <TextView
+        android:id="@+id/tvArtistName"
+        style="@style/Track.Text.Detail"
+        android:maxWidth="@dimen/dp_248"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivPointSeparator"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackName"
+        tools:text="The Beatles" />
+
+    <ImageView
+        android:id="@+id/ivPointSeparator"
+        style="@style/Track.Separator"
+        android:layout_width="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:importantForAccessibility="no"
+        android:src="@drawable/point"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvTrackDuration"
+        app:layout_constraintStart_toEndOf="@id/tvArtistName"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackName" />
+
+    <TextView
+        android:id="@+id/tvTrackDuration"
+        style="@style/Track.Text.Detail"
+        android:layout_width="@dimen/dp_36"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/right_guideline"
+        app:layout_constraintStart_toEndOf="@id/ivPointSeparator"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackName"
+        tools:text="t:me" />
+
+
+    <ImageView
+        android:id="@+id/ivOpenTrack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/go_to_details"
         android:src="@drawable/arrow_forward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/right_guideline"
+        app:layout_constraintTop_toTopOf="parent"
         app:tint="?attr/hintText" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
