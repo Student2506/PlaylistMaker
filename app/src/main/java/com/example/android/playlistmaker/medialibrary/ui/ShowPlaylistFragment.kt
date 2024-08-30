@@ -1,18 +1,26 @@
 package com.example.android.playlistmaker.medialibrary.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentShowPlaylistBinding
+import com.example.android.playlistmaker.medialibrary.domain.models.Track
 import com.example.android.playlistmaker.medialibrary.presentation.ShowPlaylistViewModel
 import com.example.android.playlistmaker.medialibrary.presentation.TrackAdapter
+import com.example.android.playlistmaker.player.ui.AudioPlayerActivity
+import com.example.android.playlistmaker.search.ui.SearchFragment.Companion.CLICK_DEBOUNCE_DELAY
+import com.example.android.playlistmaker.search.ui.SearchFragment.Companion.TRACK_TO_SHOW
+import com.example.android.playlistmaker.util.TrackConverter
+import com.example.android.playlistmaker.util.debounce
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,10 +39,23 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
     private val viewModel: ShowPlaylistViewModel by viewModel {
         parametersOf(playlist)
     }
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
+
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
-    private val adapter = TrackAdapter { track ->
-//        onTrackClickDebounce(track)
-    }
+    private val adapter = TrackAdapter(
+        object : TrackAdapter.TrackClickListener {
+            override fun onTrackClick(track: Track) {
+                onTrackClickDebounce(track)
+            }
+
+            override fun onTrackLongClick(track: Track): Boolean {
+                viewModel.requestToRemoveTrackFromPlaylist(playlist, track.trackId)
+                return true
+            }
+
+        }
+    )
+
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -47,7 +68,11 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPlaylist.adapter = adapter
-
+        onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { track ->
+            showTrack(track)
+        }
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -66,7 +91,7 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
                 .into(binding.ivPlaylistImage)
             binding.tvPlaylistName.text = playlist.title
-            binding.tvPlaylistDescription.text = playlist.description ?: ""
+            binding.tvPlaylistDescription.text = playlist.description ?: getString(R.string.no_description)
 
             if (playlist.tracks != null) {
                 var totalLength = 0L
@@ -98,5 +123,11 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         if (trackQty % 10 == 1L) return "$trackQty минута"
         if (trackQty % 10 in 2L..4L) return "$trackQty минуты"
         else return "$trackQty треков"
+    }
+
+    private fun showTrack(track: Track) {
+        val playertIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+        playertIntent.putExtra(TRACK_TO_SHOW, TrackConverter().map(track))
+        startActivity(playertIntent)
     }
 }

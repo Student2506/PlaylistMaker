@@ -33,10 +33,15 @@ class FavoriteTracksFragment : BindingFragment<FragmentFavoriteTracksBinding>() 
     private val viewModel by viewModel<FavoriteTracksViewModel>()
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
-    private val adapter = TrackAdapter { track ->
-        onTrackClickDebounce(track)
-    }
+    private val adapter = TrackAdapter(object : TrackAdapter.TrackClickListener {
+        override fun onTrackClick(track: Track) {
+            onTrackClickDebounce(track)
+        }
 
+        override fun onTrackLongClick(track: Track): Boolean {
+            return false
+        }
+    })
 
     override fun createBinding(
         inflater: LayoutInflater,

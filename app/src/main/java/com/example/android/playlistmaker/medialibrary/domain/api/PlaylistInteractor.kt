@@ -7,4 +7,5 @@ interface PlaylistInteractor {
     suspend fun createPlaylist(playlist: Playlist): Boolean
     suspend fun retreivePlaylists(): Flow<List<Playlist>>
     suspend fun retreivePlaylistById(playlistId: Long): Flow<Playlist>
+    suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long)
 }

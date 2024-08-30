@@ -30,4 +30,13 @@ class ShowPlaylistViewModel(
 
     fun tracksToPlaylistTracks(tracks: List<PlaylistTrack>): ArrayList<Track> =
         trackConverter.map(tracks)
+
+    fun requestToRemoveTrackFromPlaylist(playlistId: Long, trackId: Long) {
+        viewModelScope.launch {
+            playlistInteractor.removeTrackFromPlaylist(playlistId, trackId)
+            playlistInteractor.retreivePlaylistById(playlistId = playlistId).collect { playlist ->
+                _stateLiveData.postValue(playlist)
+            }
+        }
+    }
 }

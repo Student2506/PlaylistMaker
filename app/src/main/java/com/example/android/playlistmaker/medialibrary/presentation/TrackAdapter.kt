@@ -26,9 +26,11 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener { clickListener.onTrackClick(tracks[position]) }
+        holder.itemView.setOnLongClickListener { clickListener.onTrackLongClick(tracks[position]) }
     }
 
-    fun interface TrackClickListener {
+    interface TrackClickListener {
         fun onTrackClick(track: Track)
+        fun onTrackLongClick(track: Track): Boolean
     }
 }

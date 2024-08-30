@@ -32,4 +32,7 @@ class PlaylistRepositoryImpl(
         appDatabase.playlistDao().getPlaylistById(playlistId = playlistId)
             .map { playlistConverter.map(it) }
 
+    override suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long) {
+        appDatabase.playlistDao().removeTrackFromPlaylist(playlistId, trackId)
+    }
 }

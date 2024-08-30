@@ -29,4 +29,8 @@ interface PlaylistDao {
     @Transaction
     @Query("SELECT * FROM playlists WHERE playlistId = :playlistId")
     fun getPlaylistById(playlistId: Long): Flow<PlaylistWithTracksEntity>
+
+    @Transaction
+    @Query("DELETE FROM playlistTrackCrossRef WHERE playlistId = :playlistId AND trackId = :trackId")
+    fun removeTrackFromPlaylist(playlistId: Long, trackId: Long)
 }
