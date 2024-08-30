@@ -14,6 +14,8 @@ import com.example.android.playlistmaker.medialibrary.presentation.ShowPlaylistV
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
 
@@ -28,7 +30,6 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
     private val viewModel: ShowPlaylistViewModel by viewModel {
         parametersOf(playlist)
     }
-
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -49,8 +50,35 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             binding.tvPlaylistName.text = playlist.title
             binding.tvPlaylistDescription.text = playlist.description ?: ""
 
-            /* TODO Real text */
-            binding.tvTotalPLQty.text = playlist.tracks?.size.toString()
+            if (playlist.tracks != null) {
+                var totalLength = 0L
+                for (track in playlist.tracks) {
+                    totalLength += track.trackTime
+                }
+                val total = totalLength / 60000
+                binding.tvTotalPLLength.text = MinuteCount(total)
+                binding.tvTotalPLQty.text = TrackCount(playlist.tracks.size)
+            } else {
+                binding.tvTotalPLLength.text = MinuteCount(0L)
+                binding.tvTotalPLQty.text = TrackCount(0)
+            }
         }
+        binding.tbToolbar.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun TrackCount(trackQty: Int): String {
+        if (trackQty % 100 in 5..20) return "$trackQty треков"
+        if (trackQty % 10 == 1) return "$trackQty трек"
+        if (trackQty % 10 in 2..4) return "$trackQty трека"
+        else return "$trackQty треков"
+    }
+
+    private fun MinuteCount(trackQty: Long): String {
+        if (trackQty % 100 in 5L..20L) return "$trackQty минут"
+        if (trackQty % 10 == 1L) return "$trackQty минута"
+        if (trackQty % 10 in 2L..4L) return "$trackQty минуты"
+        else return "$trackQty треков"
     }
 }
