@@ -7,15 +7,16 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentShowPlaylistBinding
 import com.example.android.playlistmaker.medialibrary.presentation.ShowPlaylistViewModel
+import com.example.android.playlistmaker.medialibrary.presentation.TrackAdapter
 import com.example.android.playlistmaker.util.ui.BindingFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
 
@@ -30,6 +31,10 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
     private val viewModel: ShowPlaylistViewModel by viewModel {
         parametersOf(playlist)
     }
+    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
+    private val adapter = TrackAdapter { track ->
+//        onTrackClickDebounce(track)
+    }
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -38,13 +43,26 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvPlaylist.adapter = adapter
+
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().navigateUp()
                 }
             })
         viewModel.observeState().observe(viewLifecycleOwner) { playlist ->
+
+            if (playlist.tracks != null) adapter.updateRecycleView(
+                viewModel.tracksToPlaylistTracks(
+                    playlist.tracks
+                )
+            )
             Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
                 .into(binding.ivPlaylistImage)
             binding.tvPlaylistName.text = playlist.title

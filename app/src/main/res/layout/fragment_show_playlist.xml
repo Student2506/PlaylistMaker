@@ -133,6 +133,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvTotalPLLength" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:id="@+id/standard_bottom_sheet"
         android:layout_width="match_parent"
@@ -141,9 +142,9 @@
         android:background="@drawable/bottom_sheet_rounder"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="@dimen/dp_500"
+        android:visibility="visible"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="@dimen/dp_232"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View

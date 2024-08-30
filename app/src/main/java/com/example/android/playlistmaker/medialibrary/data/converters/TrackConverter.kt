@@ -58,4 +58,24 @@ class TrackConverter {
             )
         }
     }
+
+    fun map(tracks: List<PlaylistTrack>): ArrayList<Track> {
+        return ArrayList(tracks.map {
+            with(it) {
+                Track(
+                    trackId,
+                    trackName,
+                    artistName,
+                    trackTime,
+                    artworkUrl100,
+                    collectionName,
+                    primaryGenreName,
+                    releaseDate,
+                    country,
+                    previewUrl,
+                    createdAt = 0L
+                )
+            }
+        })
+    }
 }
