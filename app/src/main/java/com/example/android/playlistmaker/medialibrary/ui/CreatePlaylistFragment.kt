@@ -67,7 +67,11 @@ class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
         super.onViewCreated(view, savedInstanceState)
         confirmDialog =
             MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.is_finishing_playlist_creation))
-                .setPositiveButton(getString(R.string.finish_option)) { _, _ ->
+                .setMessage(
+                    getString(
+                        R.string.lost_data_warning
+                    )
+                ).setPositiveButton(getString(R.string.finish_option)) { _, _ ->
                     if (isAudioPlayer) {
                         (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
                     } else {
@@ -170,8 +174,6 @@ class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
             isCoverEmpty = binding.ivPlaylistCover.paddingTop == 0
         }
         binding.bCreatePlaylist.setOnClickListener {
-            Log.d(TAG, "create playlist button")
-
             viewModel.savePlaylist(
                 binding.tietPlaylistTitle.text.toString(),
                 binding.tietPlaylistDescription.text.toString()

@@ -63,4 +63,8 @@
     <string name="yes_option">Да</string>
     <string name="playlist_remove_request">Хотите удалить плейлист?</string>
     <string name="no_option">Нет</string>
+    <string name="remove_track_title">Удалить трек</string>
+    <string name="remove_track_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="confirm_remove_option">Удалить</string>
+    <string name="lost_data_warning">Все несохраненные данные будут потеряны</string>
 </resources>

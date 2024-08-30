@@ -41,22 +41,26 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         parametersOf(playlist)
     }
     private lateinit var onTrackClickDebounce: (Track) -> Unit
+    private var confirmDialog: MaterialAlertDialogBuilder? = null
 
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
-    private val adapter = TrackAdapter(
-        object : TrackAdapter.TrackClickListener {
-            override fun onTrackClick(track: Track) {
-                onTrackClickDebounce(track)
-            }
-
-            override fun onTrackLongClick(track: Track): Boolean {
-                viewModel.requestToRemoveTrackFromPlaylist(playlist, track.trackId)
-                return true
-            }
-
+    private val adapter = TrackAdapter(object : TrackAdapter.TrackClickListener {
+        override fun onTrackClick(track: Track) {
+            onTrackClickDebounce(track)
         }
-    )
 
+        override fun onTrackLongClick(track: Track): Boolean {
+            confirmDialog =
+                MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.remove_track_title)
+                    .setMessage(R.string.remove_track_message)
+                    .setPositiveButton(getString(R.string.confirm_remove_option)) { _, _ ->
+                        viewModel.requestToRemoveTrackFromPlaylist(playlist, track.trackId)
+                    }.setNegativeButton(getString(R.string.cancel_option)) { _, _ ->
+                    }
+            confirmDialog?.show()
+            return true
+        }
+    })
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -67,7 +71,6 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         super.onViewCreated(view, savedInstanceState)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-
         binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPlaylist.adapter = adapter
         onTrackClickDebounce = debounce<Track>(
@@ -76,15 +79,13 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             showTrack(track)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().navigateUp()
                 }
             })
         viewModel.observeState().observe(viewLifecycleOwner) { playlist ->
-
             if (playlist.tracks != null) adapter.updateRecycleView(
                 viewModel.tracksToPlaylistTracks(
                     playlist.tracks
@@ -93,7 +94,8 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
                 .into(binding.ivPlaylistImage)
             binding.tvPlaylistName.text = playlist.title
-            binding.tvPlaylistDescription.text = playlist.description ?: getString(R.string.no_description)
+            binding.tvPlaylistDescription.text =
+                playlist.description ?: getString(R.string.no_description)
 
             if (playlist.tracks != null) {
                 var totalLength = 0L
