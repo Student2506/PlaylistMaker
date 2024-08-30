@@ -34,5 +34,7 @@ class PlaylistRepositoryImpl(
 
     override suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long) {
         appDatabase.playlistDao().removeTrackFromPlaylist(playlistId, trackId)
+        val leftInPlaylist = appDatabase.playlistDao().countTrackInPlaylist(trackId)
+        if (leftInPlaylist == 0) appDatabase.playlistDao().removeTrackEntity(trackId)
     }
 }

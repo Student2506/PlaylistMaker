@@ -60,4 +60,7 @@
     <string name="more_options">Больше опций</string>
     <string name="share_playlist">Поделиться</string>
     <string name="no_description">Нет описания</string>
+    <string name="yes_option">Да</string>
+    <string name="playlist_remove_request">Хотите удалить плейлист?</string>
+    <string name="no_option">Нет</string>
 </resources>

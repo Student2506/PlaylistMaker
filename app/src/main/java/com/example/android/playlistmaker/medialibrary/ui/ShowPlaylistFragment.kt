@@ -23,6 +23,7 @@ import com.example.android.playlistmaker.util.TrackConverter
 import com.example.android.playlistmaker.util.debounce
 import com.example.android.playlistmaker.util.ui.BindingFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -66,6 +67,7 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         super.onViewCreated(view, savedInstanceState)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+
         binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPlaylist.adapter = adapter
         onTrackClickDebounce = debounce<Track>(

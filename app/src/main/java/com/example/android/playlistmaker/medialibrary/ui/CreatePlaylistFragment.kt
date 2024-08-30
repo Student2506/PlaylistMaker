@@ -77,8 +77,7 @@ class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
 
                 }
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
