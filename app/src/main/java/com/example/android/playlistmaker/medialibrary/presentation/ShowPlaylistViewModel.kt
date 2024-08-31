@@ -1,5 +1,7 @@
 package com.example.android.playlistmaker.medialibrary.presentation
 
+import android.icu.text.DecimalFormat
+import android.icu.text.NumberFormat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +12,8 @@ import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ShowPlaylistViewModel(
     private val playlistId: Long,
@@ -38,5 +42,35 @@ class ShowPlaylistViewModel(
                 _stateLiveData.postValue(playlist)
             }
         }
+    }
+
+    fun buildMessage(): String {
+        val playlist = _stateLiveData.value
+        val sb = StringBuilder()
+        val timeFormatter: SimpleDateFormat = SimpleDateFormat(
+            "mm:ss", Locale.getDefault()
+        )
+        sb.append("Название: ${playlist?.title}\n")
+        if (!playlist?.description.isNullOrBlank()) {
+            sb.append("Описание: ${playlist?.description}\n")
+        }
+        sb.append("${TrackCount(playlist?.tracks?.size, true)}\n")
+        playlist?.tracks?.forEachIndexed { i, elem ->
+            sb.append("${i+1}.${elem.artistName} - ${elem.trackName} (${timeFormatter.format(elem.trackTime)})\n")
+        }
+        return sb.toString()
+    }
+
+    fun TrackCount(trackQty: Int?, isTwoDigit: Boolean = false): String {
+        if (trackQty == null || trackQty == 0) return "0 треков"
+        var number = trackQty.toString()
+        if (isTwoDigit) {
+            val f: NumberFormat = DecimalFormat("00")
+            number = f.format(trackQty)
+        }
+        if (trackQty % 100 in 5..20) return "$number треков"
+        if (trackQty % 10 == 1) return "$number трек"
+        if (trackQty % 10 in 2..4) return "$number трека"
+        else return "$trackQty треков"
     }
 }

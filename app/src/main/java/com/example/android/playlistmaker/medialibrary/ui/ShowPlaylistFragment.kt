@@ -79,7 +79,8 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             showTrack(track)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().navigateUp()
@@ -104,23 +105,24 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
                 }
                 val total = totalLength / 60000
                 binding.tvTotalPLLength.text = MinuteCount(total)
-                binding.tvTotalPLQty.text = TrackCount(playlist.tracks.size)
+                binding.tvTotalPLQty.text = viewModel.TrackCount(playlist.tracks.size)
             } else {
                 binding.tvTotalPLLength.text = MinuteCount(0L)
-                binding.tvTotalPLQty.text = TrackCount(0)
+                binding.tvTotalPLQty.text = viewModel.TrackCount(0)
             }
         }
         binding.tbToolbar.setOnClickListener {
             findNavController().navigateUp()
         }
+        binding.ivShare.setOnClickListener {
+            val message = viewModel.buildMessage()
+            val shareAppIntent = Intent(Intent.ACTION_SEND)
+            shareAppIntent.setType("text/plain")
+            shareAppIntent.putExtra(Intent.EXTRA_TEXT, message)
+            startActivity(shareAppIntent)
+        }
     }
 
-    private fun TrackCount(trackQty: Int): String {
-        if (trackQty % 100 in 5..20) return "$trackQty треков"
-        if (trackQty % 10 == 1) return "$trackQty трек"
-        if (trackQty % 10 in 2..4) return "$trackQty трека"
-        else return "$trackQty треков"
-    }
 
     private fun MinuteCount(trackQty: Long): String {
         if (trackQty % 100 in 5L..20L) return "$trackQty минут"
