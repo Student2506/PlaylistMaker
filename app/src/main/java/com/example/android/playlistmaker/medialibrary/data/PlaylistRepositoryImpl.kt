@@ -8,6 +8,8 @@ import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrac
 import com.example.android.playlistmaker.util.data.db.AppDatabase
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistWithTracksEntity
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -48,10 +50,15 @@ class PlaylistRepositoryImpl(
     }
 
     override suspend fun removePlaylist(playlistId: Long) {
-        Log.d(TAG, "Trying to remove")
-        GlobalScope.launch {
-            appDatabase.playlistDao().removePlaylist(playlistId)
-            appDatabase.playlistDao().cleanupTracks()
+        coroutineScope {
+            val removeData = async { appDatabase.playlistDao().removePlaylist(playlistId) }
+            val removeTheRest = async { appDatabase.playlistDao().cleanupTracks() }
+            launch {
+                removeData.await()
+                removeTheRest.await()
+            }
         }
+
+
     }
 }
