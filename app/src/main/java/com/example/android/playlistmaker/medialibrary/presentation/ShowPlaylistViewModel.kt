@@ -2,6 +2,8 @@ package com.example.android.playlistmaker.medialibrary.presentation
 
 import android.icu.text.DecimalFormat
 import android.icu.text.NumberFormat
+import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,6 +23,9 @@ class ShowPlaylistViewModel(
     private val trackConverter: TrackConverter,
 ) : ViewModel() {
 
+    companion object {
+        private const val TAG = "ShowPlaylistViewModel"
+    }
     private val _stateLiveData = MutableLiveData<Playlist>()
     fun observeState(): LiveData<Playlist> = _stateLiveData
 
@@ -38,6 +43,16 @@ class ShowPlaylistViewModel(
     fun requestToRemoveTrackFromPlaylist(playlistId: Long, trackId: Long) {
         viewModelScope.launch {
             playlistInteractor.removeTrackFromPlaylist(playlistId, trackId)
+            playlistInteractor.retreivePlaylistById(playlistId = playlistId).collect { playlist ->
+                _stateLiveData.postValue(playlist)
+            }
+        }
+    }
+
+    fun removePlaylist(playlistId: Long) {
+        viewModelScope.launch {
+            Log.d(TAG, "Start remove playlist")
+            playlistInteractor.removePlaylist(playlistId)
             playlistInteractor.retreivePlaylistById(playlistId = playlistId).collect { playlist ->
                 _stateLiveData.postValue(playlist)
             }

@@ -51,4 +51,5 @@
     <dimen name="sp_18">18sp</dimen>
     <dimen name="dp_266">266dp</dimen>
     <dimen name="dp_232">232dp</dimen>
+    <dimen name="dp_384">384dp</dimen>
 </resources>

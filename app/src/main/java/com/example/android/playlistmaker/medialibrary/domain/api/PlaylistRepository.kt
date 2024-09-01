@@ -8,4 +8,5 @@ interface PlaylistRepository {
     suspend fun retrievePlaylists(): Flow<List<Playlist>>
     suspend fun retrievePlaylistById(playlistId: Long): Flow<Playlist>
     suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long)
+    suspend fun removePlaylist(playlistId: Long)
 }

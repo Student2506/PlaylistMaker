@@ -27,7 +27,7 @@ interface PlaylistDao {
     @Query("DELETE FROM playlist_tracks WHERE trackId = :trackId")
     suspend fun removeTrackEntity(trackId: Long)
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(PlaylistTrackCrossRef::class, onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPlaylistWithTrack(playlistTrackCrossRef: PlaylistTrackCrossRef)
 
     @Transaction
@@ -40,4 +40,12 @@ interface PlaylistDao {
 
     @Query("SELECT COUNT(*) FROM playlistTrackCrossRef WHERE trackId = :trackId")
     suspend fun countTrackInPlaylist(trackId: Long): Int
+
+    @Query("DELETE FROM playlists WHERE playlistId = :playlistId")
+    suspend fun removePlaylist(playlistId: Long)
+
+    @Query("DELETE FROM playlisttrackcrossref WHERE playlistId = :playlistId")
+    suspend fun simpleRemovePlaylist(playlistId: Long)
+
+
 }

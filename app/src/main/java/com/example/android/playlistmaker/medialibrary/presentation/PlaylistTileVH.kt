@@ -22,8 +22,6 @@ class PlaylistTileVH(private val view: View) : RecyclerView.ViewHolder(view) {
 
         title.text = playlist.title
         trackQty.text = TrackCount(playlist.tracks?.size ?: 0)
-        Log.d(TAG, playlist.imageUrl ?: "Have null")
-        Log.d(TAG, "Size ${playlist.imageUrl?.length}")
         if (!playlist.imageUrl.isNullOrEmpty()) {
             Glide.with(itemView.context).load(playlist.imageUrl)
                 .placeholder(R.drawable.placeholder_no_cover)

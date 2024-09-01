@@ -135,14 +135,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/standard_bottom_sheet"
+        android:id="@+id/playlistContent"
+        style="@style/BottomSheetMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@drawable/bottom_sheet_rounder"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="visible"
         app:behavior_hideable="false"
         app:behavior_peekHeight="@dimen/dp_232"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -162,7 +158,95 @@
             android:layout_weight="1"
             android:scrollbars="vertical" />
 
-
     </LinearLayout>
 
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/additional_menu"
+        style="@style/BottomSheetMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="@dimen/dp_384"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_4"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_12"
+            android:background="@drawable/rounder" />
+
+        <LinearLayout
+            style="@style/SongElement"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60">
+
+            <ImageView
+                android:id="@+id/ivPlaylist"
+                style="@style/Track.Icon"
+                android:layout_width="@dimen/dp_48"
+                android:layout_height="@dimen/dp_48"
+                android:contentDescription="@string/track_description"
+                android:src="@color/black" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvPlaylistTitle"
+                    style="@style/Track.Text.Header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Yesterday" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvTrackQty"
+                        style="@style/Track.Text.Detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="The Beatles" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvShare"
+            style="@style/BottomSheetMoreOptions"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:text="@string/share_option" />
+
+        <TextView
+            android:id="@+id/tvEdit"
+            style="@style/BottomSheetMoreOptions"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:text="@string/edit_option" />
+
+        <TextView
+            android:id="@+id/tvRemove"
+            style="@style/BottomSheetMoreOptions"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:text="@string/remove_option" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

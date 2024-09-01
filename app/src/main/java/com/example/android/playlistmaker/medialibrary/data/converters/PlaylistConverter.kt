@@ -30,5 +30,15 @@ class PlaylistConverter(
         }
     }
 
+    fun mapToPlaylistEntity(playlistEntity: PlaylistWithTracksEntity): PlaylistEntity {
+        return with(playlistEntity.playlist) {
+            PlaylistEntity(
+                playlistId = playlistId,
+                playlistTitle = playlistTitle,
+                playlistDescription = playlistDescription,
+                coverPath = coverPath
+            )
+        }
+    }
 
 }

@@ -1,8 +1,10 @@
 package com.example.android.playlistmaker.medialibrary.data
 
+import android.util.Log
 import com.example.android.playlistmaker.medialibrary.data.converters.PlaylistConverter
 import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistRepository
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
+import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.util.data.db.AppDatabase
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistWithTracksEntity
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +14,11 @@ class PlaylistRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val playlistConverter: PlaylistConverter,
 ) : PlaylistRepository {
+
+    companion object {
+        private const val TAG = "PlaylistRepositoryImpl"
+    }
+
     override suspend fun createPlaylist(playlist: Playlist): Boolean {
         val playlistEntity = playlistConverter.map(playlist)
         val inserted = appDatabase.playlistDao().insertPlaylist(playlistEntity)
@@ -36,5 +43,18 @@ class PlaylistRepositoryImpl(
         appDatabase.playlistDao().removeTrackFromPlaylist(playlistId, trackId)
         val leftInPlaylist = appDatabase.playlistDao().countTrackInPlaylist(trackId)
         if (leftInPlaylist == 0) appDatabase.playlistDao().removeTrackEntity(trackId)
+    }
+
+    override suspend fun removePlaylist(playlistId: Long) {
+        Log.d(TAG, "Trying to remove")
+//        appDatabase.playlistDao().getPlaylistById(playlistId = playlistId)
+//            .map { playlistConverter.map(it) }.collect {
+//                for (track: PlaylistTrack in it.tracks!!) {
+//                    Log.d(TAG, "Track $track")
+//                }
+//            }
+        appDatabase.playlistDao().removePlaylist(playlistId)
+//        appDatabase.playlistDao().simpleRemovePlaylist(playlistId)
+
     }
 }

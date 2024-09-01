@@ -67,4 +67,9 @@
     <string name="remove_track_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
     <string name="confirm_remove_option">Удалить</string>
     <string name="lost_data_warning">Все несохраненные данные будут потеряны</string>
+    <string name="share_option">Поделиться</string>
+    <string name="edit_option">Редактировать информацию</string>
+    <string name="remove_option">Удалить плейлист</string>
+    <string name="remove_playlist_request">Удалить плейлист</string>
+    <string name="remove_playlist_confirmation">Хотите удалить плейлист «%1$s»?</string>
 </resources>

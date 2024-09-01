@@ -2,11 +2,13 @@ package com.example.android.playlistmaker.medialibrary.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,7 +45,8 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
     private lateinit var onTrackClickDebounce: (Track) -> Unit
     private var confirmDialog: MaterialAlertDialogBuilder? = null
 
-    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
+    private var playlistBottomSheetBehavior: BottomSheetBehavior<View>? = null
+    private var additionalMenuBottomSheetBehavior: BottomSheetBehavior<View>? = null
     private val adapter = TrackAdapter(object : TrackAdapter.TrackClickListener {
         override fun onTrackClick(track: Track) {
             onTrackClickDebounce(track)
@@ -69,8 +72,27 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
-        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        playlistBottomSheetBehavior = BottomSheetBehavior.from(binding.playlistContent)
+        playlistBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        additionalMenuBottomSheetBehavior = BottomSheetBehavior.from(binding.additionalMenu)
+        additionalMenuBottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+        additionalMenuBottomSheetBehavior?.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED, BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                        binding.overlay.isVisible = true
+                    }
+
+                    else -> {
+                        binding.overlay.isVisible = false
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
         binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPlaylist.adapter = adapter
         onTrackClickDebounce = debounce<Track>(
@@ -79,8 +101,7 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             showTrack(track)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().navigateUp()
@@ -94,10 +115,15 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             )
             Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
                 .into(binding.ivPlaylistImage)
+
             binding.tvPlaylistName.text = playlist.title
             binding.tvPlaylistDescription.text =
                 playlist.description ?: getString(R.string.no_description)
 
+            Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
+                .into(binding.ivPlaylist)
+            binding.tvPlaylistTitle.text = playlist.title
+            binding.tvTrackQty.text = viewModel.TrackCount(playlist.tracks?.size ?: 0)
             if (playlist.tracks != null) {
                 var totalLength = 0L
                 for (track in playlist.tracks) {
@@ -115,12 +141,34 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             findNavController().navigateUp()
         }
         binding.ivShare.setOnClickListener {
-            val message = viewModel.buildMessage()
-            val shareAppIntent = Intent(Intent.ACTION_SEND)
-            shareAppIntent.setType("text/plain")
-            shareAppIntent.putExtra(Intent.EXTRA_TEXT, message)
-            startActivity(shareAppIntent)
+            ShareOption()
         }
+        binding.tvShare.setOnClickListener {
+            ShareOption()
+        }
+        binding.tvRemove.setOnClickListener {
+            confirmDialog =
+                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.remove_playlist_request))
+                    .setMessage(getString(R.string.remove_playlist_confirmation, binding.tvPlaylistName.text))
+                    .setPositiveButton(getString(R.string.yes_option)) { _, _ ->
+                        viewModel.removePlaylist(playlist)
+                        findNavController().navigateUp()
+                    }.setNegativeButton(getString(R.string.no_option)) { _, _ ->
+                    }
+            confirmDialog?.show()
+
+        }
+        binding.ivMore.setOnClickListener {
+            additionalMenuBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun ShareOption() {
+        val message = viewModel.buildMessage()
+        val shareAppIntent = Intent(Intent.ACTION_SEND)
+        shareAppIntent.setType("text/plain")
+        shareAppIntent.putExtra(Intent.EXTRA_TEXT, message)
+        startActivity(shareAppIntent)
     }
 
 
