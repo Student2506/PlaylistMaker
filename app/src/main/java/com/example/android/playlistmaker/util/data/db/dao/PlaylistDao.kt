@@ -47,5 +47,6 @@ interface PlaylistDao {
     @Query("DELETE FROM playlisttrackcrossref WHERE playlistId = :playlistId")
     suspend fun simpleRemovePlaylist(playlistId: Long)
 
-
+    @Query("DELETE FROM playlist_tracks WHERE trackId IN (SELECT trackId FROM playlist_tracks WHERE trackId NOT IN (SELECT trackId from playlisttrackcrossref))")
+    suspend fun cleanupTracks()
 }
