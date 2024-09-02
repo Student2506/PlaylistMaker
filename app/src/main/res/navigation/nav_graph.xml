@@ -33,10 +33,18 @@
         android:id="@+id/showPlaylistFragment"
         android:name="com.example.android.playlistmaker.medialibrary.ui.ShowPlaylistFragment"
         android:label="fragment_show_playlist"
-        tools:layout="@layout/fragment_show_playlist" />
+        tools:layout="@layout/fragment_show_playlist" >
+        <action
+            android:id="@+id/action_showPlaylistFragment_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
     <fragment
         android:id="@+id/playlistFragment"
         android:name="com.example.android.playlistmaker.medialibrary.ui.PlaylistFragment"
         android:label="fragment_playlist"
         tools:layout="@layout/fragment_playlist" />
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.example.android.playlistmaker.medialibrary.ui.EditPlaylistFragment"
+        android:label="EditPlaylistFragment" />
 </navigation>

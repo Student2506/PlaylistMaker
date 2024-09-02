@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -20,7 +21,7 @@ import java.io.File
 import java.io.FileOutputStream
 import kotlin.io.path.createTempFile
 
-class CreatePlaylistViewModel(
+open class CreatePlaylistViewModel(
     application: Application,
     private val playlistInteractor: PlaylistInteractor,
 ) : AndroidViewModel(application) {
@@ -29,14 +30,14 @@ class CreatePlaylistViewModel(
         private const val TAG = "CreatePlaylistViewModel"
     }
 
-    private val stateLiveData = MutableLiveData<Uri>()
+    protected val stateLiveData = MutableLiveData<Uri>()
     fun observeState(): LiveData<Uri> = stateLiveData
-    private val toastLiveData = SingleLiveEvent<String>()
+    protected val toastLiveData = SingleLiveEvent<String>()
     fun observeToastLiveData(): LiveData<String> = toastLiveData
 
     private var currentUri: Uri? = null
 
-    fun chooseFileCopyToCache(uri: Uri) {
+    fun chooseFileCopyToCache(uri: Uri): Uri? {
         val filePath = createTempFile()
         val file = File(filePath.toUri())
         val inputStream = getApplication<PlaylistMakerApp>().contentResolver.openInputStream(uri)
@@ -46,9 +47,10 @@ class CreatePlaylistViewModel(
         inputStream?.close()
         stateLiveData.postValue(file.toUri())
         currentUri = file.toUri()
+        return currentUri
     }
 
-    fun saveImageToPrivateStorage(albumTitle: String) {
+    fun saveImageToPrivateStorage(albumTitle: String, image: String?): Uri? {
         val filePath = File(
             getApplication<PlaylistMakerApp>().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
             "myalbums"
@@ -57,9 +59,9 @@ class CreatePlaylistViewModel(
             filePath.mkdirs()
         }
 
-        if (stateLiveData.value != null) {
+        if (image != null) {
             val inputStream =
-                getApplication<PlaylistMakerApp>().contentResolver.openInputStream(stateLiveData.value!!)
+                getApplication<PlaylistMakerApp>().contentResolver.openInputStream(image.toUri())
             val file = File(filePath, albumTitle)
 
             val outputStream = FileOutputStream(file)
@@ -73,12 +75,13 @@ class CreatePlaylistViewModel(
             outputStream.close()
             stateLiveData.postValue(file.toUri())
             currentUri = file.toUri()
+            return currentUri
         }
-
+        return null
     }
 
-    fun savePlaylist(title: String, description: String?) {
-        saveImageToPrivateStorage(title)
+    open fun savePlaylist(title: String, description: String?) {
+        saveImageToPrivateStorage(title, currentUri.toString())
         viewModelScope.launch {
             playlistInteractor.createPlaylist(
                 Playlist(

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistEntity
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistTrackCrossRef
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistTrackEntity
@@ -18,7 +19,7 @@ interface PlaylistDao {
     @Query("SELECT * From playlists")
     fun getPlaylistsWithTracks(): Flow<List<PlaylistWithTracksEntity>>
 
-    @Insert(PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    @Upsert(PlaylistEntity::class)
     suspend fun insertPlaylist(playlistEntity: PlaylistEntity): Long
 
     @Insert(PlaylistTrackEntity::class, onConflict = OnConflictStrategy.REPLACE)

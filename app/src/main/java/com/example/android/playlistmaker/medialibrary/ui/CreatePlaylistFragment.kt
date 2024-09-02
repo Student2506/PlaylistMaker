@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
@@ -30,7 +31,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
+open class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
     BindingFragment<FragmentCreatePlaylistBinding>() {
 
     companion object {
@@ -47,6 +48,17 @@ class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
     private var isDescriptionEmpty = true
     private var isCoverEmpty = true
     private var confirmDialog: MaterialAlertDialogBuilder? = null
+
+    protected val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
+                confirmDialog?.show()
+            } else {
+                if (isAudioPlayer) (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
+                else findNavController().navigateUp()
+            }
+        }
+    }
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -81,17 +93,9 @@ class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
 
                 }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
-                        confirmDialog?.show()
-                    } else {
-                        if (isAudioPlayer) (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
-                        else findNavController().navigateUp()
-                    }
-                }
-            })
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+
         binding.tbToolbar.setOnClickListener {
             if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
                 confirmDialog?.show()
@@ -138,7 +142,7 @@ class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
                                 requireContext().resources.displayMetrics
                             ).toInt()
                         )
-                    ).into(binding.ivPlaylistCover)
+                    ).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.ivPlaylistCover)
                     viewModel.chooseFileCopyToCache(uri)
                 } else {
                     Log.d(TAG, "No media selected")

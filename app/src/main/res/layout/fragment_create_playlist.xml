@@ -15,8 +15,8 @@
     <com.example.android.playlistmaker.medialibrary.ui.ModifiedImageView
         android:id="@+id/ivPlaylistCover"
         style="@style/CreatePlaylistPreview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:src="@drawable/add_playlist" />
 
     <com.google.android.material.textfield.TextInputLayout

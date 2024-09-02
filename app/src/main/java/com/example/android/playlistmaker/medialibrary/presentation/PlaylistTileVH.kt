@@ -1,11 +1,11 @@
 package com.example.android.playlistmaker.medialibrary.presentation
 
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
@@ -33,7 +33,7 @@ class PlaylistTileVH(private val view: View) : RecyclerView.ViewHolder(view) {
                             view.context.resources.displayMetrics
                         ).toInt()
                     )
-                ).into(cover)
+                ).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(cover)
         } else {
             cover.setImageResource(R.drawable.placeholder_no_cover)
         }

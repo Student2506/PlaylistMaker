@@ -10,7 +10,7 @@ class PlaylistConverter(
     fun map(playlist: Playlist): PlaylistEntity {
         return with(playlist) {
             PlaylistEntity(
-                playlistId = 0,
+                playlistId = id ?: 0,
                 playlistTitle = title,
                 playlistDescription = description,
                 coverPath = imageUrl,

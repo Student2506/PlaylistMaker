@@ -72,4 +72,6 @@
     <string name="remove_option">Удалить плейлист</string>
     <string name="remove_playlist_request">Удалить плейлист</string>
     <string name="remove_playlist_confirmation">Хотите удалить плейлист «%1$s»?</string>
+    <string name="save_button">Сохранить</string>
+    <string name="edit_title">Редактировать</string>
 </resources>

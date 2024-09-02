@@ -2,7 +2,6 @@ package com.example.android.playlistmaker.medialibrary.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentShowPlaylistBinding
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
@@ -114,14 +114,18 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
                 )
             )
             Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
-                .into(binding.ivPlaylistImage)
+                .diskCacheStrategy(
+                    DiskCacheStrategy.NONE
+                ).skipMemoryCache(true).into(binding.ivPlaylistImage)
 
             binding.tvPlaylistName.text = playlist.title
             binding.tvPlaylistDescription.text =
                 playlist.description ?: getString(R.string.no_description)
 
             Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
-                .into(binding.ivPlaylist)
+                .diskCacheStrategy(
+                    DiskCacheStrategy.NONE
+                ).skipMemoryCache(true).into(binding.ivPlaylist)
             binding.tvPlaylistTitle.text = playlist.title
             binding.tvTrackQty.text = viewModel.TrackCount(playlist.tracks?.size ?: 0)
             if (playlist.tracks != null) {
@@ -149,8 +153,11 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         binding.tvRemove.setOnClickListener {
             confirmDialog =
                 MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.remove_playlist_request))
-                    .setMessage(getString(R.string.remove_playlist_confirmation, binding.tvPlaylistName.text))
-                    .setPositiveButton(getString(R.string.yes_option)) { _, _ ->
+                    .setMessage(
+                        getString(
+                            R.string.remove_playlist_confirmation, binding.tvPlaylistName.text
+                        )
+                    ).setPositiveButton(getString(R.string.yes_option)) { _, _ ->
                         viewModel.removePlaylist(playlist)
                         findNavController().navigateUp()
                     }.setNegativeButton(getString(R.string.no_option)) { _, _ ->
@@ -160,6 +167,12 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         }
         binding.ivMore.setOnClickListener {
             additionalMenuBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        binding.tvEdit.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_showPlaylistFragment_to_editPlaylistFragment,
+                EditPlaylistFragment.createArgs(playlist)
+            )
         }
     }
 
