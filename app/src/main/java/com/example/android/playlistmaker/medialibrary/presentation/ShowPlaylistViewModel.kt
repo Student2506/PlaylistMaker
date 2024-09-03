@@ -12,7 +12,6 @@ import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistInterac
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
-import com.example.android.playlistmaker.search.di.viewModelModule
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -36,9 +35,10 @@ class ShowPlaylistViewModel(
         viewModelScope.launch {
             playlistInteractor.retrieveTracksOrdered(playlistId = playlistId).collect { tracks ->
                 _stateTracksLiveData.postValue(tracks)
-                playlistInteractor.retreivePlaylistById(playlistId = playlistId).collect { playlist ->
-                    _stateLiveData.postValue(playlist)
-                }
+                playlistInteractor.retreivePlaylistById(playlistId = playlistId)
+                    .collect { playlist ->
+                        _stateLiveData.postValue(playlist)
+                    }
             }
         }
     }
@@ -49,8 +49,12 @@ class ShowPlaylistViewModel(
     fun requestToRemoveTrackFromPlaylist(playlistId: Long, trackId: Long) {
         viewModelScope.launch {
             playlistInteractor.removeTrackFromPlaylist(playlistId, trackId)
-            playlistInteractor.retreivePlaylistById(playlistId = playlistId).collect { playlist ->
-                _stateLiveData.postValue(playlist)
+            playlistInteractor.retrieveTracksOrdered(playlistId = playlistId).collect { tracks ->
+                _stateTracksLiveData.postValue(tracks)
+                playlistInteractor.retreivePlaylistById(playlistId = playlistId)
+                    .collect { playlist ->
+                        _stateLiveData.postValue(playlist)
+                    }
             }
         }
     }

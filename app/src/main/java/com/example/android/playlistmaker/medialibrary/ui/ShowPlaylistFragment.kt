@@ -102,8 +102,7 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             showTrack(track)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().navigateUp()
@@ -115,14 +114,21 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             tracksForPlaylistOrder.addAll(tracks)
 
         }
+        var trackCount = 0
         viewModel.observeState().observe(viewLifecycleOwner) { playlist ->
-
-            if (playlist.tracks != null) {
+            if (playlist.tracks != null && playlist.tracks.size != 0) {
+                trackCount = playlist.tracks.size
                 adapter.updateRecycleView(
                     viewModel.tracksToPlaylistTracks(
                         tracksForPlaylistOrder
                     )
                 )
+            } else {
+                val dialog = MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.no_tracks_message))
+                    .setPositiveButton(getString(R.string.confirm_button)) { _, _ ->
+                    }
+                dialog.show()
             }
 
             Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
@@ -157,10 +163,24 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             findNavController().navigateUp()
         }
         binding.ivShare.setOnClickListener {
-            ShareOption()
+            if(trackCount > 0) {
+                ShareOption()
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.no_tracks_to_share))
+                    .setPositiveButton(getString(R.string.confirm_button)) { _, _ ->
+                    }.show()
+            }
         }
         binding.tvShare.setOnClickListener {
-            ShareOption()
+            if(trackCount > 0) {
+                ShareOption()
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.no_tracks_to_share))
+                    .setPositiveButton(getString(R.string.confirm_button)) { _, _ ->
+                    }.show()
+            }
         }
         binding.tvRemove.setOnClickListener {
             confirmDialog =
