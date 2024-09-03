@@ -2,10 +2,12 @@ package com.example.android.playlistmaker.medialibrary.data
 
 import android.util.Log
 import com.example.android.playlistmaker.medialibrary.data.converters.PlaylistConverter
+import com.example.android.playlistmaker.medialibrary.data.converters.TrackConverter
 import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistRepository
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.util.data.db.AppDatabase
+import com.example.android.playlistmaker.util.data.db.entity.PlaylistTrackEntity
 import com.example.android.playlistmaker.util.data.db.entity.PlaylistWithTracksEntity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
 class PlaylistRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val playlistConverter: PlaylistConverter,
+    private val trackConverter: TrackConverter
 ) : PlaylistRepository {
 
     companion object {
@@ -58,7 +61,11 @@ class PlaylistRepositoryImpl(
                 removeTheRest.await()
             }
         }
+    }
 
-
+    override suspend fun retrieveTracksOrdered(playlistId: Long): Flow<List<PlaylistTrack>> {
+        return appDatabase.playlistDao().getTracksByOrderByPlaylistId(playlistId).map {
+            trackConverter.mapEntity(it)
+        }
     }
 }

@@ -78,4 +78,23 @@ class TrackConverter {
             }
         })
     }
+
+    fun mapEntity(tracks: List<PlaylistTrackEntity>): ArrayList<PlaylistTrack> {
+        return ArrayList(tracks.map {
+            with(it) {
+                PlaylistTrack(
+                    trackId,
+                    trackName,
+                    artistName,
+                    trackTime,
+                    artworkUrl100,
+                    collectionName,
+                    primaryGenreName,
+                    releaseDate,
+                    country,
+                    previewUrl,
+                )
+            }
+        })
+    }
 }

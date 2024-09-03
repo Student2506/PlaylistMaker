@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.android.playlistmaker.R
 import com.example.android.playlistmaker.databinding.FragmentShowPlaylistBinding
+import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
 import com.example.android.playlistmaker.medialibrary.presentation.ShowPlaylistViewModel
 import com.example.android.playlistmaker.medialibrary.presentation.TrackAdapter
@@ -101,18 +102,29 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             showTrack(track)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().navigateUp()
                 }
             })
+        val tracksForPlaylistOrder = ArrayList<PlaylistTrack>()
+        viewModel.observeOrderedTracks().observe(viewLifecycleOwner) { tracks ->
+            tracksForPlaylistOrder.clear()
+            tracksForPlaylistOrder.addAll(tracks)
+
+        }
         viewModel.observeState().observe(viewLifecycleOwner) { playlist ->
-            if (playlist.tracks != null) adapter.updateRecycleView(
-                viewModel.tracksToPlaylistTracks(
-                    playlist.tracks
+
+            if (playlist.tracks != null) {
+                adapter.updateRecycleView(
+                    viewModel.tracksToPlaylistTracks(
+                        tracksForPlaylistOrder
+                    )
                 )
-            )
+            }
+
             Glide.with(requireContext()).load(playlist.imageUrl).placeholder(R.drawable.placeholder)
                 .diskCacheStrategy(
                     DiskCacheStrategy.NONE

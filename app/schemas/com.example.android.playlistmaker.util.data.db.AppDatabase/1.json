@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a503078047a4c0eac8a832684cf93466",
+    "identityHash": "b0fdd6ddcd08ca59a5b4e004d8ef14bf",
     "entities": [
       {
         "tableName": "favorite_tracks",
@@ -124,7 +124,7 @@
       },
       {
         "tableName": "PlaylistTrackCrossRef",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`playlistId` INTEGER NOT NULL, `trackId` INTEGER NOT NULL, PRIMARY KEY(`playlistId`, `trackId`), FOREIGN KEY(`playlistId`) REFERENCES `playlists`(`playlistId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`playlistId` INTEGER NOT NULL, `trackId` INTEGER NOT NULL, `createdAt` INTEGER, PRIMARY KEY(`playlistId`, `trackId`), FOREIGN KEY(`playlistId`) REFERENCES `playlists`(`playlistId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "playlistId",
@@ -137,6 +137,12 @@
             "columnName": "trackId",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -156,6 +162,15 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_PlaylistTrackCrossRef_playlistId_trackId` ON `${TABLE_NAME}` (`playlistId`, `trackId`)"
+          },
+          {
+            "name": "index_PlaylistTrackCrossRef_trackId",
+            "unique": false,
+            "columnNames": [
+              "trackId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_PlaylistTrackCrossRef_trackId` ON `${TABLE_NAME}` (`trackId`)"
           }
         ],
         "foreignKeys": [
@@ -250,7 +265,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a503078047a4c0eac8a832684cf93466')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b0fdd6ddcd08ca59a5b4e004d8ef14bf')"
     ]
   }
 }

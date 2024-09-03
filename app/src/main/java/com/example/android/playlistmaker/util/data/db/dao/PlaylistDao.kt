@@ -1,7 +1,6 @@
 package com.example.android.playlistmaker.util.data.db.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,40 +13,50 @@ import com.example.android.playlistmaker.util.data.db.entity.PlaylistWithTracksE
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PlaylistDao {
+abstract class PlaylistDao {
     @Transaction
     @Query("SELECT * From playlists")
-    fun getPlaylistsWithTracks(): Flow<List<PlaylistWithTracksEntity>>
+    abstract fun getPlaylistsWithTracks(): Flow<List<PlaylistWithTracksEntity>>
 
     @Upsert(PlaylistEntity::class)
-    suspend fun insertPlaylist(playlistEntity: PlaylistEntity): Long
+    abstract suspend fun insertPlaylist(playlistEntity: PlaylistEntity): Long
 
     @Insert(PlaylistTrackEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTrackEntity(playlistTrackEntity: PlaylistTrackEntity)
+    abstract suspend fun insertTrackEntity(playlistTrackEntity: PlaylistTrackEntity)
 
     @Query("DELETE FROM playlist_tracks WHERE trackId = :trackId")
-    suspend fun removeTrackEntity(trackId: Long)
+    abstract suspend fun removeTrackEntity(trackId: Long)
 
     @Insert(PlaylistTrackCrossRef::class, onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPlaylistWithTrack(playlistTrackCrossRef: PlaylistTrackCrossRef)
+    abstract suspend fun insertPlaylistWithTrack(playlistTrackCrossRef: PlaylistTrackCrossRef)
+
+    suspend fun insertPlaylistWithTrackTime(playlistTrackCrossRef: PlaylistTrackCrossRef) {
+        insertPlaylistWithTrack(playlistTrackCrossRef.apply {
+            createdAt = System.currentTimeMillis()
+        })
+    }
 
     @Transaction
     @Query("SELECT * FROM playlists WHERE playlistId = :playlistId")
-    fun getPlaylistById(playlistId: Long): Flow<PlaylistWithTracksEntity>
+    abstract fun getPlaylistById(playlistId: Long): Flow<PlaylistWithTracksEntity>
+
+    @Transaction
+    @Query("SELECT * FROM playlist_tracks INNER JOIN playlisttrackcrossref ON playlist_tracks.trackId =  playlisttrackcrossref.trackId WHERE playlistId = :playlistId ORDER BY createdAt DESC;")
+    abstract fun getTracksByOrderByPlaylistId(playlistId: Long): Flow<List<PlaylistTrackEntity>>
 
     @Transaction
     @Query("DELETE FROM playlistTrackCrossRef WHERE playlistId = :playlistId AND trackId = :trackId")
-    suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long)
+    abstract suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long)
 
     @Query("SELECT COUNT(*) FROM playlistTrackCrossRef WHERE trackId = :trackId")
-    suspend fun countTrackInPlaylist(trackId: Long): Int
+    abstract suspend fun countTrackInPlaylist(trackId: Long): Int
 
     @Query("DELETE FROM playlists WHERE playlistId = :playlistId")
-    suspend fun removePlaylist(playlistId: Long)
+    abstract suspend fun removePlaylist(playlistId: Long)
 
     @Query("DELETE FROM playlisttrackcrossref WHERE playlistId = :playlistId")
-    suspend fun simpleRemovePlaylist(playlistId: Long)
+    abstract suspend fun simpleRemovePlaylist(playlistId: Long)
 
     @Query("DELETE FROM playlist_tracks WHERE trackId IN (SELECT trackId FROM playlist_tracks WHERE trackId NOT IN (SELECT trackId from playlisttrackcrossref))")
-    suspend fun cleanupTracks()
+    abstract suspend fun cleanupTracks()
 }

@@ -81,7 +81,7 @@ open class CreatePlaylistViewModel(
     }
 
     open fun savePlaylist(title: String, description: String?) {
-        saveImageToPrivateStorage(title, currentUri.toString())
+        saveImageToPrivateStorage(title, currentUri?.toString())
         viewModelScope.launch {
             playlistInteractor.createPlaylist(
                 Playlist(

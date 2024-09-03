@@ -32,7 +32,7 @@ class PlaylistRepositoryImpl(
             appDatabase.playlistDao().insertTrackEntity(trackConverter.mapPlaylist(track))
             appDatabase.playlistDao().insertPlaylistWithTrack(
                 PlaylistTrackCrossRef(
-                    playlistId, track.trackId
+                    playlistId, track.trackId, System.currentTimeMillis()
                 )
             )
         } catch (e: SQLiteConstraintException) {

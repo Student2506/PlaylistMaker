@@ -3,7 +3,6 @@ package com.example.android.playlistmaker.medialibrary.presentation
 import android.icu.text.DecimalFormat
 import android.icu.text.NumberFormat
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +12,7 @@ import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistInterac
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
+import com.example.android.playlistmaker.search.di.viewModelModule
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -26,13 +26,19 @@ class ShowPlaylistViewModel(
     companion object {
         private const val TAG = "ShowPlaylistViewModel"
     }
+
     private val _stateLiveData = MutableLiveData<Playlist>()
     fun observeState(): LiveData<Playlist> = _stateLiveData
+    private val _stateTracksLiveData = MutableLiveData<List<PlaylistTrack>>()
+    fun observeOrderedTracks(): LiveData<List<PlaylistTrack>> = _stateTracksLiveData
 
     init {
         viewModelScope.launch {
-            playlistInteractor.retreivePlaylistById(playlistId = playlistId).collect { playlist ->
-                _stateLiveData.postValue(playlist)
+            playlistInteractor.retrieveTracksOrdered(playlistId = playlistId).collect { tracks ->
+                _stateTracksLiveData.postValue(tracks)
+                playlistInteractor.retreivePlaylistById(playlistId = playlistId).collect { playlist ->
+                    _stateLiveData.postValue(playlist)
+                }
             }
         }
     }
@@ -71,7 +77,7 @@ class ShowPlaylistViewModel(
         }
         sb.append("${TrackCount(playlist?.tracks?.size, true)}\n")
         playlist?.tracks?.forEachIndexed { i, elem ->
-            sb.append("${i+1}.${elem.artistName} - ${elem.trackName} (${timeFormatter.format(elem.trackTime)})\n")
+            sb.append("${i + 1}.${elem.artistName} - ${elem.trackName} (${timeFormatter.format(elem.trackTime)})\n")
         }
         return sb.toString()
     }
