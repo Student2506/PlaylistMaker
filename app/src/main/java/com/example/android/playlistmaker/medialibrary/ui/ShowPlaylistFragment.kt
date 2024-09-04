@@ -102,7 +102,8 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
             showTrack(track)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().navigateUp()
@@ -124,10 +125,10 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
                     )
                 )
             } else {
-                val dialog = MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.no_tracks_message))
-                    .setPositiveButton(getString(R.string.confirm_button)) { _, _ ->
-                    }
+                val dialog =
+                    MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.no_tracks_message))
+                        .setPositiveButton(getString(R.string.confirm_button)) { _, _ ->
+                        }
                 dialog.show()
             }
 
@@ -145,39 +146,30 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
                     DiskCacheStrategy.NONE
                 ).skipMemoryCache(true).into(binding.ivPlaylist)
             binding.tvPlaylistTitle.text = playlist.title
-            binding.tvTrackQty.text = viewModel.TrackCount(playlist.tracks?.size ?: 0)
-            if (playlist.tracks != null) {
-                var totalLength = 0L
-                for (track in playlist.tracks) {
-                    totalLength += track.trackTime
-                }
-                val total = totalLength / 60000
-                binding.tvTotalPLLength.text = MinuteCount(total)
-                binding.tvTotalPLQty.text = viewModel.TrackCount(playlist.tracks.size)
-            } else {
-                binding.tvTotalPLLength.text = MinuteCount(0L)
-                binding.tvTotalPLQty.text = viewModel.TrackCount(0)
+            viewModel.observeTrackQty().observe(viewLifecycleOwner) {
+                binding.tvTotalPLQty.text = it
+            }
+            viewModel.observePlaylistDuration().observe(viewLifecycleOwner) {
+                binding.tvTotalPLLength.text = it
             }
         }
         binding.tbToolbar.setOnClickListener {
             findNavController().navigateUp()
         }
         binding.ivShare.setOnClickListener {
-            if(trackCount > 0) {
-                ShareOption()
+            if (trackCount > 0) {
+                sharePlaylist()
             } else {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.no_tracks_to_share))
+                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.no_tracks_to_share))
                     .setPositiveButton(getString(R.string.confirm_button)) { _, _ ->
                     }.show()
             }
         }
         binding.tvShare.setOnClickListener {
-            if(trackCount > 0) {
-                ShareOption()
+            if (trackCount > 0) {
+                sharePlaylist()
             } else {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.no_tracks_to_share))
+                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.no_tracks_to_share))
                     .setPositiveButton(getString(R.string.confirm_button)) { _, _ ->
                     }.show()
             }
@@ -208,20 +200,12 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         }
     }
 
-    private fun ShareOption() {
+    private fun sharePlaylist() {
         val message = viewModel.buildMessage()
         val shareAppIntent = Intent(Intent.ACTION_SEND)
         shareAppIntent.setType("text/plain")
         shareAppIntent.putExtra(Intent.EXTRA_TEXT, message)
         startActivity(shareAppIntent)
-    }
-
-
-    private fun MinuteCount(trackQty: Long): String {
-        if (trackQty % 100 in 5L..20L) return "$trackQty минут"
-        if (trackQty % 10 == 1L) return "$trackQty минута"
-        if (trackQty % 10 in 2L..4L) return "$trackQty минуты"
-        else return "$trackQty треков"
     }
 
     private fun showTrack(track: Track) {

@@ -59,7 +59,7 @@ class TrackConverter {
         }
     }
 
-    fun map(tracks: List<PlaylistTrack>): ArrayList<Track> {
+    fun map(tracks: List<PlaylistTrack>): List<Track> {
         return ArrayList(tracks.map {
             with(it) {
                 Track(
@@ -79,7 +79,7 @@ class TrackConverter {
         })
     }
 
-    fun mapEntity(tracks: List<PlaylistTrackEntity>): ArrayList<PlaylistTrack> {
+    fun mapEntity(tracks: List<PlaylistTrackEntity>): List<PlaylistTrack> {
         return ArrayList(tracks.map {
             with(it) {
                 PlaylistTrack(
