@@ -19,6 +19,7 @@ import com.example.android.playlistmaker.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 import kotlin.io.path.createTempFile
 
 open class CreatePlaylistViewModel(
@@ -62,7 +63,7 @@ open class CreatePlaylistViewModel(
         if (image != null) {
             val inputStream =
                 getApplication<PlaylistMakerApp>().contentResolver.openInputStream(image.toUri())
-            val file = File(filePath, albumTitle)
+            val file = File(filePath, "$albumTitle-${UUID.randomUUID()}")
 
             val outputStream = FileOutputStream(file)
             val buffer = ByteArray(1024)
