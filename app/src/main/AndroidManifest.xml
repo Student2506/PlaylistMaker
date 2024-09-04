@@ -30,7 +30,8 @@
         </activity>
         <activity
             android:name=".player.ui.AudioPlayerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
     </application>
 
