@@ -26,11 +26,10 @@ import org.koin.core.parameter.parametersOf
 class EditPlaylistFragment : CreatePlaylistFragment(false) {
 
     companion object {
+        fun createArgs(playlistId: Long): Bundle = bundleOf(ARGS_PLAYLIST_ID to playlistId)
         private const val ARGS_PLAYLIST_ID = "playlist_id"
         private const val TAG = "EditPlaylistFragment"
         private const val ROUND_CORNERS_SIZE_PX = 8f
-
-        fun createArgs(playlistId: Long): Bundle = bundleOf(ARGS_PLAYLIST_ID to playlistId)
     }
 
     private val playlistId by lazy { requireArguments().getLong(ARGS_PLAYLIST_ID) }

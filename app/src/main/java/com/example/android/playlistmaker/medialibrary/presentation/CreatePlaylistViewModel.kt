@@ -26,8 +26,8 @@ open class CreatePlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor,
 ) : AndroidViewModel(application) {
 
-    companion object {
-        private const val TAG = "CreatePlaylistViewModel"
+    private companion object {
+        const val TAG = "CreatePlaylistViewModel"
     }
 
     protected val stateLiveData = MutableLiveData<Uri>()

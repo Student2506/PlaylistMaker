@@ -21,7 +21,8 @@ class PlaylistTileVH(private val view: View) : RecyclerView.ViewHolder(view) {
     fun bind(playlist: Playlist) {
 
         title.text = playlist.title
-        trackQty.text = TrackCount(playlist.tracks?.size ?: 0)
+        val tracksQty = playlist.tracks?.size ?: 0
+        trackQty.text = itemView.context.resources.getQuantityString(R.plurals.tracks_plural, tracksQty, tracksQty)
         if (!playlist.imageUrl.isNullOrEmpty()) {
             Glide.with(itemView.context).load(playlist.imageUrl)
                 .placeholder(R.drawable.placeholder_no_cover)
@@ -40,15 +41,8 @@ class PlaylistTileVH(private val view: View) : RecyclerView.ViewHolder(view) {
 
     }
 
-    private fun TrackCount(trackQty: Int): String {
-        if (trackQty % 100 in 5..20) return "$trackQty треков"
-        if (trackQty % 10 == 1) return "$trackQty трек"
-        if (trackQty % 10 in 2..4) return "$trackQty трека"
-        else return "$trackQty треков"
-    }
-
-    companion object {
-        private const val ROUND_CORNERS_SIZE_PX = 8f
-        private const val TAG = "PlaylistTileVH"
+    private companion object {
+        const val ROUND_CORNERS_SIZE_PX = 8f
+        const val TAG = "PlaylistTileVH"
     }
 }

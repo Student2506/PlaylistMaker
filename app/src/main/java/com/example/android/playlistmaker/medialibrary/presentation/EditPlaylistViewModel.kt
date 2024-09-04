@@ -30,8 +30,8 @@ class EditPlaylistViewModel(
             }
         }
     }
-    companion object {
-        private const val TAG = "EditPlaylistViewModel"
+    private companion object {
+        const val TAG = "EditPlaylistViewModel"
     }
 
     fun savePlaylist(title: String, description: String?, cover: String?) {

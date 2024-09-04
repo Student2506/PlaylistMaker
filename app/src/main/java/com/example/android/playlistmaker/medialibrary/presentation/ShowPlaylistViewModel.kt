@@ -23,8 +23,8 @@ class ShowPlaylistViewModel(
     private val application: Application,
 ) : AndroidViewModel(application) {
 
-    companion object {
-        private const val TAG = "ShowPlaylistViewModel"
+    private companion object {
+        const val TAG = "ShowPlaylistViewModel"
     }
 
     private val _stateLiveData = MutableLiveData<Playlist>()
@@ -73,7 +73,7 @@ class ShowPlaylistViewModel(
         }
     }
 
-    fun tracksToPlaylistTracks(tracks: List<PlaylistTrack>): ArrayList<Track> =
+    fun tracksToPlaylistTracks(tracks: List<PlaylistTrack>): List<Track> =
         trackConverter.map(tracks)
 
     fun requestToRemoveTrackFromPlaylist(playlistId: Long, trackId: Long) {

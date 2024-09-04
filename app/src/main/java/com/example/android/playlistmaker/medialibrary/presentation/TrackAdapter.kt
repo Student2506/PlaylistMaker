@@ -10,7 +10,7 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
     RecyclerView.Adapter<TrackViewHolder>() {
     private val tracks = ArrayList<Track>()
 
-    fun updateRecycleView(tracks: ArrayList<Track>) {
+    fun updateRecycleView(tracks: List<Track>) {
         val diffCallback = TracksCallback(this.tracks, tracks)
         val diffTracks = DiffUtil.calculateDiff(diffCallback)
         this.tracks.clear()
