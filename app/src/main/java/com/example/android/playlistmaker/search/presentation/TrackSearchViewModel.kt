@@ -121,6 +121,12 @@ class TrackSearchViewModel(
     }
 
     fun clearHistory() {
+        historyTracksInteractor.putHistoryTracks("",
+            object : HistoryTracksInteractor.HistoryTracksConsumer {
+                override fun consume(result: Any) {
+                    Log.d(TAG, "Write empty string to history")
+                }
+            })
         renderState(TracksState.HistoryContent(arrayListOf<Track>()))
     }
 
