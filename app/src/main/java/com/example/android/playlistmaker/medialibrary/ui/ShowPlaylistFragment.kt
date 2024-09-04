@@ -116,7 +116,7 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
         }
         var trackCount = 0
         viewModel.observeState().observe(viewLifecycleOwner) { playlist ->
-            if (playlist.tracks != null && playlist.tracks.size != 0) {
+            if (!playlist.tracks.isNullOrEmpty()) {
                 trackCount = playlist.tracks.size
                 adapter.updateRecycleView(
                     viewModel.tracksToPlaylistTracks(
