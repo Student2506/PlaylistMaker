@@ -30,7 +30,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val trackSearchViewModel by viewModel<TrackSearchViewModel>()
-    private var lastRequest: String? = null
     private var isHistory = true
 
     override fun createBinding(
@@ -99,7 +98,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             }
         }
         binding.btRefresh.setOnClickListener {
-            trackSearchViewModel.searchSong(lastRequest!!)
+            trackSearchViewModel.searchSong(null)
         }
         binding.btClearHistory.isVisible = false
 

@@ -39,12 +39,12 @@ class TrackSearchViewModel(
         }
     }
 
-    fun searchSong(songTitle: String) {
+    fun searchSong(songTitle: String?) {
         if (songTitle.equals("")) return
         renderState(TracksState.Loading)
 
         viewModelScope.launch {
-            tracksInteractor.searchTracks(songTitle).collect { pair ->
+            tracksInteractor.searchTracks(songTitle ?: latestSearchText).collect { pair ->
                 processResult(pair.first, pair.second)
             }
         }
