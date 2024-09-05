@@ -12,6 +12,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -19,6 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
+import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.presentation.EditPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -37,6 +39,8 @@ class EditPlaylistFragment : CreatePlaylistFragment(false) {
     private val viewModel: EditPlaylistViewModel by viewModel {
         parametersOf(playlistId)
     }
+    private var isCoverChanged = false
+    private var playlistCurrent: Playlist? = null
 
     private var cover: Uri? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,7 +50,9 @@ class EditPlaylistFragment : CreatePlaylistFragment(false) {
         binding.tbToolbar.title = getString(R.string.edit_title)
 
         viewModel.observePlaylist().observe(viewLifecycleOwner) { playlist ->
+            playlistCurrent = playlist
             binding.tietPlaylistTitle.setText(playlist.title)
+            cover = playlist.imageUrl?.toUri()
             binding.tietPlaylistDescription.setText(playlist.description ?: "")
             Log.d(TAG, "My image ${playlist.imageUrl}")
             binding.ivPlaylistCover.setPadding(0, 0, 0, 0)
@@ -70,7 +76,7 @@ class EditPlaylistFragment : CreatePlaylistFragment(false) {
             viewModel.savePlaylist(
                 binding.tietPlaylistTitle.text.toString(),
                 binding.tietPlaylistDescription.text.toString(),
-                cover.toString()
+                if (cover != null) cover.toString() else null
             )
             findNavController().navigateUp()
         }
@@ -82,6 +88,7 @@ class EditPlaylistFragment : CreatePlaylistFragment(false) {
         })
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                isCoverChanged = false
                 if (uri != null) {
                     binding.ivPlaylistCover.setPadding(0, 0, 0, 0)
                     Glide.with(requireContext()).load(uri).transform(
@@ -94,6 +101,7 @@ class EditPlaylistFragment : CreatePlaylistFragment(false) {
                         )
                     ).into(binding.ivPlaylistCover)
                     cover = viewModel.chooseFileCopyToCache(uri)
+                    isCoverChanged = true
                 } else {
                     Log.d(TAG, "No media selected")
                 }
