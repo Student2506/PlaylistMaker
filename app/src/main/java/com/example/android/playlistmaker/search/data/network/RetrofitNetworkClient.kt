@@ -31,6 +31,7 @@ class RetrofitNetworkClient(
                 val response = itunesService.searchTracks(term = dto.term, entity = dto.entity)
                 response.apply { resultCode = 200 }
             } catch (e: Throwable) {
+                Log.e(TAG, e.message ?: "")
                 Log.e(TAG, e.stackTrace.toString())
                 Response().apply { resultCode = 500 }
             }

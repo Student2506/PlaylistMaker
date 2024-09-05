@@ -1,11 +1,11 @@
 package com.example.android.playlistmaker.medialibrary.presentation
 
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.android.playlistmaker.R
@@ -21,9 +21,8 @@ class PlaylistTileVH(private val view: View) : RecyclerView.ViewHolder(view) {
     fun bind(playlist: Playlist) {
 
         title.text = playlist.title
-        trackQty.text = TrackCount(playlist.tracks?.size ?: 0)
-        Log.d(TAG, playlist.imageUrl ?: "Have null")
-        Log.d(TAG, "Size ${playlist.imageUrl?.length}")
+        val tracksQty = playlist.tracks?.size ?: 0
+        trackQty.text = itemView.context.resources.getQuantityString(R.plurals.tracks_plural, tracksQty, tracksQty)
         if (!playlist.imageUrl.isNullOrEmpty()) {
             Glide.with(itemView.context).load(playlist.imageUrl)
                 .placeholder(R.drawable.placeholder_no_cover)
@@ -35,22 +34,15 @@ class PlaylistTileVH(private val view: View) : RecyclerView.ViewHolder(view) {
                             view.context.resources.displayMetrics
                         ).toInt()
                     )
-                ).into(cover)
+                ).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(cover)
         } else {
             cover.setImageResource(R.drawable.placeholder_no_cover)
         }
 
     }
 
-    private fun TrackCount(trackQty: Int): String {
-        if (trackQty % 100 in 5..20) return "$trackQty треков"
-        if (trackQty % 10 == 1) return "$trackQty трек"
-        if (trackQty % 10 in 2..4) return "$trackQty трека"
-        else return "$trackQty треков"
-    }
-
-    companion object {
-        private const val ROUND_CORNERS_SIZE_PX = 8f
-        private const val TAG = "PlaylistTileVH"
+    private companion object {
+        const val ROUND_CORNERS_SIZE_PX = 8f
+        const val TAG = "PlaylistTileVH"
     }
 }

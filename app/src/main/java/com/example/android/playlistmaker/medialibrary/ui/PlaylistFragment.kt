@@ -47,7 +47,15 @@ class PlaylistFragment : BindingFragment<FragmentPlaylistBinding>() {
             }
         }
         binding.rvPlaylist.layoutManager = GridLayoutManager(requireContext(), 2)
-        adapter = PlaylistTileAdapter(playlist)
+        adapter = PlaylistTileAdapter(playlist) {
+            Log.d(TAG, "Moving to $it")
+            if (it.id != null) {
+                findNavController().navigate(
+                    R.id.action_mediaLibraryFragment_to_showPlaylistFragment,
+                    ShowPlaylistFragment.createArgs(it.id)
+                )
+            }
+        }
         binding.rvPlaylist.adapter = adapter!!
 
         viewModel.setPlaylists()

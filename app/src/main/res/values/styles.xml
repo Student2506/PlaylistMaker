@@ -369,4 +369,25 @@
         <item name="android:textSize">@dimen/sp_12</item>
     </style>
 
+    <style name="BottomSheetMoreOptions">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:paddingHorizontal">@dimen/dp_16</item>
+        <item name="android:paddingVertical">@dimen/dp_20</item>
+        <item name="android:textColor">@color/button_color</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+
+    <style name="BottomSheetMenu">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/bottom_sheet_rounder</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
+
 </resources>

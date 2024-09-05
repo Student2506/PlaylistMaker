@@ -37,7 +37,7 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             ).into(urlCover)
     }
 
-    companion object {
-        private const val ROUND_CORNERS_SIZE_PX = 2f
+    private companion object {
+        const val ROUND_CORNERS_SIZE_PX = 2f
     }
 }
