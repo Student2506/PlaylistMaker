@@ -12,6 +12,7 @@ import com.example.android.playlistmaker.medialibrary.domain.api.PlaylistInterac
 import com.example.android.playlistmaker.medialibrary.domain.models.Playlist
 import com.example.android.playlistmaker.medialibrary.domain.models.PlaylistTrack
 import com.example.android.playlistmaker.medialibrary.domain.models.Track
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -38,37 +39,40 @@ class ShowPlaylistViewModel(
 
     init {
         viewModelScope.launch {
-            playlistInteractor.retrieveTracksOrdered(playlistId = playlistId).collect { tracks ->
+            val playlistFlow = playlistInteractor.retreivePlaylistById(playlistId = playlistId)
+            val tracksOrderedFlow =
+                playlistInteractor.retrieveTracksOrdered(playlistId = playlistId)
+            tracksOrderedFlow.combine(playlistFlow) { tracks, playlist ->
+                Pair(tracks, playlist)
+            }.collect { (tracks, playlist) ->
                 _stateTracksLiveData.postValue(tracks)
-                playlistInteractor.retreivePlaylistById(playlistId = playlistId)
-                    .collect { playlist ->
-                        _stateLiveData.postValue(playlist)
-                        _stateTracksQty.postValue(
-                            application.resources.getQuantityString(
-                                R.plurals.tracks_plural,
-                                playlist.tracks?.size ?: 0,
-                                playlist.tracks?.size ?: 0
-                            )
-                        )
-                        if (playlist.tracks != null) {
-                            var totalLength = 0L
-                            for (track in playlist.tracks) {
-                                totalLength += track.trackTime
-                            }
-                            val total = totalLength / 60000
-                            _statePlaylistDuration.postValue(
-                                application.resources.getQuantityString(
-                                    R.plurals.minutes_plural, total.toInt(), total
-                                )
-                            )
-                        } else {
-                            _statePlaylistDuration.postValue(
-                                application.resources.getQuantityString(
-                                    R.plurals.minutes_plural, 0, 0
-                                )
-                            )
-                        }
+                _stateLiveData.postValue(playlist)
+                _stateTracksQty.postValue(
+                    application.resources.getQuantityString(
+                        R.plurals.tracks_plural,
+                        playlist.tracks?.size ?: 0,
+                        playlist.tracks?.size ?: 0
+                    )
+                )
+                if (playlist.tracks != null) {
+                    var totalLength = 0L
+                    for (track in playlist.tracks) {
+                        totalLength += track.trackTime
                     }
+                    val total = totalLength / 60000
+                    _statePlaylistDuration.postValue(
+                        application.resources.getQuantityString(
+                            R.plurals.minutes_plural, total.toInt(), total
+                        )
+                    )
+                } else {
+                    _statePlaylistDuration.postValue(
+                        application.resources.getQuantityString(
+                            R.plurals.minutes_plural, 0, 0
+                        )
+                    )
+                }
+
             }
         }
     }
