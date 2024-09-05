@@ -54,6 +54,7 @@ open class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
             if (!isCoverEmpty || !isTitleEmpty || !isDescriptionEmpty) {
                 confirmDialog?.show()
             } else {
+                isEnabled = false
                 if (isAudioPlayer) (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
                 else findNavController().navigateUp()
             }
@@ -84,6 +85,7 @@ open class CreatePlaylistFragment(private val isAudioPlayer: Boolean = false) :
                         R.string.lost_data_warning
                     )
                 ).setPositiveButton(getString(R.string.finish_option)) { _, _ ->
+                    onBackPressedCallback.isEnabled = false
                     if (isAudioPlayer) {
                         (requireActivity() as AudioPlayerActivity).closeCreatePlaylist()
                     } else {
