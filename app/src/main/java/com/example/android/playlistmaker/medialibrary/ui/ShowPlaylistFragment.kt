@@ -1,10 +1,14 @@
 package com.example.android.playlistmaker.medialibrary.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -197,6 +201,19 @@ class ShowPlaylistFragment : BindingFragment<FragmentShowPlaylistBinding>() {
                 EditPlaylistFragment.createArgs(playlist)
             )
         }
+        binding.playlistContent.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val outLocation = IntArray(2)
+                binding.ivShare.getLocationOnScreen(outLocation)
+                playlistBottomSheetBehavior?.setPeekHeight(view.height - (outLocation[1] + binding.ivShare.measuredHeight))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                } else {
+                    view.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                }
+            }
+        })
     }
 
     private fun sharePlaylist() {
